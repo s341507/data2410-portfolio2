@@ -1,7 +1,7 @@
 # Docker Container setup for VM 1
 version: "3.0"
 services:
-# mysql container setup
+  # mysql container setup
   mysql-server:
     image: haakco/mysql80
     ports:
@@ -17,6 +17,10 @@ services:
       - MYSQL_PASSWORD=123
     cap_add:
       - SYS_NICE
+    networks: # todo: add network to all containers
+      customnetwork:
+        ipv4_address: 111.11.1.11
+
   # zabbix server setup
   zabbix-server:
     image: zabbix/zabbix-server-mysql
@@ -64,3 +68,10 @@ services:
       - ZBX_SERVER_HOST=zabbix-server
     depends_on:
       - zabbix-server
+# custom network for the containers
+networks:
+  customnetwork:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: xxx.xx.x.xx/xx # todo
