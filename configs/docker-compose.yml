@@ -1,5 +1,7 @@
+# Docker Container setup for VM 1
 version: "3.0"
 services:
+# 
   mysql-server:
     image: haakco/mysql80
     ports:
