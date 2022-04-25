@@ -2,7 +2,7 @@
 title: |
     DATA2410-1 22V Datanettverk og Skytjenester
     
-    GROUP Portfolio Assignment 2 - Socket Bots
+    GROUP Portfolio Assignment 2 - Docker and Zabbix Real Use-Case
 author: | 
     Ulrik Bakken Singsaas | s351917
     Adrian
