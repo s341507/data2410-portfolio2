@@ -6,7 +6,7 @@ title: |
 author: | 
     Ulrik Bakken Singsaas | s351917
     Adrian
-    Thea
+    Thea | s351879
     Andrea
 date: April 25, 2022
 geometry: margin=2cm
