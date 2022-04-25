@@ -20,3 +20,8 @@ pandoc rapport.md -s -o rapport.pdf --pdf-engine=xelatex --variable monofont="SF
  -->
 
 Test
+
+# 1. VM1: Docker containers setup 10%
+# 2. VM2 and VM3: Install zabbix-agent and zabbix-proxy 10%
+# 3. VM2: Nginx proxy 10%
+# 4. VM1: Zabbix frontend 
