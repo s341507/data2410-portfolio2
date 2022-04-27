@@ -12,3 +12,6 @@
 - [ ] Rapportere det vi har gjort så langt
 - [ ] Guide for hvordan man kjører
 - [ ] Ta oppvasken
+
+# Redundant
+- [ ] Maile Hårek om docker i docker
