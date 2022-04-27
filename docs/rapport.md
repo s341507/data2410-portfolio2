@@ -38,6 +38,11 @@ sudo docker container run --privileged -v /var/run/docker.sock:/var/run/docker.s
 
 where `vm_image` was made from this Dockerfile:
 
+<!-- 
+TODO
+- [ ] update this dockerfile to match not having apache
+-->
+
 ```dockerfile
 FROM ubuntu:20.04
 ENV TZ=Europe/Oslo
