@@ -46,6 +46,7 @@
 - [ ] Enable encryption with PSK and configure it
 - [ ] Create a new template named zabbix-monitoring and add the following items and triggers (Spesifikasjoner i oppgavetekster)
 
+
 # General
 - [ ] Rapportere det vi har gjort så langt
 - [ ] Guide for hvordan man kjører
