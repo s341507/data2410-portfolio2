@@ -21,9 +21,10 @@
   - [ ] Start and enable zabbix-proxy
 - [x] Zabbix agent installation on VM3
   - [x] Install zabbix-agent from ??
-  - [ ] Start and enable zabbix-agent
+  - [x] Start and enable zabbix-agent
+  - [x] Testing zabbix agent with restarting 
   - [x] Generate hex value for psk encryption file on your local VM3. (Spesifikasjoner i oppgaveteksten)
- - [ ] Move file to /opt/zabbix/ directory and give it permissions which will enable zabbix-agent to access the file. 
+ - [x] Move file to /opt/zabbix/ directory and give it permissions which will enable zabbix-agent to access the file. 
  - [ ] Enable psk encryption in the zabbix-agent configuration file and set valid server address (Spesifikasjoner i oppgaveteksten) 
 
 
@@ -33,7 +34,7 @@
 - [ ] zabbix-server-web has its own nginx.conf and it needs to be configured to listen on port 8080
 
 ## Tillegg
-- [ ] Koble agent mot proxy
+- [ ] Koble agent mot nginx proxy (vm3 til vm2)
 
 
 # V. VM1: Zabbix frontend
