@@ -12,8 +12,8 @@ RUN apt install curl -y
 # vm3 specific commands
 RUN wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
 RUN dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
-RUN apt-get install -f
-RUN apt-get install zabbix-agent
+RUN apt-get install -f -y
+RUN apt-get install zabbix-agent -y
 
 #command to make the container stay open
 CMD ["tail", "-f", "/dev/null"]
