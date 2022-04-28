@@ -18,3 +18,9 @@ sudo apt-add-repository https://cli.github.com/packages
 sudo apt update
 sudo apt install gh
 ```
+
+# ssh for intel1
+```bash
+ssh -p 513 g13@intel1.vlab.cs.hioa.no
+pass: fell7rips
+```
