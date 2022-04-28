@@ -5,6 +5,9 @@ RUN apt-get -y update
 RUN apt install iputils-ping -y
 RUN apt install net-tools -y
 RUN apt install nano -y
+RUN apt install vim -y
+RUN apt install wget -y
+RUN apt install curl -y
 #RUN apt-get -y install apache2
 #CMD ["apachectl", "-D", "FOREGROUND"]
 CMD ["tail", "-f", "/dev/null"]
