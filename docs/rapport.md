@@ -30,8 +30,25 @@ Started with deleting the 3 VMs set up by default as these had the wrong ubuntu 
 
 We used these commands to make new containers with the focal fossa version (Ubuntu 20.04), whilst also allowing for having docker containers within docker containers.
 
+Making the images to run containers from
+
 ```bash
+# making vm 1 image
+docker build -f vm1-dockerfile -t vm-image1
+
+# making vm 2 image
+docker build -f vm2-dockerfile -t vm-image2
+
+# making vm 3 image
+docker build -f vm3-dockerfile -t vm-image3 
+```
+
+```bash
+# running vm1 container
 sudo docker container run --privileged -v /var/run/docker.sock:/var/run/docker.sock -d vm_image
+# running vm2 container
+sudo docker container run -d -t vm2-dockerfile
+
 ```
 
 where `vm_image` was made from this Dockerfile:
@@ -132,6 +149,11 @@ Installing zabbix-agent on VM3:
 
 This is run as `root@4d08e816a5a3` aka. root on the VM3 container.
 
+<!-- 
+TODO
+- [ ] get these commands into a dockerfile
+ -->
+
 ```bash
  wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
 
@@ -149,6 +171,8 @@ root@4d08e816a5a3:/# openssl rand -hex 32 > zabbix_agent.psk
 root@4d08e816a5a3:/# cat zabbix_agent.psk
 f62ae210eb7e91ab7908cbad2f2e8e0189f57b54e9d4de9be636e17ad362e7f7
 ```
+
+Since we are running this in a docker container and not a straight vm, then we do not have systemd available, therefore we cannot *enable* the service, only start it, and have it as a run command in a dockerfile and make sure that the service is started every time the contained based on the dockerfile is run
 
 # 3. VM2: Nginx proxy 10%
 
