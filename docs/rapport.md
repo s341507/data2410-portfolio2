@@ -41,7 +41,7 @@ TODO
 - [ ] update this dockerfile to match not having apache
 -->
 
-```dockerfile
+```bash
 TODO
 - [ ] get from configs/Dockerfile
 ```
