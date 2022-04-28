@@ -26,44 +26,44 @@ docker exec -it <container-id> bash
 
 ## VM Setup
 
-Started with deleting the 3 VMs set up by default as these had the wrong ubuntu version in relation to the ones reccomended in the task text.
+We Started with deleting the 3 VMs set up by default, because these had the wrong ubuntu version in relation to the reccomendation in the assignment description.
 
-We used these commands to make new containers with the focal fossa version (Ubuntu 20.04), whilst also allowing for having docker containers within docker containers.
+We used these commands to make new containers with the focal fossa version, whilst also allowing for docker containers within docker containers.
 
 ```bash
 sudo docker container run --privileged -v /var/run/docker.sock:/var/run/docker.sock -d vm_image
 ```
 
-where `vm_image` was made from this Dockerfile:
+The image, `vm_image`, was made from this Dockerfile:
 
 <!--
 TODO
 - [ ] update this dockerfile to match not having apache
 -->
 
-```bash
+```dockerfile
 TODO
 - [ ] get from configs/Dockerfile
 ```
 
 ## Quad Container Setup
 
-Then we used our file found in configs/docker-compose.yml to set up the four containers required for the task, as required by the text with the given config instructions.
+After setting up the VMs we used the file `docker compose.yml`, found in the configs folder, to set up the four containers with required the required config instructions for the assignment. 
 
 ```bash
 TODO
-- [ ] Past finalized version of this file
+- [ ] Paste finalized version of this file
 ```
 
-As no volumes were given, we used four files as the volumes for each of the four containers, linked to this git repo for easy maintenance. At first we ran without the volume statements to auto generrate the configs, then we edited those to paste then back in on a new compose to auto set our statements
 
-these are the four files (TODO or the changes we made to the four files):
+The assignment does not specify volumes. Therefore, in order to keep the maintenance simple, we used four files from `this directory` as the volumes for each of the four containers. At first we ran the docker containers without the volume statements to auto generrate the configs, then we edited the configs and pasted them back in to a new compose file to automate our statements. The final files we used can be found below (alt. The changes we made to the files can be found below). 
 
 <!--
 TODO
+- [ ] Specify the four files and directory in the following explanation.
 - [ ] prune comments from the files to make them wayyyyy shorter
-- [ ] insert these four files
- -->
+- [ ] Insert he final four files (or the changes, based on what we decide to include) RE: The final files we used can be found below (alt. The changes we made to the files can be found below)
+-->
 
 ### mysql
 
@@ -73,12 +73,13 @@ TODO
 
 ### zabbix-agent
 
+<!--
 TODO
-
 - [ ] få containere til å snakke sammen?
 - [ ] Finialize this "chapter"
+-->
 
-# 2. VM2 and VM3: Install zabbix-proxy and zabbix-agent 10%
+# 2. VM2 and VM3: Install zabbix-agent and zabbix-proxy 10%
 
 We start by fetching this: ` wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb`
 So that we can install the `zabbix-agent`
@@ -130,7 +131,7 @@ this gives you a cli web browser
 
 Installing zabbix-agent on VM3:
 
-This is run as `root@4d08e816a5a3` aka. root on the VM3 container.
+Run the following script as root on the vm3 container to install the zabbix agent:
 
 ```bash
  wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
