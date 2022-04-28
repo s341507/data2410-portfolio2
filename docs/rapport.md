@@ -113,6 +113,19 @@ root@47b33e945b34:/# curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_
 root@47b33e945b34:/# bash mariadb_repo_setup --mariadb-server-version=10.6
 ```
 
+## Accessing zabbix web with lynx
+
+Accessing the zabbix-web
+
+```
+# if lynx is not installed
+g13@net513:~$ lynx localhost
+
+g13@net513:~$ lynx localhost
+
+this gives you a cli web browser 
+```
+
 ## VM 3
 
 This is run as `root@4d08e816a5a3` aka. root on the vm3 container:
