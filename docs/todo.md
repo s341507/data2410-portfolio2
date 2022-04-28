@@ -28,9 +28,9 @@
 
 
 # IV. VM2: Nginx proxy  
-- [ ] Install nginx proxy and prepare the files to configure nginx proxy
-- [ ] Add to /etc/nginx/nginx.conf include directories (Spesifikasjoner i oppgaveteksten)
-- [ ] zabbix-server-web has its own nginx.conf and it needs to be configured to listen on port 8080
+- [x] Install nginx proxy and prepare the files to configure nginx proxy
+- [x] Add to /etc/nginx/nginx.conf include directories (Spesifikasjoner i oppgaveteksten)
+- [x] zabbix-server-web has its own nginx.conf and it needs to be configured to listen on port 8080
 
 ## Tillegg
 - [ ] Koble agent mot proxy
