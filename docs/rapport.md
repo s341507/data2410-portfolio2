@@ -28,7 +28,7 @@ docker exec -it <container-id> bash
 
 Started with deleting the 3 VMs set up by default as these had the wrong ubuntu version in relation to the ones reccomended in the task text.
 
-We used these commands to make new containers with the focal fossa version, whilst also allowing for having docker containers within docker containers.
+We used these commands to make new containers with the focal fossa version (Ubuntu 20.04), whilst also allowing for having docker containers within docker containers.
 
 ```bash
 sudo docker container run --privileged -v /var/run/docker.sock:/var/run/docker.sock -d vm_image
@@ -41,7 +41,7 @@ TODO
 - [ ] update this dockerfile to match not having apache
 -->
 
-```dockerfile
+```bash
 TODO
 - [ ] get from configs/Dockerfile
 ```
@@ -78,12 +78,12 @@ TODO
 - [ ] få containere til å snakke sammen?
 - [ ] Finialize this "chapter"
 
-# 2. VM2 and VM3: Install zabbix-agent and zabbix-proxy 10%
+# 2. VM2 and VM3: Install zabbix-proxy and zabbix-agent 10%
 
-Starter med å hente: ` wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb`
-Sånn at vi kan installere `zabbix-agent`
+We start by fetching this: ` wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb`
+So that we can install the `zabbix-agent`
 
-Installing zabbix-proxy:
+Installing zabbix-proxy on VM2:
 
 ```bash
 root@47b33e945b34:/# apt-get install wget
@@ -106,7 +106,7 @@ Reading package lists... Done
 root@47b33e945b34:/# apt-get install zabbix-sql-scripts
 ```
 
-Installing MariaDB inside vm2:
+Installing MariaDB inside VM2:
 
 ```bash
 root@47b33e945b34:/# curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
@@ -128,7 +128,9 @@ this gives you a cli web browser
 
 ## VM 3
 
-This is run as `root@4d08e816a5a3` aka. root on the vm3 container:
+Installing zabbix-agent on VM3:
+
+This is run as `root@4d08e816a5a3` aka. root on the VM3 container.
 
 ```bash
  wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
