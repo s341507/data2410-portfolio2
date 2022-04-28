@@ -34,6 +34,7 @@
 
 ## Tillegg
 - [ ] Koble agent mot proxy
+- [ ] Flytte kommandoer over til Dockerfile
 
 
 # V. VM1: Zabbix frontend
