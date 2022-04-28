@@ -26,7 +26,7 @@ docker exec -it <container-id> bash
 
 ## VM Setup
 
-We Started with deleting the 3 VMs set up by default, because these had the wrong ubuntu version in relation to the reccomendation in the assignment description.
+We Started by deleting the 3 default VMs, because these had a different ubuntu version than what was recommended in the assignment description.
 
 We used these commands to make new containers with the focal fossa version, whilst also allowing for docker containers within docker containers.
 
