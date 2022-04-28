@@ -8,6 +8,12 @@ RUN apt install nano -y
 RUN apt install vim -y
 RUN apt install wget -y
 RUN apt install curl -y
+
+# vm2 specific commands
+RUN apt install nginx -y
+RUN 
 #RUN apt-get -y install apache2
 #CMD ["apachectl", "-D", "FOREGROUND"]
+
+#command to make the container stay open
 CMD ["tail", "-f", "/dev/null"]
