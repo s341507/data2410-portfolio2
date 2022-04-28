@@ -80,8 +80,8 @@ TODO
 
 # 2. VM2 and VM3: Install zabbix-proxy and zabbix-agent 10%
 
-Starter med å hente: ` wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb`
-Sånn at vi kan installere `zabbix-agent`
+We start by fetching this: ` wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb`
+So that we can install the `zabbix-agent`
 
 Installing zabbix-proxy on VM2:
 
