@@ -3,7 +3,8 @@
 - [ ] Finn ut av å lage et container network
 
 # VM 2 
-- [ ] Sette opp proxy
+- [ ] Zabbix proxy
+- [ ] Nginx proxy
 
 # VM 3 
 - [ ] Koble agent mot proxy
