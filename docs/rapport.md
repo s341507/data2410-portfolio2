@@ -30,17 +30,21 @@ We Started by deleting the 3 default VMs, because these had a different ubuntu v
 
 We used these commands to make new containers with the focal fossa version, whilst also allowing for docker containers within docker containers.
 
-Making the images to run containers from
+Making the images to run containers from, with their custom configs and starting various services to circumvent the problem of not having systemd in docker containers, but starting the services in the image so that they run on startup anyways
+
+<!-- 
+Perhaps just compress these two sets of three similar commands into just two commands and say that you swapped out the numbers?
+ -->
 
 ```bash
 # making vm 1 image
-docker build -f vm1-dockerfile -t vm-image1
+sudo docker build -t vm-image1 -f data2410-portfolio2/configs/vm1-dockerfile .
 
 # making vm 2 image
-docker build -f vm2-dockerfile -t vm-image2
+sudo docker build -t vm-image2 -f data2410-portfolio2/configs/vm2-dockerfile .
 
 # making vm 3 image
-docker build -f vm3-dockerfile -t vm-image3
+sudo docker build -t vm-image3 -f data2410-portfolio2/configs/vm3-dockerfile .
 ```
 
 ```bash
@@ -105,10 +109,10 @@ TODO
 
 # 2. VM2 and VM3: Install zabbix-agent and zabbix-proxy 10%
 
-We start by fetching this: ` wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb`
-So that we can install the `zabbix-agent`
+We start by fetching this: ` wget https://repo.zabbix.com/zabbix/6.2/ubuntu/pool/main/z/zabbix-release2zabbix-release_6.1-1%2Bubuntu20.04_all.deb`
+So that we can install the3`zabbix-agent`
 
-Installing zabbix-proxy on VM2:
+Installing zabbix-3roxy on VM2:
 
 ```bash
 root@47b33e945b34:/# apt-get install wget
@@ -191,6 +195,7 @@ TODO
  -->
 
 ```bash
+# TODO delete these, they have been put into vm3 dockerfile
  wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
 
  dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
@@ -211,6 +216,7 @@ f62ae210eb7e91ab7908cbad2f2e8e0189f57b54e9d4de9be636e17ad362e7f7
 Moving it to /opt/zabbix folder:
 
 ```bash
+mkdir /opt/zabbix
 chmod 777 /opt/zabbix
 mv ./zabbix_agent.psk /opt/zabbix/zabbix_agent.psk
 ```
@@ -227,5 +233,26 @@ TLSPSKFile=/opt/zabbix_agent.psk
 Since we are running this in a docker container and not a straight vm, then we do not have systemd available, therefore we cannot _enable_ the service, only start it, and have it as a run command in a dockerfile and make sure that the service is started every time the contained based on the dockerfile is run
 
 # 3. VM2: Nginx proxy 10%
+
+We start by creating the configuration file for the nginx-proxy:
+
+```conf
+# To be moved to /etc/nginx/sites-enabled/zabbix.conf on VM2
+
+server {
+    listen  8080;
+    server_name localhost;
+
+    location / {
+        proxy-pass http://172.24.0.1:8080;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+This file makes sure that the nginx-proxy listens on port 8080, and redirects all incoming traffic from that port.
+The traffic is redirected to the zabbix-server using `proxy-pass` followed by the zabbix-server's IP address and port number.
 
 # 4. VM1: Zabbix frontend
