@@ -55,3 +55,4 @@
 
 # Redundant
 - [ ] Maile Hårek om docker i docker
+- [x] Maile Hårek om hosting av nginx proxy
