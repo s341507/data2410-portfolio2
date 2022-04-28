@@ -255,4 +255,5 @@ server {
 This file makes sure that the nginx-proxy listens on port 8080, and redirects all incoming traffic from that port.
 The traffic is redirected to the zabbix-server using `proxy-pass` followed by the zabbix-server's IP address and port number.
 
+ * Testing nginx configuration                                               [ OK ]
 # 4. VM1: Zabbix frontend
