@@ -115,19 +115,16 @@ root@47b33e945b34:/# bash mariadb_repo_setup --mariadb-server-version=10.6
 
 ## VM 3
 
+This is run as `root@4d08e816a5a3` aka. root on the vm3 container:
+
 ```bash
-root@4d08e816a5a3:/# wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
+ wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
 
-root@4d08e816a5a3:/# dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
-Selecting previously unselected package zabbix-release.
-(Reading database ... 4623 files and directories currently installed.)
-Preparing to unpack zabbix-release_6.1-1+ubuntu20.04_all.deb ...
-Unpacking zabbix-release (1:6.1-1+ubuntu20.04) ...
-Setting up zabbix-release (1:6.1-1+ubuntu20.04) ...
-root@4d08e816a5a3:/# apt-get install -f
+ dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
 
-root@4d08e816a5a3:/# apt-get install zabbix-agent
-..
+ apt-get install -f
+
+ apt-get install zabbix-agent
 ```
 
 Creating psk encryption key:
