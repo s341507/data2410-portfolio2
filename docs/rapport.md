@@ -62,7 +62,7 @@ TODO
 - [ ] update this dockerfile to match not having apache
 -->
 
-```dockerfile
+```bash
 TODO
 - [ ] get from configs/Dockerfile
 ```
@@ -244,7 +244,7 @@ server {
     server_name localhost;
 
     location / {
-        proxy-pass http://172.24.0.1:8080;
+        proxy_pass http://172.24.0.1:8080;
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -253,7 +253,7 @@ server {
 }
 ```
 This file makes sure that the nginx-proxy listens on port 8080, and redirects all incoming traffic from that port.
-The traffic is redirected to the zabbix-server using `proxy-pass` followed by the zabbix-server's IP address and port number.
+The traffic is redirected to the zabbix-server using `proxy_pass` followed by the zabbix-server's IP address and port number.
 
 Then, we start up a terminal on VM2 and install nginx
 
