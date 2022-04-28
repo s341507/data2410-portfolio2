@@ -78,6 +78,14 @@ TODO
 
 The assignment does not specify volumes. Therefore, in order to keep the maintenance simple, we used four files from `this directory` as the volumes for each of the four containers. At first we ran the docker containers without the volume statements to auto generrate the configs, then we edited the configs and pasted them back in to a new compose file to automate our statements. The final files we used can be found below (alt. The changes we made to the files can be found below).
 
+Copying configs to containers, so we can use the volumes
+
+```bash
+g13@net513:~/data2410-portfolio2$ sudo docker cp vm_data/zabbix/zabbix_server.conf c99a6922714d:/etc/zabbix/zabbix_server.conf
+g13@net513:~/data2410-portfolio2$ sudo docker cp vm_data/zabbix-agent/zabbix_agentd.conf c99a6922714d:/etc/zabbix/zabbix_agentd.conf
+g13@net513:~/data2410-portfolio2$ sudo docker cp vm_data/zabbix-web/ c99a6922714d:/etc/zabbix/
+```
+
 <!--
 TODO
 - [ ] Specify the four files and directory in the following explanation.
@@ -246,5 +254,43 @@ server {
 ```
 This file makes sure that the nginx-proxy listens on port 8080, and redirects all incoming traffic from that port.
 The traffic is redirected to the zabbix-server using `proxy-pass` followed by the zabbix-server's IP address and port number.
+
+Then, we start up a terminal on VM2 and install nginx
+
+```bash
+sudo docker exec -it vm2 /bin/bash
+root@47b33e945b34:/# apt-get update
+root@47b33e945b34:/# apt-get install nginx
+```
+
+Once nginx is installed, we disable the default virtual host by unlinking it
+
+```bash
+root@47b33e945b34:/# unlink /etc/nginx/sites-enabled/default
+```
+
+Then we add `reverse-proxy.conf` to the directory `/etc/nginx/sites-available/`
+
+```bash
+root@47b33e945b34:/# cd /etc/nginx/sites-available/
+root@47b33e945b34:/# cd nano reverse-proxy.conf
+```
+To complete the proxy, we activate the directives by linking to `/sites-enabled/` using the following command
+
+```bash
+root@47b33e945b34:/etc/nginx/sites-available# ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enabled/reverse-proxy.conf
+```
+Lastly, to see if it works, we run an nginx configuration test and restart the service.
+
+```bash
+root@47b33e945b34:/etc/nginx/sites-available# cd
+root@47b33e945b34:~# service nginx configtest
+ * Testing nginx configuration                                               [ OK ]
+root@47b33e945b34:~# service nginx restart
+ * Restarting nginx nginx                                                    [ OK ]
+root@47b33e945b34:~#
+```
+
+This verifies that nginx is functioning as intended.
 
 # 4. VM1: Zabbix frontend

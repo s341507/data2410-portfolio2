@@ -17,9 +17,9 @@ services:
       - MYSQL_PASSWORD=123
     cap_add:
       - SYS_NICE
-    networks: # todo: add network to all containers
-      customnetwork:
-        ipv4_address: 111.11.1.11
+    networks:
+      zabbix-net:
+        ipv4_address: 172.0.20.1
 
   # zabbix server setup
   zabbix-server:
@@ -29,7 +29,7 @@ services:
     hostname: zabbix-server
     restart: unless-stopped
     volumes:
-      - /etc/zabbix/:/etc/zabbix/
+      - /etc/zabbix:/etc/zabbix:rw
     environment:
       - DB_SERVER_HOST=mysql-server
       - MYSQL_DATABASE=zabbix
@@ -37,6 +37,9 @@ services:
       - MYSQL_PASSWORD=123
     depends_on:
       - mysql-server
+    networks:
+      zabbix-net:
+        ipv4_address: 172.0.20.2
   # zabbix web container
   zabbix-web:
     image: zabbix/zabbix-web-nginx-mysql
@@ -45,7 +48,7 @@ services:
     hostname: zabbix-web
     restart: unless-stopped
     volumes:
-      - /etc/zabbix/:/etc/zabbix/
+      - /etc/zabbix:/etc/zabbix:rw
     environment:
       - DB_SERVER_HOST=mysql-server
       - MYSQL_DATABASE=zabbix
@@ -55,6 +58,9 @@ services:
     depends_on:
       - mysql-server
       - zabbix-server
+    networks:
+      zabbix-net:
+        ipv4_address: 172.0.20.3
   # zabbix agent container
   zabbix-agent:
     image: zabbix/zabbix-agent
@@ -63,15 +69,18 @@ services:
     hostname: zabbix-agent
     restart: unless-stopped
     volumes:
-      - /etc/zabbix/:/etc/zabbix/
+      - /etc/zabbix:/etc/zabbix:rw
     environment:
       - ZBX_SERVER_HOST=zabbix-server
     depends_on:
       - zabbix-server
+    networks:
+      zabbix-net:
+        ipv4_address: 172.0.20.4
 # custom network for the containers
 networks:
-  customnetwork:
+  zabbix-net:
     driver: bridge
     ipam:
       config:
-        - subnet: xxx.xx.x.xx/xx # todo
+        - subnet: 172.0.20.0/29
