@@ -57,7 +57,7 @@ CMD ["apachectl", "-D", "FOREGROUND"]
 
 ## Quad Container Setup
 
-Then we we used our file found in configs/docker-compose.yml to set up the four containers required for the task, as required by the text with the given config instructions.
+Then we used our file found in configs/docker-compose.yml to set up the four containers required for the task, as required by the text with the given config instructions.
 
 ```bash
 TODO
