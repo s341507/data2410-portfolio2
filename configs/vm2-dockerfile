@@ -15,5 +15,9 @@ RUN unlink /etc/nginx/sites-enabled/default
 COPY /home/g13/data2420-portfolio2/vm_data/nginx/reverse-proxy.conf /etc/nginx/sites-available/reverse-proxy.conf
 RUN ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enabled/reverse-proxy.conf
 
+# Testing to see if the service works as intended
+RUN service nginx configtest
+RUN service nginx restart
+
 #command to make the container stay open
 CMD ["tail", "-f", "/dev/null"]
