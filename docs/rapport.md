@@ -36,7 +36,14 @@ Making the images to run containers from, with their custom configs and starting
 Perhaps just compress these two sets of three similar commands into just two commands and say that you swapped out the numbers?
  -->
 
-```shell script
+<!-- 
+TODO
+- [ ] run image1
+- [ ] run image2
+- [ ] build image3
+ -->
+
+```bash
 # making vm 1 image
 sudo docker build -t vm-image1 -f data2410-portfolio2/configs/vm1-dockerfile .
 
@@ -47,7 +54,7 @@ sudo docker build -t vm-image2 -f data2410-portfolio2/configs/vm2-dockerfile .
 sudo docker build -t vm-image3 -f data2410-portfolio2/configs/vm3-dockerfile .
 ```
 
-```shell script
+```bash
 # running vm1 container
 sudo docker container run --privileged -v /var/run/docker.sock:/var/run/docker.sock -d vm_image
 # running vm2 container
@@ -62,7 +69,7 @@ TODO
 - [ ] update this dockerfile to match not having apache
 -->
 
-```shell script
+```bash
 TODO
 - [ ] get from configs/Dockerfile
 ```
@@ -71,7 +78,7 @@ TODO
 
 After setting up the VMs we used the file `docker compose.yml`, found in the configs folder, to set up the four containers with required the required config instructions for the assignment.
 
-```shell script
+```bash
 TODO
 - [ ] Paste finalized version of this file
 ```
@@ -80,7 +87,7 @@ The assignment does not specify volumes. Therefore, in order to keep the mainten
 
 Copying configs to containers, so we can use the volumes
 
-```shell script
+```bash
 g13@net513:~/data2410-portfolio2$ sudo docker cp vm_data/zabbix/zabbix_server.conf c99a6922714d:/etc/zabbix/zabbix_server.conf
 g13@net513:~/data2410-portfolio2$ sudo docker cp vm_data/zabbix-agent/zabbix_agentd.conf c99a6922714d:/etc/zabbix/zabbix_agentd.conf
 g13@net513:~/data2410-portfolio2$ sudo docker cp vm_data/zabbix-web/ c99a6922714d:/etc/zabbix/
@@ -112,9 +119,9 @@ TODO
 We start by fetching this: ` wget https://repo.zabbix.com/zabbix/6.2/ubuntu/pool/main/z/zabbix-release2zabbix-release_6.1-1%2Bubuntu20.04_all.deb`
 So that we can install the3`zabbix-agent`
 
-Installing zabbix-3roxy on VM2:
+Installing zabbix-proxy on VM2:
 
-```shell script
+```bash
 root@47b33e945b34:/# apt-get install wget
 Reading package lists... Done
 ...
@@ -137,7 +144,7 @@ root@47b33e945b34:/# apt-get install zabbix-sql-scripts
 
 Installing MariaDB inside VM2:
 
-```shell script
+```bash
 root@47b33e945b34:/# curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
 root@47b33e945b34:/# bash mariadb_repo_setup --mariadb-server-version=10.6
 root@47b33e945b34:/# apt -y install mariadb-common mariadb-server-10.6 mariadb-client-10.6
@@ -145,7 +152,7 @@ root@47b33e945b34:/# apt -y install mariadb-common mariadb-server-10.6 mariadb-c
 
 Setting new **root password** = 123
 
-```shell script
+```bash
 root@47b33e945b34:/# mysql_secure_installation
 
 Enter current password for root (enter for none):
@@ -165,7 +172,7 @@ Reload privilege tables now? [Y/n] y
 Thanks for using MariaDB!
 ```
 
-```shell script
+```bash
 root@47b33e945b34:/# mysql -uroot -p'123' -e "create database zabbix_proxy character set utf8mb4 collate utf8mb4_bin;"
 root@47b33e945b34:/# mysql -uroot -p'123' -e "grant all privileges on zabbix_proxy.* to zabbix@localhost identified by 'zabbixDBpass';"
 ```
@@ -174,7 +181,7 @@ root@47b33e945b34:/# mysql -uroot -p'123' -e "grant all privileges on zabbix_pro
 
 Accessing the zabbix-web
 
-```shell script
+```
 # if lynx is not installed
 g13@net513:~$ lynx localhost
 
@@ -194,7 +201,7 @@ TODO
 - [ ] get these commands into a dockerfile
  -->
 
-```shell script
+```bash
 # TODO delete these, they have been put into vm3 dockerfile
  wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
 
@@ -207,7 +214,7 @@ TODO
 
 Creating psk encryption key:
 
-```shell script
+```bash
 root@4d08e816a5a3:/# openssl rand -hex 32 > zabbix_agent.psk
 root@4d08e816a5a3:/# cat zabbix_agent.psk
 f62ae210eb7e91ab7908cbad2f2e8e0189f57b54e9d4de9be636e17ad362e7f7
@@ -215,7 +222,7 @@ f62ae210eb7e91ab7908cbad2f2e8e0189f57b54e9d4de9be636e17ad362e7f7
 
 Moving it to /opt/zabbix folder:
 
-```shell script
+```bash
 mkdir /opt/zabbix
 chmod 777 /opt/zabbix
 mv ./zabbix_agent.psk /opt/zabbix/zabbix_agent.psk
@@ -223,7 +230,7 @@ mv ./zabbix_agent.psk /opt/zabbix/zabbix_agent.psk
 
 Updating `zabbix-agent.conf`:
 
-```shell script
+```bash
 TLSConnect=psk
 TLSAccept=psk
 TLSPSKIdentity=cbt_psk_01,
@@ -236,7 +243,7 @@ Since we are running this in a docker container and not a straight vm, then we d
 
 We start by creating the configuration file for the nginx-proxy:
 
-```shell script
+```conf
 # To be moved to /etc/nginx/sites-enabled/zabbix.conf on VM2
 
 server {
@@ -257,7 +264,7 @@ The traffic is redirected to the zabbix-server using `proxy_pass` followed by th
 
 Then, we start up a terminal on VM2 and install nginx
 
-```shell script
+```bash
 sudo docker exec -it vm2 /bin/bash
 root@47b33e945b34:/# apt-get update
 root@47b33e945b34:/# apt-get install nginx
@@ -265,24 +272,25 @@ root@47b33e945b34:/# apt-get install nginx
 
 Once nginx is installed, we disable the default virtual host by unlinking it
 
-```shell script
+```bash
 root@47b33e945b34:/# unlink /etc/nginx/sites-enabled/default
 ```
 
 Then we add `reverse-proxy.conf` to the directory `/etc/nginx/sites-available/`
 
-```shell script
+```bash
 root@47b33e945b34:/# cd /etc/nginx/sites-available/
 root@47b33e945b34:/# nano reverse-proxy.conf
 ```
 To complete the proxy, we activate the directives by linking to `/sites-enabled/` using the following command
 
-```shell script
+```bash
 root@47b33e945b34:/etc/nginx/sites-available# ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enabled/reverse-proxy.conf
 ```
+
 Lastly, to see if it works, we run an nginx configuration test and restart the service.
 
-```shell script
+```bash
 root@47b33e945b34:/etc/nginx/sites-available# cd
 root@47b33e945b34:~# service nginx configtest
  * Testing nginx configuration                                               [ OK ]
@@ -292,5 +300,10 @@ root@47b33e945b34:~#
 ```
 
 This verifies that nginx is functioning as intended.
+<!-- 
+All has been introduced to dockerfile to this point
+You can check the tests manually after entering the dockerfile
+ -->
+ 
 
 # 4. VM1: Zabbix frontend
