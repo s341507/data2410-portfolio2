@@ -9,6 +9,7 @@ guide for zabbix server
 https://www.alibabacloud.com/blog/how-to-install-zabbix-monitoring-server-on-ubuntu-20-04_597802
 
 guide for nginx proxy
+https://www.hostinger.com/tutorials/how-to-set-up-nginx-reverse-proxy/
 
 # ubuntu github cli install
 
