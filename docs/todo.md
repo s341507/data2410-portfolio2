@@ -8,8 +8,10 @@
 - [x] Container 4: zabbix/zabbix-agent (Spesifikasjoner i oppgaveteksten)
 
 ## Tillegg
-- [ ] Finn ut av volumes for 4 containers 
+- [x] Finn ut av volumes for 4 containers  (kan hende vi trenger mer configs)
 - [ ] Finn ut av å lage et container network
+  - [ ] Få agent og server til å sende active logs
+- [ ] Fix server not sending active checks and agent not getting active checks
 
 
 # III. VM2 and VM3: Install zabbix-agent and zabbix-proxy 
@@ -26,6 +28,7 @@
   - [x] Generate hex value for psk encryption file on your local VM3. (Spesifikasjoner i oppgaveteksten)
  - [x] Move file to /opt/zabbix/ directory and give it permissions which will enable zabbix-agent to access the file. 
  - [ ] Enable psk encryption in the zabbix-agent configuration file and set valid server address (Spesifikasjoner i oppgaveteksten) 
+
 
 
 # IV. VM2: Nginx proxy  
@@ -56,3 +59,4 @@
 # Redundant
 - [ ] Maile Hårek om docker i docker
 - [x] Maile Hårek om hosting av nginx proxy
+- [ ] Maile Hårek ssh tunneling for å debugge i browser

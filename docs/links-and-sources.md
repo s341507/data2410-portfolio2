@@ -4,6 +4,8 @@
 where i got the VM .iso (which we used in the first VM but no longer are using)
 https://releases.ubuntu.com/20.04.4/
 
+## Zabbix Manual installation from containers
+https://www.zabbix.com/documentation/current/en/manual/installation/containers
 
 ## Zabbix agent
 guide for zabbix agent on ubuntu focal fossa
