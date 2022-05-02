@@ -25,7 +25,7 @@ https://www.hostinger.com/tutorials/how-to-set-up-nginx-reverse-proxy/
 Used this guide: https://www.techiediaries.com/install-github-cli-ubuntu-20/
 
 Commands we used from that guide:
-```bash
+```shell script
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
 sudo apt-add-repository https://cli.github.com/packages
 sudo apt update
@@ -33,7 +33,7 @@ sudo apt install gh
 ```
 
 # ssh for intel1
-```bash
+```shell script
 ssh -p 513 g13@intel1.vlab.cs.hioa.no
 pass: fell7rips
 ```
