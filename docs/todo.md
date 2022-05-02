@@ -21,19 +21,21 @@
   - [ ] Start and enable zabbix-proxy
 - [x] Zabbix agent installation on VM3
   - [x] Install zabbix-agent from ??
-  - [ ] Start and enable zabbix-agent
+  - [x] Start and enable zabbix-agent
+  - [x] Testing zabbix agent with restarting 
   - [x] Generate hex value for psk encryption file on your local VM3. (Spesifikasjoner i oppgaveteksten)
- - [ ] Move file to /opt/zabbix/ directory and give it permissions which will enable zabbix-agent to access the file. 
+ - [x] Move file to /opt/zabbix/ directory and give it permissions which will enable zabbix-agent to access the file. 
  - [ ] Enable psk encryption in the zabbix-agent configuration file and set valid server address (Spesifikasjoner i oppgaveteksten) 
 
 
 # IV. VM2: Nginx proxy  
-- [ ] Install nginx proxy and prepare the files to configure nginx proxy
-- [ ] Add to /etc/nginx/nginx.conf include directories (Spesifikasjoner i oppgaveteksten)
-- [ ] zabbix-server-web has its own nginx.conf and it needs to be configured to listen on port 8080
+- [x] Install nginx proxy and prepare the files to configure nginx proxy
+- [x] Add to /etc/nginx/nginx.conf include directories (Spesifikasjoner i oppgaveteksten)
+- [x] zabbix-server-web has its own nginx.conf and it needs to be configured to listen on port 8080
 
 ## Tillegg
-- [ ] Koble agent mot proxy
+- [ ] Koble agent mot nginx proxy (vm3 til vm2)
+- [ ] Flytte kommandoer over til Dockerfile
 
 
 # V. VM1: Zabbix frontend
@@ -44,6 +46,7 @@
 - [ ] Enable encryption with PSK and configure it
 - [ ] Create a new template named zabbix-monitoring and add the following items and triggers (Spesifikasjoner i oppgavetekster)
 
+
 # General
 - [ ] Rapportere det vi har gjort så langt
 - [ ] Guide for hvordan man kjører
@@ -52,3 +55,4 @@
 
 # Redundant
 - [ ] Maile Hårek om docker i docker
+- [x] Maile Hårek om hosting av nginx proxy
