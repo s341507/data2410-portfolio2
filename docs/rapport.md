@@ -273,7 +273,7 @@ Then we add `reverse-proxy.conf` to the directory `/etc/nginx/sites-available/`
 
 ```bash
 root@47b33e945b34:/# cd /etc/nginx/sites-available/
-root@47b33e945b34:/# cd nano reverse-proxy.conf
+root@47b33e945b34:/# nano reverse-proxy.conf
 ```
 To complete the proxy, we activate the directives by linking to `/sites-enabled/` using the following command
 
