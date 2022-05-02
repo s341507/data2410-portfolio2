@@ -35,7 +35,7 @@
 
 ## Tillegg
 - [ ] Koble agent mot nginx proxy (vm3 til vm2)
-- [ ] Flytte kommandoer over til Dockerfile
+- [x] Flytte kommandoer over til Dockerfile
 
 
 # V. VM1: Zabbix frontend
