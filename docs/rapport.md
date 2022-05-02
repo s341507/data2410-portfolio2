@@ -36,6 +36,13 @@ Making the images to run containers from, with their custom configs and starting
 Perhaps just compress these two sets of three similar commands into just two commands and say that you swapped out the numbers?
  -->
 
+<!-- 
+TODO
+- [ ] run image1
+- [ ] run image2
+- [ ] build image3
+ -->
+
 ```bash
 # making vm 1 image
 sudo docker build -t vm-image1 -f data2410-portfolio2/configs/vm1-dockerfile .
@@ -112,7 +119,7 @@ TODO
 We start by fetching this: ` wget https://repo.zabbix.com/zabbix/6.2/ubuntu/pool/main/z/zabbix-release2zabbix-release_6.1-1%2Bubuntu20.04_all.deb`
 So that we can install the3`zabbix-agent`
 
-Installing zabbix-3roxy on VM2:
+Installing zabbix-proxy on VM2:
 
 ```bash
 root@47b33e945b34:/# apt-get install wget
@@ -280,6 +287,7 @@ To complete the proxy, we activate the directives by linking to `/sites-enabled/
 ```bash
 root@47b33e945b34:/etc/nginx/sites-available# ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enabled/reverse-proxy.conf
 ```
+
 Lastly, to see if it works, we run an nginx configuration test and restart the service.
 
 ```bash
@@ -292,5 +300,10 @@ root@47b33e945b34:~#
 ```
 
 This verifies that nginx is functioning as intended.
+<!-- 
+All has been introduced to dockerfile to this point
+You can check the tests manually after entering the dockerfile
+ -->
+ 
 
 # 4. VM1: Zabbix frontend
