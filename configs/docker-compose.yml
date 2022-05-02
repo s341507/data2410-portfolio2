@@ -9,7 +9,7 @@ services:
     hostname: mysql-server
     restart: unless-stopped
     volumes:
-      - /var/lib/mysql:/var/lib/mysql
+      - mysql-server-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=123
       - MYSQL_DATABASE=zabbix
@@ -19,7 +19,7 @@ services:
       - SYS_NICE
     networks:
       zabbix-net:
-        ipv4_address: 172.0.20.1
+        ipv4_address: 172.200.0.1
 
   # zabbix server setup
   zabbix-server:
@@ -29,7 +29,7 @@ services:
     hostname: zabbix-server
     restart: unless-stopped
     volumes:
-      - /etc/zabbix:/etc/zabbix:rw
+      - zabbix-server-config:/etc/zabbix
     environment:
       - DB_SERVER_HOST=mysql-server
       - MYSQL_DATABASE=zabbix
@@ -39,7 +39,7 @@ services:
       - mysql-server
     networks:
       zabbix-net:
-        ipv4_address: 172.0.20.2
+        ipv4_address: 172.200.0.2
   # zabbix web container
   zabbix-web:
     image: zabbix/zabbix-web-nginx-mysql
@@ -48,7 +48,7 @@ services:
     hostname: zabbix-web
     restart: unless-stopped
     volumes:
-      - /etc/zabbix:/etc/zabbix:rw
+      - zabbix-web-config:/etc/zabbix
     environment:
       - DB_SERVER_HOST=mysql-server
       - MYSQL_DATABASE=zabbix
@@ -60,7 +60,7 @@ services:
       - zabbix-server
     networks:
       zabbix-net:
-        ipv4_address: 172.0.20.3
+        ipv4_address: 172.200.0.3
   # zabbix agent container
   zabbix-agent:
     image: zabbix/zabbix-agent
@@ -69,18 +69,23 @@ services:
     hostname: zabbix-agent
     restart: unless-stopped
     volumes:
-      - /etc/zabbix:/etc/zabbix:rw
+      - zabbix-agent-config:/etc/zabbix
     environment:
       - ZBX_SERVER_HOST=zabbix-server
     depends_on:
       - zabbix-server
     networks:
       zabbix-net:
-        ipv4_address: 172.0.20.4
+        ipv4_address: 172.200.0.4
 # custom network for the containers
 networks:
   zabbix-net:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.0.20.0/29
+        - subnet: 172.200.0.0/16
+volumes:
+  - mysql-server-data:
+  - zabbix-server-config:
+  - zabbix-web-config:
+  - zabbix-agent-config:
