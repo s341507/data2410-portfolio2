@@ -6,7 +6,7 @@ title: |
 author: |
   Ulrik Bakken Singsaas | s351917 \
   Adrian Bakstad | s341507 \
-  Thea | s351879 \
+  Thea Emilie Haugen | s351879 \
   Andrea Bjørge | s344175
 date: April 25, 2022
 geometry: margin=2cm
