@@ -9,7 +9,7 @@ RUN apt install vim -y
 RUN apt install wget -y
 RUN apt install curl -y
 
-# vm2 specific commands
+# VM2-specific commands
 RUN apt install nginx -y
 RUN unlink /etc/nginx/sites-enabled/default
 COPY data2410-portfolio2/vm_data/nginx/reverse-proxy.conf /etc/nginx/sites-available/reverse-proxy.conf

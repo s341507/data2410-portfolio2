@@ -26,7 +26,14 @@ docker exec -it <container-id> bash
 
 ## VM Setup
 
-The three default VMs had a different ubuntu version than what was recommended in the assignment description. Therefore, to ensure that we were in line with the assignment description, we started by deleting the three default VMs. Following this, we used the following commands to make new containers with the focal fossa version, whilst also allowing for docker containers within docker containers. We made the images to run containers from, with their custom configs and start various services to circumvent the problem of not having systemd in docker containers. Starting the services in the image ensures that they run on startup. 
+The three preinstalled VMs had a different ubuntu version than what was recommended in the assignment description. 
+Therefore, to ensure that we were in line with the assignment description, we started by deleting them. 
+We then built new images for the VMs, using Dockerfiles, to run the containers with their new custom configurations.
+The new images automatically start various services on the different containers to circumvent the problem of not having systemd in docker containers. 
+Starting the services in the image ensures that they run on container startup, and minimizes the amount of commands we have to run manually for each container. 
+After the images were ready, we made new containers, now with the focal fossa version, whilst also allowing for docker containers within docker containers. 
+
+The following code is what we used for building the images and running the containers, as explained above.
 
 <!-- 
 Perhaps just compress these two sets of three similar commands into just two commands and say that you swapped out the numbers?
@@ -40,22 +47,23 @@ TODO
  -->
 
 ```bash
-# making vm 1 image
+# building the image for VM1 from Dockerfile
 sudo docker build -t vm-image1 -f data2410-portfolio2/configs/vm1-dockerfile .
 
-# making vm 2 image
+# building the image for VM2 from Dockerfile
 sudo docker build -t vm-image2 -f data2410-portfolio2/configs/vm2-dockerfile .
 
-# making vm 3 image
+# building the image for VM3 from Dockerfile
 sudo docker build -t vm-image3 -f data2410-portfolio2/configs/vm3-dockerfile .
 ```
 
 ```bash
-# running vm1 container
+# Running the VM1 container
 sudo docker container run --privileged -v /var/run/docker.sock:/var/run/docker.sock -d vm_image
-# running vm2 container
+# Running the VM2 container
 sudo docker container run -d -t vm2-dockerfile
-
+# Running the VM3 container
+# Coming soon
 ```
 
 The image, `vm_image`, was made from this Dockerfile:
@@ -72,14 +80,14 @@ TODO
 
 ## Quad Container Setup
 
-After setting up the VMs we used the file `docker compose.yml`, to set up the four containers with the required config instructions for the assignment. This file can be found in the configs folder. 
+After setting up the three VMs, we used the file `docker-compose.yml`, to set up the four containers with the required config instructions for the assignment. This file can be found in the configs folder. 
 
 ```bash
 TODO
 - [ ] Paste finalized version of this file
 ```
 
-The assignment does not specify volumes. Therefore, in order to keep the maintenance simple, we used four files from `this directory` as the volumes for each of the four containers. At first we ran the docker containers without the volume statements to auto generrate the configs, then we edited the configs and pasted them back in to a new compose file to automate our statements. The final files we used can be found below *(alt. The changes we made to the files can be found below).*
+The assignment does not specify volumes. Therefore, in order to keep the maintenance simple, we used four files from `this directory` as the volumes for each of the four containers. At first, we ran the docker containers without the volume statements to auto generate the configs, then we edited the configs and pasted them back in to a new compose file to automate our statements. The final files we used can be found below *(alt. The changes we made to the files can be found below).*
 
 The following scripts copies configs to containers, so we can use the volumes.
 
@@ -113,7 +121,7 @@ TODO
 # 2. VM2 and VM3: Install zabbix-agent and zabbix-proxy 10%
 
 ## VM2
-The following script describes the installation of `Zabbix-proxy` on VM2. 
+The following code block describes the installation of `Zabbix-proxy` on VM2. 
 
 ```bash
 root@47b33e945b34:/# apt-get install wget
@@ -136,7 +144,7 @@ Reading package lists... Done
 root@47b33e945b34:/# apt-get install zabbix-sql-scripts
 ```
 
-The following script describes the installation of MariaDB inside VM2.
+The following code block describes the installation of `MariaDB` on VM2.
 
 ```bash
 root@47b33e945b34:/# curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
@@ -144,7 +152,7 @@ root@47b33e945b34:/# bash mariadb_repo_setup --mariadb-server-version=10.6
 root@47b33e945b34:/# apt -y install mariadb-common mariadb-server-10.6 mariadb-client-10.6
 ```
 
-The following scripts sets the password for new **root password** = 123.
+The following code blocks set the password for new **root password** = 123.
 
 ```bash
 root@47b33e945b34:/# mysql_secure_installation
@@ -173,20 +181,21 @@ root@47b33e945b34:/# mysql -uroot -p'123' -e "grant all privileges on zabbix_pro
 
 ### Accessing zabbix web with lynx
 
-The following script describes how to access the `Zabbix-web`.
+<!--
+TODO
+- [ ] Replace with ssh-tunneling
+ -->
+
+The following code block describes how to access the `Zabbix-web`.
 
 ```bash
-# if lynx is not installed
+# This gives you a cli web browser
 g13@net513:~$ lynx localhost
-
-g13@net513:~$ lynx localhost
-
-this gives you a cli web browser
 ```
 
 ## VM 3
 
-The following script must be run as root on VM3 to install the `Zabbix-agent`.
+The following code block must be run as root on VM3 to install the `Zabbix-agent`.
 
 <!--
 TODO
@@ -204,7 +213,7 @@ TODO
  apt-get install zabbix-agent
 ```
 
-The following script creates the psk encryption key.
+The following code block creates the psk encryption key.
 
 ```bash
 root@4d08e816a5a3:/# openssl rand -hex 32 > zabbix_agent.psk
@@ -212,7 +221,7 @@ root@4d08e816a5a3:/# cat zabbix_agent.psk
 f62ae210eb7e91ab7908cbad2f2e8e0189f57b54e9d4de9be636e17ad362e7f7
 ```
 
-The following script moves the psk encryption key to /opt/zabbix folder. 
+The following code block moves the psk encryption key to /opt/zabbix folder. 
 
 ```bash
 mkdir /opt/zabbix
@@ -220,7 +229,7 @@ chmod 777 /opt/zabbix
 mv ./zabbix_agent.psk /opt/zabbix/zabbix_agent.psk
 ```
 
-The following script is an update to the `zabbix-agent.conf` file.
+The following code block is an update to the `zabbix-agent.conf` file.
 
 ```bash
 TLSConnect=psk
@@ -229,11 +238,11 @@ TLSPSKIdentity=cbt_psk_01,
 TLSPSKFile=/opt/zabbix_agent.psk
 ```
 
-Since we are running this in a docker container and not on an actual VM, we don´t have systemd available. Therefore, we cannot _enable_ the service, only start it, and have it as a run command in a dockerfile. This means we need to make sure that the service is started every time we run the the container the dockerfile is made for.
+Since we are running this in a docker container and not on an actual VM, we don´t have systemd available. Therefore, we cannot _enable_ the service, only start it, and have it as a run command in a dockerfile. This means we need to make sure that the service is started every time we run the container the dockerfile is made for.
 
 # 3. VM2: Nginx proxy 10%
 
-We start by creating the configuration file for the nginx-proxy. This file makes sure that the nginx-proxy listens on port 8080, and redirects all incoming traffic from that port to the `Zabbix-server` using `proxy_pass`followed by the `Zabbix-server`'s IP adress and port number.
+We start by creating the configuration file for the nginx-proxy. This file makes sure that the nginx-proxy listens on port 8080, and redirects all incoming traffic from that port to the `Zabbix-server` using `proxy_pass`followed by the Zabbix-server's IP address and port number.
 
 ```bash
 # To be moved to /etc/nginx/sites-enabled/zabbix.conf on VM2
@@ -252,7 +261,7 @@ server {
 }
 ```
 
-After setting up the configuration file for the `Nginx-proxy`, we start up a terminal on VM2 and install nginx with the following script.
+After setting up the configuration file for the `Nginx-proxy`, we start up a terminal on VM2 and install nginx with the following commands.
 
 ```bash
 sudo docker exec -it vm2 /bin/bash
@@ -260,7 +269,7 @@ root@47b33e945b34:/# apt-get update
 root@47b33e945b34:/# apt-get install nginx
 ```
 
-Once nginx is installed, we disable the default virtual host by unlinking it with the following script.
+Once nginx is installed, we disable the default virtual host by unlinking it with the following command.
 
 ```bash
 root@47b33e945b34:/# unlink /etc/nginx/sites-enabled/default
