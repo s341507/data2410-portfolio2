@@ -1,3 +1,4 @@
+USE zabbix; # Setting so we use the zabbix database
 CREATE TABLE `role` (
 	`roleid`                 bigint unsigned                           NOT NULL,
 	`name`                   varchar(255)    DEFAULT ''                NOT NULL,
