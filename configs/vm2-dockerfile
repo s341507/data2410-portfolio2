@@ -16,19 +16,21 @@ RUN apt-get install -f
 RUN apt-get install zabbix-proxy-mysql
 RUN apt-get install zabbix-sql-scripts
 
-# MariaDB
+# MariaDB commands
 RUN curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
 RUN bash mariadb_repo_setup --mariadb-server-version=10.6
 RUN apt -y install mariadb-common mariadb-server-10.6 mariadb-client-10.6
-# RUN mysql_secure_installation
+# W need to do this manually thus far
+#RUN mysql_secure_installation
 
-# VM2-specific commands
+# Nginx commands
 RUN apt install nginx -y
 RUN unlink /etc/nginx/sites-enabled/default
 COPY data2410-portfolio2/vm_data/nginx/reverse-proxy.conf /etc/nginx/sites-available/reverse-proxy.conf
 RUN ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enabled/reverse-proxy.conf
 
 # Testing to see if the service works as intended
+RUN service nginx start
 RUN service nginx configtest
 RUN service nginx restart
 
