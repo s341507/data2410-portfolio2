@@ -201,6 +201,10 @@ g13@net513:~$ lynx localhost
 
 We needed to set up a new host on the frontend to make the active checks work, used a ssh tunnel to let us open the intel1 localhost:80 in our own browsers
 
+<!-- 
+Change to listen to 8080 to make it use the nginx proxy and make it look a bit better
+ -->
+
 ```bash
 ssh -L 8080:localhost:80 -p 513 g13@intel1.vlab.cs.hioa.no
 ```
