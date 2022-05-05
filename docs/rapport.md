@@ -197,6 +197,31 @@ The following code block describes how to access the `Zabbix-web`.
 g13@net513:~$ lynx localhost
 ```
 
+### Acessing zabbix web with ssh tunneling, setting up the new host
+
+We needed to set up a new host on the frontend to make the active checks work, used a ssh tunnel to let us open the intel1 localhost:80 in our own browsers
+
+```bash
+ssh -L 8080:localhost:80 -p 513 g13@intel1.vlab.cs.hioa.no
+```
+
+then we could use the localhost:8080 in our browser to login with `user: Admin password: admin`
+
+![](assets/ssh-tunnel-sucess.png)
+
+Then we set up a new host to make the active changes work, configured like this:
+
+![](assets/zabbix_agent-on-frontend-config.png)
+
+Proof that it is working:
+
+![](assets/zabbix_agent-on-frontend-config-working.png)
+
+<!-- 
+- [ ] Need to test that the active checks are actually working now
+- [ ] 
+ -->
+
 ## VM 3
 
 The following code block must be run as root on VM3 to install the `Zabbix-agent`.
