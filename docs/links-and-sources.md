@@ -39,3 +39,7 @@ sudo apt install gh
 ssh -p 513 g13@intel1.vlab.cs.hioa.no
 pass: fell7rips
 ```
+
+# lise løsning for agent og server active
+Lise — Today at 5:26 PM
+Fikk også dette (etter jeg prøvde å koble til den eksterne agenten). plutselig ville ikke stack-agenten koble seg opp mot server-hosten. Lagde en agent-host (zabbix-agent) på frontend og da var den fornøyd. Men jeg vet ikke om det er rett løsning, eller hvorfor det løste problemet 🙃  Lagde hosten basert på videoen her: https://blog.zabbix.com/handy-tips-15-deploying-zabbix-passive-and-active-agents/17696/
