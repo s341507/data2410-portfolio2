@@ -122,6 +122,8 @@ TODO
 # 2. VM2 and VM3: Install zabbix-agent and zabbix-proxy 10%
 
 ## VM2
+
+### Zabbix Proxy install
 The following code block describes the installation of `Zabbix-proxy` on VM2. 
 
 ```bash
@@ -145,6 +147,7 @@ Reading package lists... Done
 root@47b33e945b34:/# apt-get install zabbix-sql-scripts
 ```
 
+### MariaDB Install
 The following code block describes the installation of `MariaDB` on VM2.
 
 ```bash
