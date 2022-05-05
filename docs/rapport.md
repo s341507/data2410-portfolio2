@@ -305,6 +305,16 @@ This verifies that nginx works as intended.
 All has been introduced to dockerfile to this point
 You can check the tests manually after entering the dockerfile
  -->
+ 
+To reach other docker containers, we have to use the IP address of the host machine (intel1 in this case) 172.19.0.1
+
+```bash
+root@0501deebfda5:/# curl 172.19.0.1
+<!DOCTYPE html>
+<html>
+--------------------------------- # commented put contents of the zabbix page
+root@0501deebfda5:/#
+```
 
 
 # 4. VM1: Zabbix frontend
