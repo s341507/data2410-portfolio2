@@ -20,7 +20,7 @@ RUN apt-get install zabbix-sql-scripts
 RUN curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
 RUN bash mariadb_repo_setup --mariadb-server-version=10.6
 RUN apt -y install mariadb-common mariadb-server-10.6 mariadb-client-10.6
-RUN mysql_secure_installation
+# RUN mysql_secure_installation
 
 # VM2-specific commands
 RUN apt install nginx -y
