@@ -62,7 +62,7 @@ sudo docker build -t vm-image3 -f data2410-portfolio2/configs/vm3-dockerfile .
 sudo docker container run --privileged -v /var/run/docker.sock:/var/run/docker.sock -d vm_image
 # Running the VM2 container
 
-sudo docker container run --name vm2 -p 8080:80 -d -t vm-image2
+sudo docker container run --name vm2 -p 8080:8080 -d -t vm-image2
 # Running the VM3 container
 # Coming soon
 ```
