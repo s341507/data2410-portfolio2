@@ -147,6 +147,9 @@ Reading package lists... Done
 root@47b33e945b34:/# apt-get install zabbix-sql-scripts
 ```
 
+After installing this we had to make the two VM's communicate, we initially had problems with them getting the same ip over bridged network setting i virtualbox  but fixed this by updating vm2's MAC address. Then we just had to set up the nginx.conf to map to vm1's local ip and port 80, letting us access this on vm2's local ip with port 8080 on the host machine as per the illustration in the assignment description
+
+
 ### MariaDB Install
 The following code block describes the installation of `MariaDB` on VM2.
 
