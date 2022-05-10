@@ -248,27 +248,42 @@ TODO
 
 The following code block creates the psk encryption key.
 
-```bash
-root@4d08e816a5a3:/# openssl rand -hex 32 > zabbix_agent.psk
-root@4d08e816a5a3:/# cat zabbix_agent.psk
-f62ae210eb7e91ab7908cbad2f2e8e0189f57b54e9d4de9be636e17ad362e7f7
+```
+ubuntu1@ubuntu1-VirtualBox:~$ openssl rand -hex 32 > zabbix_agent.psk
+ubuntu1@ubuntu1-VirtualBox:~$ cat zabbix_agent.psk 
+e8126679667a8594bc8d3d76121b6ba2a5fb4b6d41bea2cd62190c163fbc6c6b
 ```
 
 The following code block moves the psk encryption key to /opt/zabbix folder. 
 
 ```bash
-mkdir /opt/zabbix
-chmod 777 /opt/zabbix
-mv ./zabbix_agent.psk /opt/zabbix/zabbix_agent.psk
+sudo mkdir /opt/zabbix
+sudo chmod 777 /opt/zabbix
+sudo mv zabbix_agent.psk /opt/zabbix/
 ```
 
-The following code block is an update to the `zabbix-agent.conf` file.
+used these commands to edit the `zabbix-agent.conf` file
+
+```bash
+ubuntu1@ubuntu1-VirtualBox:~$ sudo su
+root@ubuntu1-VirtualBox:/home/ubuntu1# vim /etc/zabbix/zabbix_
+zabbix_agentd.conf  zabbix_proxy.conf   
+root@ubuntu1-VirtualBox:/home/ubuntu1# vim /etc/zabbix/zabbix_
+zabbix_agentd.conf  zabbix_proxy.conf   
+root@ubuntu1-VirtualBox:/home/ubuntu1# vim /etc/zabbix/zabbix_
+zabbix_agentd.conf  zabbix_proxy.conf   
+root@ubuntu1-VirtualBox:/home/ubuntu1# vim /etc/zabbix/zabbix_agentd.conf 
+```
+
+The following code block containser the lines we changed in the `zabbix-agent.conf` file.
 
 ```bash
 TLSConnect=psk
 TLSAccept=psk
 TLSPSKIdentity=cbt_psk_01,
 TLSPSKFile=/opt/zabbix_agent.psk
+# the local ip of our bridged networked VM2
+Server=192.168.50.247
 ```
 
 Since we are running this in a docker container and not on an actual VM, we don´t have systemd available. Therefore, we cannot _enable_ the service, only start it, and have it as a run command in a dockerfile. This means we need to make sure that the service is started every time we run the container the dockerfile is made for.
