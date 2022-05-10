@@ -123,18 +123,9 @@ TODO
 
 ## VM2
 
-### Zabbix Proxy install
-The following code block describes the installation of `Zabbix-proxy` on VM2. 
-
-```bash
-root@47b33e945b34:/# apt-get install wget
-Reading package lists... Done
-...
-root@47b33e945b34:/# wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
-
-root@47b33e945b34:/# dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
-Selecting previously unselected package zabbix-release.
-(Reading database ... 4623 files and directories currently installed.)
+We followed this guide to complete task 1 in part III of the assignment description: https://bestmonitoringtools.com/install-zabbix-proxy-on-ubuntu/
+We started by installing `Zabbix proxy` on VM2 with the following commands: 
+apt-get install wget
 Preparing to unpack zabbix-release_6.1-1+ubuntu20.04_all.deb ...
 Unpacking zabbix-release (1:6.1-1+ubuntu20.04) ...
 Setting up zabbix-release (1:6.1-1+ubuntu20.04) ...
