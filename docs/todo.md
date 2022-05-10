@@ -54,6 +54,7 @@
 - [ ] Rapportere det vi har gjort så langt
 - [ ] Guide for hvordan man kjører
 - [ ] Ta oppvasken
+- [ ] APA kildehenvisning i proxy configuration i VM2.
 
 
 # Redundant
