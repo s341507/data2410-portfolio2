@@ -126,7 +126,8 @@ TODO
 We followed this guide to complete task 1 in part III of the assignment description: https://bestmonitoringtools.com/install-zabbix-proxy-on-ubuntu/
 There were a few things we did differently from the guide. These will be described below. 
 
-We started by installing `Zabbix proxy` on VM2 with the following commands: 
+### Innstalling Zabbix Proxy
+We started by installing `Zabbix Proxy` on VM2 with the following commands: 
 
 ```bash
 apt-get install wget
@@ -144,8 +145,8 @@ apt-get install zabbix-sql-scripts
 
 The only notable difference between the guide and what we did in this part of the task, is that we used Zabbix-proxy version 6.1 in stead of Zabbix-proxy version 6.0, becasue the assignment descriptions asks us to use version 6.1.  
 
-
-After we finished installing `Zabbix proxy`, we installed and configured the database, using `MariaDB`, according to both the guide mentioned above, and the assignment description. 
+### Configuring database
+After we finished installing `Zabbix Proxy`, we installed and configured the database, using `MariaDB`, according to both the guide mentioned above, and the assignment description. 
 
 The following block of code describes the installation of `MariaDB` on VM2:
 
@@ -210,7 +211,8 @@ sudo cat /usr/share/doc/zabbix-sql-scripts/mysql/proxy.sql | mysql -uzabbix -p'z
 In the installation and configuration of the database, we followed the guide quite exactly. Therefore, there are very few differences between what we did to install and configure the database, and what is stated in the installation guide. 
 
 
-Once the installation and configuration of the database was complete, it was time to configure the `Zabbix proxy`. The first step when configuring the `Zabbix proxy` was to open the config file with the following command: 
+### Configurating Zabbix Proxy
+Once the installation and configuration of the database was complete, it was time to configure the `Zabbix Proxy`. The first step when configuring the `Zabbix Proxy` was to open the config file with the following command: 
 
 ```bash 
 sudo nano /etc/zabbix/zabbix_proxy.conf
@@ -224,9 +226,11 @@ In the file we changed the following values:
 5. DBName=zabbix_proxy
 6. DBUser=zabbix
 
-After editing the necessary values, we saved and exited the file. We configured the ConfigFrequency to be 100 seconds. This parameter determines how often the proxy retrieves data from the configuration file, and is useful to cut down on the waiting time between updates on the status of the `Zabbix proxy`. The notable differences between our config file, and the config file in the guide is that we have a different IP address for the server, and a different hostname for the proxy itself. 
+After editing the necessary values, we saved and exited the file. We configured the ConfigFrequency to be 100 seconds. This parameter determines how often the proxy retrieves data from the configuration file, and is useful to cut down on the waiting time between updates on the status of the `Zabbix Proxy`. The notable differences between our config file, and the config file in the guide is that we have a different IP address for the server, and a different hostname for the proxy itself. 
 
-Next, we started and enabled the `Zabbix proxy` to boot on startup with the following commands: 
+
+### Starting and enabling Zabbix Proxy
+Next, we started and enabled the `Zabbix Proxy` to boot on startup with the following commands: 
 
 ```bash
 sudo systemctl restart zabbix-proxy
@@ -236,6 +240,9 @@ sudo systemctl enable zabbix-proxy
 
 Find Hostname in the zabbix-proxy config file and note. This is important in order to connect the proxy to the server in the web frontend. 
 In the zabbix-proxy config find DBPassword, and make sure it is set to the correct password.  
+
+
+### Registering Zabbix Proxy in the Zabbix frontend
 
 
 ### Accessing zabbix web with lynx
