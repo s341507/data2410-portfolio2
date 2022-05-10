@@ -123,49 +123,67 @@ TODO
 
 ## VM2
 
-### Zabbix Proxy install
-The following code block describes the installation of `Zabbix-proxy` on VM2. 
+We followed this guide to complete task 1 in part III of the assignment description: https://bestmonitoringtools.com/install-zabbix-proxy-on-ubuntu/
+There were a few things we did differently from the guide. These will be described below. 
+
+### Innstalling Zabbix Proxy
+We started by installing `Zabbix Proxy` on VM2 with the following commands: 
 
 ```bash
-root@47b33e945b34:/# apt-get install wget
-Reading package lists... Done
-...
-root@47b33e945b34:/# wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
+apt-get install wget
 
-root@47b33e945b34:/# dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
-Selecting previously unselected package zabbix-release.
-(Reading database ... 4623 files and directories currently installed.)
-Preparing to unpack zabbix-release_6.1-1+ubuntu20.04_all.deb ...
-Unpacking zabbix-release (1:6.1-1+ubuntu20.04) ...
-Setting up zabbix-release (1:6.1-1+ubuntu20.04) ...
-root@47b33e945b34:/# apt-get install -f
+wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
 
-root@47b33e945b34:/# apt-get install zabbix-proxy-mysql
-Reading package lists... Done
-..
+dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
 
-root@47b33e945b34:/# apt-get install zabbix-sql-scripts
+apt-get install -f
+
+apt-get install zabbix-proxy-mysql
+
+apt-get install zabbix-sql-scripts
 ```
 
-### MariaDB Install
-The following code block describes the installation of `MariaDB` on VM2.
+The only notable difference between the guide and what we did in this part of the task, is that we used Zabbix-proxy version 6.1 in stead of Zabbix-proxy version 6.0, becasue the assignment descriptions asks us to use version 6.1.  
+
+### Configuring database
+After we finished installing `Zabbix Proxy`, we installed and configured the database, using `MariaDB`, according to both the guide mentioned above, and the assignment description. 
+
+The following block of code describes the installation of `MariaDB` on VM2:
 
 ```bash
-root@47b33e945b34:/# curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
-root@47b33e945b34:/# bash mariadb_repo_setup --mariadb-server-version=10.6
-root@47b33e945b34:/# apt -y install mariadb-common mariadb-server-10.6 mariadb-client-10.6
+sudo apt install software-properties-common -y
+
+curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
+
+sudo bash mariadb_repo_setup --mariadb-server-version=10.6
+
+sudo apt update
+
+sudo apt -y install mariadb-common mariadb-server-10.6 mariadb-client-10.6
 ```
 
-The following code blocks set the password for new **root password** = 123.
+After installing `MariaDB` we bagan the configuration of the database by running the following commands to start and enable MariaDB, and configure it to start on boot: 
 
 ```bash
-root@47b33e945b34:/# mysql_secure_installation
+sudo systemctl start mariadb
 
-Enter current password for root (enter for none):
+sudo systemctl enable mariadb
+```
+
+The next step in the configuration of the database was to reset the password. We did that with the commands in the following code block: The following code blocks set the password for new **root password** = 123.
+
+```bash
+sudo mysql_secure_installation
+
+Enter current password for root (enter for none): Press Enter
 
 Switch to unix_socket authentication [Y/n] y
 
 Change the root password? [Y/n] y
+
+New password: <Enter root DB password>
+
+Re-enter new password: <Repeat root DB password>
 
 Remove anonymous users? [Y/n] y
 
@@ -174,14 +192,74 @@ Disallow root login remotely? [Y/n] y
 Remove test database and access to it? [Y/n] y
 
 Reload privilege tables now? [Y/n] y
-
-Thanks for using MariaDB!
 ```
+
+The only notable difference between the guide and what we did was that we set the root password to '123', in stead of 'rootDBpass. 
+
+After we set the root password, it was time to create the database by running the commands in the following block of code: 
 
 ```bash
-root@47b33e945b34:/# mysql -uroot -p'123' -e "create database zabbix_proxy character set utf8mb4 collate utf8mb4_bin;"
-root@47b33e945b34:/# mysql -uroot -p'123' -e "grant all privileges on zabbix_proxy.* to zabbix@localhost identified by 'zabbixDBpass';"
+sudo  mysql -uroot -p'123' -e "create database zabbix_proxy character set utf8mb4 collate utf8mb4_bin;"
+sudo mysql -uroot -p'123' -e "grant all privileges on zabbix_proxy.* to zabbix@localhost identified by 'zabbixDBpass';"
 ```
+
+The last step in the configuration of the database was to import the initial schema and data with the following command: 
+
+```bash
+sudo cat /usr/share/doc/zabbix-sql-scripts/mysql/proxy.sql | mysql -uzabbix -p'zabbixDBpass' zabbix_proxy
+```
+In the installation and configuration of the database, we followed the guide quite exactly. Therefore, there are very few differences between what we did to install and configure the database, and what is stated in the installation guide. 
+
+
+### Configurating Zabbix Proxy
+Once the installation and configuration of the database was complete, it was time to configure the `Zabbix Proxy`. The first step when configuring the `Zabbix Proxy` was to open the config file with the following command: 
+
+```bash 
+sudo nano /etc/zabbix/zabbix_proxy.conf
+```
+
+In the file we changed the following values: 
+1. DBPassword=zabbixDBpass
+2. ConfigFrequency=100
+3. Server= *INSERT SERVER IP HERE*
+4. Hostname=Zabbix Proxy
+5. DBName=zabbix_proxy
+6. DBUser=zabbix
+
+After editing the necessary values, we saved and exited the file. We configured the ConfigFrequency to be 100 seconds. This parameter determines how often the proxy retrieves data from the configuration file, and is useful to cut down on the waiting time between updates on the status of the `Zabbix Proxy`. The notable differences between our config file, and the config file in the guide is that we have a different IP address for the server, and a different hostname for the proxy itself. 
+
+
+### Starting and enabling Zabbix Proxy
+Next, we started and enabled the `Zabbix Proxy` to boot on startup with the following commands: 
+
+```bash
+sudo systemctl restart zabbix-proxy
+
+sudo systemctl enable zabbix-proxy
+```
+
+Find Hostname in the zabbix-proxy config file and note. This is important in order to connect the proxy to the server in the web frontend. 
+In the zabbix-proxy config find DBPassword, and make sure it is set to the correct password.  
+
+
+### Registering Zabbix Proxy in the Zabbix frontend
+
+
+### Accessing zabbix web with lynx
+
+<!--
+TODO
+- [ ] Replace with ssh-tunneling
+ -->
+
+The following code block describes how to access the `Zabbix-web`.
+
+```bash
+# This gives you a cli web browser
+g13@net513:~$ lynx localhost
+```
+
+
 
 ### Accessing zabbix web with lynx
 
