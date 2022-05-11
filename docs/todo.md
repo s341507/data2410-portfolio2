@@ -19,8 +19,8 @@
   - [x] Install zabbix-proxy 
   - [x] Install MariaDB
   - [x] Configure zabbix-proxy to connect to the MariaDB
-  - [ ] Configure zabbix-proxy to connect to zabbix-server
-  - [ ] Start and enable zabbix-proxy
+  - [x] Configure zabbix-proxy to connect to zabbix-server
+  - [x] Start and enable zabbix-proxy
 - [x] Zabbix agent installation on VM3
   - [x] Install zabbix-agent from ??
   - [x] Start and enable zabbix-agent
@@ -37,17 +37,21 @@
 - [x] zabbix-server-web has its own nginx.conf and it needs to be configured to listen on port 8080
 
 ## Tillegg
-- [ ] Koble agent mot zabbix proxy (vm3 til vm2)
+- [x] Koble agent mot zabbix proxy (vm3 til vm2)
 - [x] Flytte kommandoer over til Dockerfile
 
 
 # V. VM1: Zabbix frontend
 - [x] Create a host group named zabbix-monitoring
-- [ ] Create a host, assign it to the newly created group, and configure the agent with VM3 ipv4 address and port used by zabbix-agent
-- [ ] Assign a hostname and visible name
-- [ ] Add a template named Linux by zabbix agent
-- [ ] Enable encryption with PSK and configure it
+- [x] Create a host, assign it to the newly created group, and configure the agent with VM3 ipv4 address and port used by zabbix-agent
+- [x] Assign a hostname and visible name
+- [x] Add a template named Linux by zabbix agent
+- [x] Enable encryption with PSK and configure it
 - [ ] Create a new template named zabbix-monitoring and add the following items and triggers (Spesifikasjoner i oppgavetekster)
+  - [ ] Create an item in the template that will monitor the total used disk space on the directory /var, interval 1h
+  - [ ] Create an item in the template that will monitor docker process usage, interval 1m, units %
+  – [ ] Create a trigger in the template that will trigger when uptime is longer than 240 days, assign it type information (solution:  {test-hostname:system.uptime.last()}>240d)
+  - [ ] Create a trigger in the template that will trigger when disk i/o is overloaded, higher than 20, average 5min (solution: {test-hostname:system.cpu.util[,iowait].avg(5m)}>20)
 
 
 # General
