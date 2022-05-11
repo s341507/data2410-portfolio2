@@ -24,6 +24,11 @@ docker exec -it <container-id> bash
 
 # 1. VM1: Docker containers setup 10%
 
+Originally, we attempted to use Docker containers on the intel1-server to implement our solution. The server however, ran out of storage, forcing us to create virtual machines through VirtualBox as a substitute. 
+
+The steps we took to set up the Docker containers can be seen below, but our final solution, utilizing virtual machines, will be shown further down.
+Even though the environments on intel1 will be referred to as VMs, they are in fact docker containers. All references to VMs before the switch from intel1 to VirtualBox will therefore refer to the docker containers named VM1, VM2 and VM3.
+
 ## VM Setup
 
 The three preinstalled VMs had a different ubuntu version than what was recommended in the assignment description. 
@@ -146,7 +151,7 @@ apt-get install zabbix-proxy-mysql
 apt-get install zabbix-sql-scripts
 ```
 
-The only notable difference between the guide and what we did in this part of the task, is that we used Zabbix-proxy version 6.1 in stead of Zabbix-proxy version 6.0, becasue the assignment descriptions asks us to use version 6.1.  
+The only notable difference between the guide and what we did in this part of the task, is that we used Zabbix-proxy version 6.1 instead of Zabbix-proxy version 6.0, because the assignment descriptions asks us to use version 6.1.  
 
 ### Configuring database
 After we finished installing `Zabbix Proxy`, we installed and configured the database, using `MariaDB`, according to both the guide mentioned above, and the assignment description. 
@@ -165,7 +170,7 @@ sudo apt update
 sudo apt -y install mariadb-common mariadb-server-10.6 mariadb-client-10.6
 ```
 
-After installing `MariaDB` we bagan the configuration of the database by running the following commands to start and enable MariaDB, and configure it to start on boot: 
+After installing `MariaDB` we began the configuration of the database by running the following commands to start and enable MariaDB, and configure it to start on boot: 
 
 ```bash
 sudo systemctl start mariadb
@@ -359,7 +364,7 @@ zabbix_agentd.conf  zabbix_proxy.conf
 root@ubuntu1-VirtualBox:/home/ubuntu1# vim /etc/zabbix/zabbix_agentd.conf 
 ```
 
-The following code block containser the lines we changed in the `zabbix-agent.conf` file.
+The following code block contains the lines we changed in the `zabbix-agent.conf` file.
 
 ```bash
 TLSConnect=psk
@@ -401,7 +406,7 @@ root@47b33e945b34:/# apt-get update
 root@47b33e945b34:/# apt-get install nginx
 ```
 
-Once nginx is installed, we disable the default virtual host by unlinking it with the following command.
+Once nginx has been installed, we disable the default virtual host by unlinking it with the following command.
 
 ```bash
 root@47b33e945b34:/# unlink /etc/nginx/sites-enabled/default
