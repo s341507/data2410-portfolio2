@@ -329,6 +329,9 @@ TODO
 # TODO delete these, they have been put into vm3 dockerfile
  wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
 
+ #woops had to use this one for right version
+ wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/zabbix-agent_6.0.1-1%2Bubuntu20.04_amd64.deb
+
  dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
 
  apt-get install -f
