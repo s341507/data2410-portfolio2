@@ -50,7 +50,7 @@
 - [ ] Create a new template named zabbix-monitoring and add the following items and triggers (Spesifikasjoner i oppgavetekster)
   - [ ] Create an item in the template that will monitor the total used disk space on the directory /var, interval 1h
   - [ ] Create an item in the template that will monitor docker process usage, interval 1m, units %
-  – [ ] Create a trigger in the template that will trigger when uptime is longer than 240 days, assign it type information (solution:  {test-hostname:system.uptime.last()}>240d)
+  - [ ] Create a trigger in the template that will trigger when uptime is longer than 240 days, assign it type information (solution:  {test-hostname:system.uptime.last()}>240d)
   - [ ] Create a trigger in the template that will trigger when disk i/o is overloaded, higher than 20, average 5min (solution: {test-hostname:system.cpu.util[,iowait].avg(5m)}>20)
 
 
