@@ -132,7 +132,10 @@ We started by installing `Zabbix Proxy` on VM2 with the following commands:
 ```bash
 apt-get install wget
 
-wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
+wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-1%2Bubuntu20.04_all.deb
+
+#needed this as well as the proxy was the wrong version
+wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/zabbix-proxy-mysql_6.0.1-1%2Bubuntu20.04_amd64.deb
 
 dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
 
@@ -200,7 +203,7 @@ After we set the root password, it was time to create the database by running th
 
 ```bash
 sudo  mysql -uroot -p'123' -e "create database zabbix_proxy character set utf8mb4 collate utf8mb4_bin;"
-sudo mysql -uroot -p'123' -e "grant all privileges on zabbix_proxy.* to zabbix@localhost identified by 'zabbixDBpass';"
+sudo mysql -uroot -p'123' -e "grant all privileges on *.* to zabbix@localhost identified by 'zabbixDBpass';"
 ```
 
 The last step in the configuration of the database was to import the initial schema and data with the following command: 
@@ -215,16 +218,19 @@ In the installation and configuration of the database, we followed the guide qui
 Once the installation and configuration of the database was complete, it was time to configure the `Zabbix Proxy`. The first step when configuring the `Zabbix Proxy` was to open the config file with the following command: 
 
 ```bash 
-sudo nano /etc/zabbix/zabbix_proxy.conf
+sudo gedit /etc/zabbix/zabbix_proxy.conf
 ```
 
 In the file we changed the following values: 
-1. DBPassword=zabbixDBpass
-2. ConfigFrequency=100
-3. Server= *INSERT SERVER IP HERE*
-4. Hostname=Zabbix Proxy
-5. DBName=zabbix_proxy
-6. DBUser=zabbix
+
+```
+DBPassword=zabbixDBpass
+ConfigFrequency=100
+Server=192.168.50.95
+Hostname=Zabbix Proxy
+DBName=zabbix_proxy
+DBUser=zabbix
+```
 
 After editing the necessary values, we saved and exited the file. We configured the ConfigFrequency to be 100 seconds. This parameter determines how often the proxy retrieves data from the configuration file, and is useful to cut down on the waiting time between updates on the status of the `Zabbix Proxy`. The notable differences between our config file, and the config file in the guide is that we have a different IP address for the server, and a different hostname for the proxy itself. 
 
