@@ -24,21 +24,14 @@ docker exec -it <container-id> bash
 
 # 1. VM1: Docker containers setup 10%
 
-Originally, we attempted to use Docker containers on the intel1-server to implement our solution. The server however, ran out of storage, forcing us to create virtual machines through VirtualBox as a substitute. 
+Originally, we attempted to use Docker containers on the intel1-server to implement our solution. However, the server ran out of storage, so created virtual machines through VirtualBox as a substitute. 
 
-The steps we took to set up the Docker containers can be seen below, but our final solution, utilizing virtual machines, will be shown further down.
+The steps we took to set up the Docker containers is described below. Our final solution, utilizing virtual machines, will be shown further down in this report.
 Even though the environments on intel1 will be referred to as VMs, they are in fact docker containers. All references to VMs before the switch from intel1 to VirtualBox will therefore refer to the docker containers named VM1, VM2 and VM3.
+ 
+## VM Setup on intel1
 
-## VM Setup
-
-The three preinstalled VMs had a different ubuntu version than what was recommended in the assignment description. 
-Therefore, to ensure that we were in line with the assignment description, we started by deleting them. 
-We then built new images for the VMs, using Dockerfiles, to run the containers with their new custom configurations.
-The new images automatically start various services on the different containers to circumvent the problem of not having systemd in docker containers. 
-Starting the services in the image ensures that they run on container startup, and minimizes the amount of commands we have to run manually for each container. 
-After the images were ready, we made new containers, now with the focal fossa version, whilst also allowing for docker containers within docker containers. 
-
-The following code is what we used for building the images and running the containers, as explained above.
+The three preinstalled VMs had a different ubuntu version than what was recommended in the assignment description. Therefore, to ensure that we were in line with the assignment description, we started by deleting them. We then built new images for the VMs, using Dockerfiles, to run the containers with their new custom configurations. The new images automatically start various services on the different containers to circumvent the problem of not having systemd in docker containers. Starting the services in the image ensures that they run on container startup, and minimizes the amount of commands we need to run manually for each container. After the images were ready, we made new containers, now with the focal fossa version, whilst also allowing for docker containers within docker containers. The following blocks of code describes what we used for building the images and running the containers, as explained above.
 
 <!-- 
 Perhaps just compress these two sets of three similar commands into just two commands and say that you swapped out the numbers?
@@ -84,7 +77,7 @@ TODO
 - [ ] get from configs/Dockerfile
 ```
 
-## Quad Container Setup
+## Quad Container Setup on intel1
 
 After setting up the three VMs, we used the file `docker-compose.yml`, to set up the four containers with the required config instructions for the assignment. This file can be found in the configs folder. 
 
@@ -95,7 +88,7 @@ TODO
 
 The assignment does not specify volumes. Therefore, in order to keep the maintenance simple, we used four files from `this directory` as the volumes for each of the four containers. At first, we ran the docker containers without the volume statements to auto generate the configs, then we edited the configs and pasted them back in to a new compose file to automate our statements. The final files we used can be found below *(alt. The changes we made to the files can be found below).*
 
-The following scripts copies configs to containers, so we can use the volumes.
+The following block of code describes the process of copying configs to containers, so we can use the volumes.
 
 ```bash
 g13@net513:~/data2410-portfolio2$ sudo docker cp vm_data/zabbix/zabbix_server.conf c99a6922714d:/etc/zabbix/zabbix_server.conf
@@ -124,7 +117,15 @@ TODO
 - [ ] Finialize this "chapter"
 -->
 
+## Virtual Machines with VitualBox
+<!-- 
+TODO
+- [ ] Descirbe setup of VMs on virtual box (see introduction paragraph of report for specifics). 
+-->
+
 # 2. VM2 and VM3: Install zabbix-agent and zabbix-proxy 10%
+
+From here on out, everything was performed on VMs using VirtualBox. 
 
 ## VM2
 
