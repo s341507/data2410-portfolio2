@@ -19,8 +19,8 @@
   - [x] Install zabbix-proxy 
   - [x] Install MariaDB
   - [x] Configure zabbix-proxy to connect to the MariaDB
-  - [ ] Configure zabbix-proxy to connect to zabbix-server
-  - [ ] Start and enable zabbix-proxy
+  - [x] Configure zabbix-proxy to connect to zabbix-server
+  - [x] Start and enable zabbix-proxy
 - [x] Zabbix agent installation on VM3
   - [x] Install zabbix-agent from ??
   - [x] Start and enable zabbix-agent
