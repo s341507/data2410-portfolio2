@@ -48,6 +48,8 @@
 - [x] Add a template named Linux by zabbix agent
 - [x] Enable encryption with PSK and configure it
 - [ ] Create a new template named zabbix-monitoring and add the following items and triggers (Spesifikasjoner i oppgavetekster)
+  - [ ] **Check Discord pinned for this, in network channel**
+  - [ ] **Check Thea's presentation in our private discord for this setup thingyyyyyyyyy ~~we out here~~**
   - [ ] Create an item in the template that will monitor the total used disk space on the directory /var, interval 1h
   - [ ] Create an item in the template that will monitor docker process usage, interval 1m, units %
   - [ ] Create a trigger in the template that will trigger when uptime is longer than 240 days, assign it type information (solution:  {test-hostname:system.uptime.last()}>240d)
