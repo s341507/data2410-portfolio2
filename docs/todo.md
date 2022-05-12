@@ -129,10 +129,11 @@
   - [ ] Final read through and edit
   - [ ] Clean up unnecessary comments
   - [ ] Remove all references to our project directory and folders if we're not delivering the .zip file of our working directory. 
+  - [ ] Check all figure references. 
   - [ ] Convert to pdf
   - [ ] Deliver the report
 
   # Report structure
-  - [ ] Ikke ha tekst på samme side som innholdsfortegnelsen
+  - [x] Ikke ha tekst på samme side som innholdsfortegnelsen
   - [ ] Linjeavastand 1,5 i hele dokumentet
   - [ ] Mer whitespace mellom tekst og bilder/kode

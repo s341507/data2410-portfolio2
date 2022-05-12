@@ -46,12 +46,10 @@ configs: files that aren't in use, but are kept as backup
 
 Originally, we attempted to use docker containers on the intel1-server to implement our solution. However, the server ran out of storage space, so we created virtual machines through VirtualBox as a substitute. 
 
-The first thing we needed was a VM running Ubuntu Focal Fossa.
-Cloning this VM would let us create the 3 virtual machines needed for the assignment, each with 4GB of RAM and 10GB of disk space. 
-We started by downloading the image for Ubuntu Focal Fossa (20.04) from: 
-  <https://releases.ubuntu.com/20.04/ubuntu-20.04.4-desktop-amd64.iso> and creating VM1.
+The first thing we needed was a VM running Ubuntu Focal Fossa. We needed the VM to have 4GB of RAM and 10GB of disk space. As shown in Figure 1, we started by downloading the image for Ubuntu Focal Fossa (20.04) from: 
+  <https://releases.ubuntu.com/20.04/ubuntu-20.04.4-desktop-amd64.iso> and created VM1.
 
-![Ubuntu installation screen](./assets/ubuntu%20install.png)
+![Ubuntu installation screen](./assets/ubuntu%20install.png)  <!-- figure 1 -->
 
 <!--![](./assets/ubuntu%20install2.png) -->
 
@@ -203,7 +201,7 @@ We used the following command on VM1 to start the docker containers with the `do
 sudo docker-compose up
 ```
 
-After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack. This was to ensure that everything connected properly. The web frontend is hosted on VM1 port 80 as per the assignment description, so to reach it, we simply typed the address in a web browser. In later steps of the assignment, we set up an nginx proxy that allowed us to reach the frontend trough the localhost-address.
+After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack. This was to ensure that everything connected properly. The web frontend is hosted on VM1 port 80 as per the assignment description. At this point in the assignmnet we typed the address ito a web browser to access the web frontend.
 
 <!-- 
 TODO
@@ -212,13 +210,13 @@ TODO
 
 ![.](assets/all-green-vm1-splitt1.png) \
 
-![Image showing that the zabbix-agent and zabbix-server is working](assets/all-green-vm1-splitt2.png)
+![Image showing that the zabbix-agent and zabbix-server is working](assets/all-green-vm1-splitt2.png) <!-- figure 2 -->
 
-Here is a screenshot of our docker compose log, showing that all the checks except for one is working between the agent and server. Our thoughts was that this one check from the template probably wasn't suited for being run in a docker environment as some things can be different there. We decided to cut this image in two and put them ih two rows to make it easier to read in a standing page .pdf format
+Figure 2 shows a screenshot of the docker compose log. It shows that all the checks except one is working between the agent and server. We assumed that this one check from the template probably wasn't suited for being run in a docker environment, because some things can be different in a docker environment. We decided to cut this image into two parts to improve the readability.
 
-![Logs from docker compose after setting up hosts on frontend](assets/host-error-sorted-tho-sorted-itself.png)
+![Logs from docker compose after setting up hosts on frontend](assets/host-error-sorted-tho-sorted-itself.png)  <!-- figure 3 -->
 
-So this should fully explain how we did the first part of this assignment, how we installed docker, how we configured our docker-compose stack and made our docker bridge network inside of VM1, while also going a little further by using the frontend to set up the hosts there.'
+This section should now fully explain how we did the first part of this assignment, how we installed docker, how we configured our docker-compose stack and made our docker bridge network inside of VM1, while also going a little further by using the frontend to set up the hosts there.' 
 
 \newpage
 
@@ -369,7 +367,7 @@ Quickly documenting how we did the frontend setup of the proxy after, doing the 
 
 ![Image showing proxy creation dialog window](assets/proxy-frontend-setup.png) <!--this can be removed if we don't have enough space-->
 
-![Image showing that the zabbix-proxy is connected](assets/zabbix-proxy-post-100s.png)
+![Image showing that the zabbix-proxy is connected](assets/zabbix-proxy-post-100s.png) <!-- figure 4 -->
 
 ## 3.2. VM 3. Zabbix Agent installation and setup 
 
@@ -431,7 +429,7 @@ Server=192.168.50.247
 Lastly we start the agent with the following command:
 
 ```bash
-sudo systemctl restart zabbix-agent
+sudo systemctl start zabbix-agent
 ```
 
 See point/heading 5 to see how we configured this in the front end.
@@ -439,6 +437,8 @@ See point/heading 5 to see how we configured this in the front end.
 \newpage
 
 # 4. VM2: Nginx proxy
+
+## 4.1. Installing nginx proxy and preparing configuration files
 
 We started by installing nginx with the following commands.
 
@@ -454,6 +454,8 @@ Once nginx was installed, we disabled the default virtual host by unlinking it, 
 sudo unlink /etc/nginx/sites-enabled/default
 ```
 
+## 4.2. Applying configurations to the proxy
+
 To add the new configurations to the proxy, we moved to the `sites-available` directory to create our new file.
 
 ```bash
@@ -461,7 +463,9 @@ cd /etc/nginx/sites-available/
 nano reverse-proxy.conf
 ```
 
-Here we created a new configuration file for the nginx-proxy. These configurations makes sure that the nginx-proxy listens on port 8080, and redirects all incoming traffic from that port to the `Zabbix-server` using `proxy_pass` followed by the Zabbix-server's IP address and port number.
+Here we created a new configuration file for the nginx-proxy. These configurations makes sure that the nginx-proxy listens on port 8080, and redirects all incoming traffic from that port to the `Zabbix-server` using `proxy_pass` followed by the Zabbix-server's IP address and port number. So it takes the site from the VM1 forwarded address from the zabbix-web container, and proxies this to VM2's ip on port 8080
+
+To clarify, VM1's local IP in the VirtualBox bridged network is `192.168.50.95` and the docker container holding the web frontend is mapped to this ip on port 80
 
 ```bash
 server {
@@ -496,13 +500,17 @@ sudo systemctl restart nginx
 
 This verifies that nginx works as intended.
 
-Image of nginx-proxy being accessed from host machine via VM2 local IP in bridged network on port 8080. This isn't strictly localhost:8080 based on the diagram.
+The following is an image of the nginx-proxy being accessed from host machine via VM2 local IP in bridged network on port 8080. This isn't strictly localhost:8080 based on the diagram.
 
-![Image showing zabbix frontend from nginx proxy](assets/nginx-frontend-working-red-highlight.png)
+![Image showing zabbix frontend from nginx proxy](assets/nginx-frontend-working-red-highlight.png) <!-- figure 5 -->
 
-![Image showing local ip of vm2](assets/vm2-local-ip.png)
+![Image showing local ip of vm2](assets/vm2-local-ip.png) 
 
 Hostnames on all VMs where `ubuntu1` because vm2 and vm3 where created by cloning vm1.
+
+## 4.3. Comment on Zabbix Server Web Frontend nginx configuration
+
+Regarding point 4.3 in the assignment text, we have already configured the port forwarding of the zabbix-web via the ``docker-compose.yml`` file; From 80 to 8080.
 
 \newpage
 
@@ -512,7 +520,7 @@ To access the Zabbix frontend, we connected to the nginx-proxy on VM2 via its lo
 
 ![.](assets/all-green-split1.png) \
 
-![Image of our host setup with VM3 agent, split in two for easier viewing on paper](assets/all-green-split2.png)
+![Image of our host setup with VM3 agent, split in two for easier viewing on paper](assets/all-green-split2.png) 
 
 <!-- ![](assets/double-vm-bridged-network-unique-mac-proxy-works.png)-->
 
@@ -570,15 +578,10 @@ Canonical. (n.d.). *Ubuntu 20.04.4 LTS (Focal Fossa)*. Ubuntu 20.04.4 lts (focal
 *Downloads.mariadb.com*. downloads.mariadb.com. (n.d.). Retrieved May 12, 2022, from <https://downloads.mariadb.com/MariaDB/mariadb_repo_setup> 
 
 
-*Index of /zabbix/6.0/ubuntu/pool/main/z/zabbix/*. Zabbix Official Repository. (n.d.). Retrieved May 12, 2022, from <https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/> 
+*Index of /zabbix/6.0/ubuntu/pool/main/z/*. Zabbix Official Repository. (n.d.). Retrieved May 12, 2022, from <https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/> 
 
 
 Lontons	A. (2021, December 9). *Handy Tips #15: Deploying zabbix passive and active agents*. Zabbix Blog. Retrieved May 12, 2022, from <https://blog.zabbix.com/handy-tips-15-deploying-zabbix-passive-and-active-agents/17696/> 
 
 
 *Zabbix proxy: Install on ubuntu 20.04 in 10 minutes!* Best Monitoring Tools. (n.d.). Retrieved May 12, 2022, from <https://bestmonitoringtools.com/install-zabbix-proxy-on-ubuntu/> 
-
-
-<!-- 
-*Index of /zabbix/6.0/ubuntu/pool/main/z/zabbix-release/*. Zabbix Official Repository. (n.d.). Retrieved May 12, 2022, from <https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/>  
--->
