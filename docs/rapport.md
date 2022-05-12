@@ -28,7 +28,9 @@ docker exec -it <container-id> bash
 
 ## 1.1. Our project directory
 
-Our project-files are separated into sub-folders based on their functionality.
+For ease of use, all project-files are separated into the following sub-folders based on their functionality.
+configs: files pertainign
+docs: files pertaining to documentation and explanation of our project
 
 ## 1.2. Virtual Machines with VirtualBox
 
@@ -65,7 +67,19 @@ We used the following command to install docker.
 sudo apt-get install -y docker-compose
 ```
 
-In the block below, we display our docker compose file  `configs/docker-compose.yml`, which was run with the `docker-compose up` command on VM1, in the configs folder in our project directory. 
+When setting up the docker containers, we mostly used the auto generated docker files, but we made some minor adjustments by setting the environment variables for these files before they were generated. The environment variables were created outside the ``docker-compose.yml`` file, and later referenced in the ``docker-compose.yml`` file. We created volume links as external volumes, to make it possible to edit the files outside the docker containers via the docker volume functionality, since these volume files are synchronized with the volume files we mapped them to. The ``docs`` volume was used to get the .sql file to create the server. Setting up volumes for outside access made debugging easier while working on the project. For example we utilized this setup to look at the `zabbix_server.conf` config file to see if the environment variables in the ``docker-compose.yml`` file was correctly written in the config file.
+
+The following block of code describes how we set up the volumes according to the description above. 
+
+```bash
+sudo docker volume create mysql-server-data
+sudo docker volume create zabbix-server-config
+sudo docker volume create zabbix-web-config
+sudo docker volume create zabbix-agent-config
+sudo docker volume create docs
+```
+
+In the block below, we display our docker compose file  `configs/docker-compose.yml` from the configs folder in our project directory. This file was run with the `docker-compose up` command on VM1 to start the docker containers. 
 
 
 ```yml
@@ -177,18 +191,6 @@ volumes:
     external: true
   docs:
     external: true
-```
-
-When setting up the docker containers, we mostly used the auto generated docker files, but we made some minor adjustments by setting the environment variables for these files before they were generated. The environment variables were created outside the ``docker-compose.yml`` file, and later referenced in the ``docker-compose.yml`` file. We created volume links as external volumes, to make it possible to edit the files outside the docker containers via the docker volume functionality, since these volume files are synchronized with the volume files we mapped them to. The ``docs`` volume was used to get the .sql file to create the server. Setting up volumes for outside access made debugging easier while working on the project. For example we utilized this setup to look at the `zabbix_server.conf` config file to see if the environment variables in the ``docker-compose.yml`` file was correctly written in the config file.
-
-The following block of code describes how we set up the volumes according to the description above. 
-
-```bash
-sudo docker volume create mysql-server-data
-sudo docker volume create zabbix-server-config
-sudo docker volume create zabbix-web-config
-sudo docker volume create zabbix-agent-config
-sudo docker volume create docs
 ```
 
 After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack. This was to ensure that everything connected properly. The web frontend is hosted on VM1 port 80 as per the assignment description, so to reach it, we simply typed the address in a web browser. In later steps of the assignment, we set up an nginx proxy that allowed us to reach the frontend trough the localhost-address.
@@ -552,6 +554,8 @@ After making those triggers we made sure that the triggers where correctly creat
 ![Image showing the uptime trigger is created](assets/trigger-uptime240.png)
 
 ![Image showing the disk io trigger is created](assets/trigger-disk-io-smol.png)
+
+\newpage
 
 # 6. References
 
