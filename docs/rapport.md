@@ -32,7 +32,7 @@ docker exec -it <container-id> bash
 
 This report will cover our solution to the Group Portfolio 2 Assignment, given to us in the subject DATA2410. 
 
-The report is divided into six separate parts; an introduction to our project, four parts detailing the steps we took to implement the different pieces of our solution, and a final sixth part, summarizing what we have done throughout the project. 
+The report is divided into six separate sections; an introduction to our project, four sections detailing the steps we took to implement the different pieces of our solution, and a final sixth section, summarizing what we have done throughout the project. 
 
 ## 1.1. Our project directory
 
@@ -56,9 +56,12 @@ The first thing we needed was a VM running Ubuntu Focal Fossa. We needed the VM 
   <https://releases.ubuntu.com/20.04/ubuntu-20.04.4-desktop-amd64.iso> and created VM1 from this image.
 
 <!-- figure 1 -->
-![Ubuntu installation screen](./assets/ubuntu%20install.png)  
+![Showing Ubuntu installation screen](./assets/ubuntu%20install.png)  
 
 The next step was to configure VM1. We started by setting up VM1 on a bridged network. The reason we started with VM1 was to make sure that it was working. We created VM2 by cloning VM1 and changing the mac address. By cloning VM1 one more time, we created VM3. By changing the mac addresses we ensured that each VM had their own local IP on the bridged network. By doing it this way, we made sure that all three VMs could communicate with each other, whilst also being able to communicate with the host machine.
+
+<!-- figure 2 -->
+![Showing Network panel in virtualbox for VM3](assets/network-config-bridged-network-with-refresehed-mac-and-arrow.png)
 
 The architecture diagram in the assignment description can be interpreted to mean that we should use an internal network for all of the VMs whilst giving VM2 a second bridged network adapter. This would ensure that only the nginx proxy could reach the outside of the internal VM network. Since the assignment didn't specify what network method to use for th VMs, we decided against this, because this would make our assignment more complicated than necessary.
 
@@ -115,9 +118,11 @@ services:
     networks:
       zabbix-net:
         ipv4_address: 172.200.1.1
-        # not really supposed to have two commands put putting it on one line broke things and this seems to work
+        # not really supposed to have two commands put putting it on one line broke things and 
+        # this seems to work
         # tried this, but it did not work:
-        # command: bash -c "--default-authentication-plugin=mysql_native_password && --datadir=/var/lib/mysql/data"
+        # command: bash -c "--default-authentication-plugin=mysql_native_password \
+        # && --datadir=/var/lib/mysql/data"
     command: --default-authentication-plugin=mysql_native_password
     command: --datadir=/var/lib/mysql/data
 
@@ -209,23 +214,23 @@ We used the following command on VM1 to start the docker containers with the `do
 sudo docker-compose up
 ```
 
-After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack, as shown in Figure 2. This was to ensure that everything connected properly. The web frontend is hosted on VM1 port 80 as per the assignment description. At this point in the assignment we typed the address ito a web browser to access the web frontend.
+After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack, as shown in Figure 3. This was to ensure that everything connected properly. The web frontend is hosted on VM1 port 80 as per the assignment description. At this point in the assignment we typed the address ito a web browser to access the web frontend.
 
 <!-- 
 TODO
 - [ ] Consider having images of how we configured it in the front frontend
  -->
 
- We decided to split Figure 2 image into two parts to improve the readability, same with Figure 9.
+ We decided to split Figure 3 image into two parts to improve the readability, same with Figure 11.
 
 ![.](assets/all-green-vm1-splitt1.png) \
 
-<!-- figure 2 -->
-![Image showing that the zabbix-agent and zabbix-server is working](assets/all-green-vm1-splitt2.png)
-
-Figure 3 shows a screenshot of the docker compose log. It shows that all the checks except one is working between the agent and server. We assumed that this one check from the template probably wasn't suited for being run in a docker environment, because some things can be different in a docker environment. Also we saw after a few minutes this error
-
 <!-- figure 3 -->
+![Showing that the zabbix-agent and zabbix-server is working](assets/all-green-vm1-splitt2.png)
+
+Figure 4 shows a screenshot of the docker compose log. It shows that all the checks except one is working between the agent and server. We assumed that this one check from the template probably wasn't suited for being run in a docker environment, because some things can be different in a docker environment. Also we saw after a few minutes this error
+
+<!-- figure 4 -->
 ![Logs from docker compose after setting up hosts on frontend](assets/host-error-sorted-tho-sorted-itself.png)
 
 \newpage
@@ -355,12 +360,13 @@ DBName=zabbix_proxy
 DBUser=zabbix
 ```
 
-After editing the necessary values, we saved and exited the file. We set the ConfigFrequency to be 100 seconds. This parameter determines how often the proxy retrieves data from the configuration file, and is useful to cut down on the waiting time between updates on the status of the Zabbix Proxy. The notable differences between our config file, and the config file in the guide is that we have a different IP address for the server, and a different hostname for the proxy itself. The difference in IP address is to connect the Zabbix Proxy to the right server.  
+After editing the necessary values, we saved and exited the file. We set the ConfigFrequency to be 100 seconds. This parameter determines how often the proxy retrieves data from the configuration file, and is useful to cut down on the waiting time between updates on the status of the Zabbix Proxy. We also noted the Hostname, because this was needed to connect the proxy tp he server in the web frontend. We also ensured the the DBPassword was set to the correct value. 
 
+The notable differences between our config file, and the config file in the guide is that we have a different IP address for the server, and a different hostname for the proxy itself. The difference in IP address is to connect the Zabbix Proxy to the right server.  
 
 ### 3.1.4. Starting and enabling the Zabbix Proxy
 
-Next, we started the `Zabbix Proxy` and enabled it to boot on startup with the following commands: 
+Next, we started the Zabbix Proxy and enabled it to boot on startup with the following commands: 
 
 ```bash
 # makes the proxy start on startup
@@ -368,25 +374,22 @@ sudo systemctl enable zabbix-proxy
 
 # not really needed but I like to do this just in case
 sudo systemctl start zabbix-proxy
-```
-
-It is important to take note of the Hostname in the zabbix-proxy config file. We need it in order to connect the proxy to the server using the web frontend. 
-While in the zabbix-proxy config file, it is also important to make sure that the DBPassword is set to the correct value.  
-
+``` 
 
 ### 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
 
-Quickly documenting how we did the frontend setup of the proxy after, doing the config on VM2, and also an image verifying that it was connected
+Figure 5 and Figure 6 documents how we set up the proxy in the web frontend after finishing the configuration on VM2. The Figures also verifies that the proxy is correctly connected to the server. 
 
-<!--figure 4 this can be removed if we don't have enough space-->
-![Image showing proxy creation dialog window](assets/proxy-frontend-setup.png) 
+<!--figure 5 this can be removed if we don't have enough space-->
+![Showing proxy creation dialog window](assets/proxy-frontend-setup.png) 
 
-<!-- figure 5 -->
-![Image showing that the zabbix-proxy is connected](assets/zabbix-proxy-post-100s.png) 
+<!-- figure 6 -->
+![Showing that the zabbix-proxy is connected](assets/zabbix-proxy-post-100s.png) 
+
 
 ## 3.2. VM 3. Zabbix Agent installation and setup 
 
-The following code block must be run as root on VM3 to install the `Zabbix-agent`.
+The following code block must be run as root on VM3 to install the Zabbix-agent.
 
 ```bash
 wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/
@@ -414,7 +417,7 @@ cat zabbix_agent.psk
 e8126679667a8594bc8d3d76121b6ba2a5fb4b6d41bea2cd62190c163fbc6c6b
 ```
 
-The following code block moves the psk encryption key to /opt/zabbix folder. 
+The following code block moves the psk encryption key to ``/opt/zabbix`` folder. 
 
 ```bash
 sudo mkdir /opt/zabbix
@@ -424,7 +427,7 @@ sudo chmod 777 /opt/zabbix
 sudo mv zabbix_agent.psk /opt/zabbix/
 ```
 
-Used these commands to edit the `zabbix-agent.conf` file
+The following commands were used to edit the `zabbix-agentd.conf` file
 
 ```bash
 sudo vim /etc/zabbix/zabbix_agentd.conf 
@@ -435,9 +438,9 @@ The following code block contains the lines we changed in the `zabbix-agent.conf
 ```bash
 TLSConnect=psk
 TLSAccept=psk
-TLSPSKIdentity=cbt_psk_01,
+TLSPSKIdentity=cbt_psk_01
 TLSPSKFile=/opt/zabbix_agent.psk
-# the local ip of our bridged networked VM2
+# The local ip of our bridged networked VM2
 Server=192.168.50.247
 ```
 
@@ -447,20 +450,21 @@ Lastly we start the agent with the following command:
 sudo systemctl start zabbix-agent
 ```
 
-See point/heading 5 to see how we configured this in the front end.
+In the Zabbix frontend we added psk encryption to the ``zabbix_server_vm3_agent`` host.
+
+<!-- figure 7 -->
+![Showing psk encryption](assets/agent-3-config-encryption-page.png)
 
 \newpage
 
 # 4. VM2: Nginx proxy
 
 This section explains how we installed, configured and started an nginx reverse proxy that listens on localhost, redirecting its requests to the Zabbix-server frontend.
-<!--TODO
-- [x] Innledning section 4
--->
+
 
 ## 4.1. Installing nginx proxy and preparing configuration files
 
-We started by installing nginx with the following commands.
+We started by installing nginx on the VM, using the following commands.
 
 ```bash
 sudo apt-get update
@@ -476,16 +480,14 @@ sudo unlink /etc/nginx/sites-enabled/default
 
 ## 4.2. Applying configurations to the proxy
 
-To add the new configurations to the proxy, we moved to the `sites-available` directory to create our new file.
+In order to add our new configurations to the proxy, we first moved to the `sites-available` directory. Once there, we created a new configuration file, called `reverse-proxy.conf`. We used the following commands.
 
 ```bash
 cd /etc/nginx/sites-available/
 nano reverse-proxy.conf
 ```
 
-Here we created a new configuration file for the nginx-proxy. These configurations makes sure that the nginx-proxy listens on port 8080, and redirects all incoming traffic from that port to the `Zabbix-server` using `proxy_pass` followed by the Zabbix-server's IP address and port number. So it takes the site from the VM1 forwarded address from the zabbix-web container, and proxies this to VM2's ip on port 8080
-
-To clarify, VM1's local IP in the VirtualBox bridged network is `192.168.50.95` and the docker container holding the web frontend is mapped to this ip on port 80
+The newly created `reverse-proxy.conf` file and its configurations can be seen in the block below.
 
 ```bash
 server {
@@ -493,7 +495,7 @@ server {
     server_name localhost;
 
     location / {
-        proxy_pass http://192.168.50.95:80;
+        proxy_pass http://192.168.50.95:80; # Zabbix server IP
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -502,7 +504,12 @@ server {
 }
 ```
 
-To complete the proxy, we activate the directives by linking to `/sites-enabled/` using the following command.
+These configurations ensures that the nginx-proxy listens on port 8080 of VM2, and redirects all incoming traffic from that port to the `Zabbix-server` using `proxy_pass`.
+
+To clarify, VM1's local IP in the VirtualBox bridged network is `192.168.50.95` and the docker container holding the web frontend is mapped to this ip on port 80
+
+
+To complete the proxy, we activated the directives by linking to `/sites-enabled/` using the following command.
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enabled/reverse-proxy.conf
@@ -520,94 +527,94 @@ sudo systemctl restart nginx
 
 This verifies that nginx works as intended.
 
-Figure 6 shows the zabbix frontend being accessed from the host machine through the nginx proxy on VM2. The URL to reach the zabbix frontend isn't localhost:8080, as the architecture diagram suggested, but rather the IP address of VM2.
+Figure 8 shows the zabbix frontend being accessed from the host machine through the nginx proxy on VM2. The URL to reach the zabbix frontend isn't localhost:8080, as the architecture diagram suggested, but rather the IP address of VM2.
 
-<!-- figure 6 -->
-![Image showing zabbix frontend from nginx proxy](assets/nginx-frontend-working-red-highlight.png) 
+<!-- figure 8 -->
+![Showing zabbix frontend from nginx proxy](assets/nginx-frontend-working-red-highlight.png) 
 
-<!-- figure 7 -->
-![Image showing local ip of VM2](assets/vm2-local-ip.png) 
+<!-- figure 9 -->
+![Showing local ip of VM2](assets/vm2-local-ip.png) 
 
-Hostname on all VMs are `ubuntu1` because VM2 and VM3 where created by cloning VM1.
+The hostname on all VMs is `ubuntu1` as a result of VM2 and VM3 being clones of VM1.
 
 ## 4.3. Comment on Zabbix Server Web Frontend nginx configuration
 
 Regarding point 4.3 in the assignment text, we have already configured the port forwarding of the zabbix-web via the ``docker-compose.yml`` file; From 80 to 8080.
 
-Inside zabbix-web container we have the following nginx configuration:
+Inside the zabbix-web container we have the following nginx configuration:
 
-<!-- figure 8 -->
+<!-- figure 9 -->
 ![](assets/zabbix-web-nginx-correct-port.png) 
 
 \newpage
 
 # 5. VM1: Zabbix frontend
 
-This section explains how
+This section explains how we used the Zabbix frontend to create a host group, a host and a template  complete with items and triggers. It also explains how we enabled PSK-encryption for our zabbix-agent on VM3
 
 <!--TODO
-- [ ] Innledning section 5
+- [x] Innledning section 5
 -->
 
-To access the Zabbix frontend, we connected to the nginx-proxy on VM2 via its local IP and port 8080 as specified. This redirected us to the VM1 zabbix-web docker container. Once logged in to the Zabbix frontend, we added the host according to the descriptions, made the items as per point a) and b) and lastly the triggers as per point c) and d)
+To access the Zabbix frontend, we connected to the nginx-proxy on VM2 via its local IP and port 8080 as specified. This redirected us to the VM1 zabbix-web docker container. Once logged in to the Zabbix frontend, we added a host according to the assignment description, made the items as per point a) and b) and lastly the triggers as per point c) and d)
 
 ![.](assets/all-green-split1.png) \
 
-<!-- figure 9 -->
-![Image of our host setup with VM3 agent, split in two for easier viewing on paper](assets/all-green-split2.png)
+<!-- figure 11 -->
+![Showing our host setup with VM3 agent, split in two for easier viewing on paper](assets/all-green-split2.png)
 
 <!-- ![](assets/double-vm-bridged-network-unique-mac-proxy-works.png)-->
 
 We created a new template named zabbix-monitoring in the zabbix-monitoring host group:
 
-<!-- figure 10, this can be removed if we don't have enough space-->
-![Image showing template creation dialog](assets/making-template-for-monitoring-group.png) 
+<!-- figure 12, this can be removed if we don't have enough space-->
+![Showing template creation dialog](assets/making-template-for-monitoring-group.png) 
 
 ## 5.1. Items
 
-We created the item for total disk space usage in the directory ``/var`` with interval of 1 hour:
+We created the item for total disk space usage in the directory ``/var`` with an interval of one hour:
 
 ```bash
 fsv.fs.size[/var,used]
 ```
 
-We created an that will monitor the docker process usage with interval of 1 minute:
+We created an item that monitors the docker process usage with an interval of one minute:
 
 ```bash
 proc.cpu.util[dockerd]
 ```
 
-<!-- figure 11 -->
-![Image showing that the items are created](assets/items-created.png)
+<!-- figure 13 -->
+![Showing that the items are created](assets/items-created.png)
 
 
 ## 5.2. Triggers
 
-We created a trigger that triggers when uptime is longer than 240 days:
+We created a trigger that triggers when the uptime is longer than 240 days:
 
 ```bash
 last(/zabbix_server_agent_vm3/system.uptime)>240d
 ```
 
-<!-- figure 12 -->
-![Image showing trigger uptime creation dialog](assets/making-trigger-uptime240.png)
+<!-- figure 14 -->
+![Showing trigger uptime creation dialog](assets/making-trigger-uptime240.png)
 
-We created a trigger that triggers when disk I/O is higher than 20% average for 5 minutes:
+We created a trigger that triggers when disk I/O is higher than 20% average for five minutes:
 
 ```bash
 avg(/zabbix_server_agent_vm3/system.cpu.util[,iowait],5m)>20
 ```
 
-<!-- figure 13 -->
-![Image showing trigger disk io creation dialog](assets/making-trigger-disk-io.png)
-
-After making those triggers we made sure that the triggers where correctly created:
-
-<!-- figure 14 -->
-![Image showing the uptime trigger is created](assets/trigger-uptime240.png)
-
 <!-- figure 15 -->
-![Image showing the disk io trigger is created](assets/trigger-disk-io-smol.png)
+![Showing trigger disk I/O creation dialog](assets/making-trigger-disk-io.png)
+
+After creating the triggers, we checked to make sure that the triggers were created correctly:
+
+<!-- figure 16 -->
+![Showing the uptime trigger is created](assets/trigger-uptime240.png)
+
+<!-- figure 17 -->
+![Showing the disk I/O trigger is created](assets/trigger-disk-io-smol.png)
 
 \newpage
 

@@ -80,50 +80,55 @@
     - [ ] Done 
 - [ ] 2. VM1: Docker containers setup
   - [ ] 2.1. Quad Container Setup on intel1 / VM1
+    - [ ] More detailed description of the docker-compose.yml file (What is mentioned as important in the assignmnet description)
     - [x] First draft 
-    - [ ] Edited
+    - [x] Edited
     - [ ] Done 
 - [ ] 3. VM2 and VM3: Install zabbix-agent and zabbix-proxy
   - [ ] Ha systemctl kommandoer for VM2 og VM3
   - [ ] 3.1. VM2
      - [ ] 3.1.1. Innstalling Zabbix Proxy
        - [x] First draft 
-       - [ ] Edited
+       - [x] Edited
        - [ ] Done 
      - [ ] 3.1.2. Configuring MariaDB database for the proxy to use
        - [x] First draft 
-       - [ ] Edited
+       - [x] Edited
        - [ ] Done 
      - [ ] 3.1.3. Configurating Zabbix Proxy
        - [x] First draft 
-       - [ ] Edited
+       - [x] Edited
        - [ ] Done 
      - [ ] 3.1.4. Starting and enabling the Zabbix Proxy
        - [x] First draft 
-       - [ ] Edited
+       - [x] Edited
        - [ ] Done 
      - [ ] 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
        - [x] First draft 
-       - [ ] Edited
+       - [x] Edited
        - [ ] Done 
   - [ ] 3.2. VM 3
-    - [ ] First draft 
-    - [ ] Edited
+    - [x] First draft 
+    - [x] Edited
     - [ ] Done 
 - [ ] 4. VM2: Nginx proxy
-  - [ ] First draft 
-  - [ ] Edited
+  - [x] First draft 
+  - [x] Edited
   - [ ] Done 
 - [ ] 5. VM1: Zabbix frontend
   - [ ] 5.1. Items
-    - [ ] First draft 
-    - [ ] Edited
+    - [x] First draft 
+    - [x] Edited
     - [ ] Done 
   - [ ] 5.2. Triggers
-    - [ ] First draft 
-    - [ ] Edited
+    - [x] First draft 
+    - [x] Edited
     - [ ] Done 
-- [ ] 6. APA7 References?
+- [ ] Conclusion and summary
+  - [ ] First draft
+  - [ ] Edited 
+  - [ ] Done
+- [ ] 7. APA7 References?
   - [ ] First draft 
   - [ ] Edited
   - [ ] Done 
@@ -132,7 +137,7 @@
   - [ ] Final read through and edit
   - [ ] Clean up unnecessary comments
   - [ ] Remove all references to our project directory and folders if we're not delivering the .zip file of our working directory. 
-  - [ ] Check all figure references. 
+  - [ ] Check all figure references, and that all figures are references at least once. 
   - [ ] Convert to pdf
   - [ ] Deliver the report
 
