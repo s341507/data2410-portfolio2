@@ -29,8 +29,9 @@ docker exec -it <container-id> bash
 ## 1.1. Our project directory
 
 For ease of use, all project-files are separated into the following sub-folders based on their functionality.
-configs: files pertainign
+docker: files pertaining to docker functionality
 docs: files pertaining to documentation and explanation of our project
+vm_data
 
 ## 1.2. Virtual Machines with VirtualBox
 
@@ -59,7 +60,7 @@ The architecture diagram in the assignment description can be interpreted to mea
 
 # 2. VM1: Docker containers setup - Quad Container Setup
 
-After setting up the three VMs, we used the file `docker-compose.yml`, to set up the four docker containers with the required config instructions for the assignment within VM1. This file can be found in the configs folder in our project directory. The first step in setting up the docker containers was to install docker on VM1. 
+After setting up the three VMs, we used the file `docker-compose.yml`, to set up the four docker containers with the required config instructions for the assignment within VM1. This file can be found in the docker folder in our project directory. The first step in setting up the docker containers was to install docker on VM1. 
 
 We used the following command to install docker.
 
@@ -67,7 +68,7 @@ We used the following command to install docker.
 sudo apt-get install -y docker-compose
 ```
 
-When setting up the docker containers, we mostly used the auto generated docker files, but we made some minor adjustments by setting the environment variables for these files before they were generated. The environment variables were created outside the ``docker-compose.yml`` file, and later referenced in the ``docker-compose.yml`` file. We created volume links as external volumes, to make it possible to edit the files outside the docker containers via the docker volume functionality, since these volume files are synchronized with the volume files we mapped them to. The ``docs`` volume was used to get the .sql file to create the server. Setting up volumes for outside access made debugging easier while working on the project. For example we utilized this setup to look at the `zabbix_server.conf` config file to see if the environment variables in the ``docker-compose.yml`` file was correctly written in the config file.
+We used the auto generated docker files to set up the docker containers, but we made some minor adjustments by setting the environment variables for these files before they were generated. The environment variables were created outside the ``docker-compose.yml`` file, and later referenced in the ``docker-compose.yml`` file. We created volume links as external volumes to make it possible to edit the files outside the docker containers via the docker volume functionality. This was possible because the volume files are synchronized with the volume files we mapped them to. The ``docs`` volume was used to get the .sql file to create the server. Setting up volumes for outside access made debugging easier while working on the project. For example we utilized this setup to look at the `zabbix_server.conf` config file to see if the environment variables in the ``docker-compose.yml`` file was correctly written in the config file.
 
 The following block of code describes how we set up the volumes according to the description above. 
 
@@ -79,7 +80,7 @@ sudo docker volume create zabbix-agent-config
 sudo docker volume create docs
 ```
 
-In the block below, we display our docker compose file  `configs/docker-compose.yml` from the configs folder in our project directory. This file was run with the `docker-compose up` command on VM1 to start the docker containers. 
+In the block below, we display our docker compose file  `portfolio2/docker/docker-compose.yml` from the docker folder in our project directory. This file was run with the `docker-compose up` command on VM1 to start the docker containers. 
 
 
 ```yml
