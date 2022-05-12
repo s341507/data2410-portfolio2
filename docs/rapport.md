@@ -22,7 +22,9 @@ to run a docker container
 docker exec -it <container-id> bash
  -->
 
-# Virtual Machines with VirtualBox
+# 1. Introduction
+
+## 1.1. Virtual Machines with VirtualBox
 
 <!-- 
 TODO
@@ -39,56 +41,23 @@ Therefore, We started by downloading the image for Ubuntu Focal Fossa (20.04) fr
 
 We set up VM1 on a bridged network, configuring it first to make sure it was working. Then, we cloned it and changed the mac address to create VM2. We cloned VM1 one more time to create VM3. Changing the mac addresses lets each VM have each their local IP on the bridged network. By doing it this way, we made sure that all three VMs could communicate with each other, whilst also being able to communicate with the host machine.
 
+
 The architecture diagram in the assignment description can be interpreted to mean that we should use an internal network for all of the VMs whilst giving VM2 a second bridged network adapter. This would ensure that only the nginx proxy could reach the outside of the internal VM network. However, this would make our assignment more complicated than necessary, because the assignment didn't specify what network method to use for the VMs.
 
 \newpage
 
-# 1. VM1: Docker containers setup 10%
+# 2. VM1: Docker containers setup
 
-Originally, we attempted to use docker containers on the intel1-server to implement our solution. However, the server ran out of storage space, so we created virtual machines through VirtualBox as a substitute. The following we did was done on a VM in virtualbox called VM1
+Originally, we attempted to use docker containers on the intel1-server to implement our solution. However, the server ran out of storage space, so we created virtual machines through VirtualBox as a substitute. 
 
-<!-- The steps we took to set up the Docker containers are described below. Our final solution, utilizing virtual machines, will be shown further down in this report. -->
-
-<!-- Even though the environments on intel1 will be referred to as VMs, they are in fact docker containers. All references to VMs before the switch from intel1 to VirtualBox will therefore refer to the docker containers named VM1, VM2 and VM3. -->
- 
-## VM Setup on intel1
-
-The three preinstalled VMs had a different Ubuntu version than what was recommended in the assignment description. Therefore, to ensure that we were in line with the assignment criteria, we started by deleting them. We then built new images for the VMs, using Dockerfiles, to run the containers with their new custom configurations. The new images automatically start various services on the different containers to circumvent the problem of not having systemd in docker containers. Starting the services in the image ensures that they run on container startup, and minimizes the amount of commands we need to run manually for each container. After the images were ready, we made new containers, now with the focal fossa version, whilst also allowing for docker containers within docker containers. The following blocks of code describe what we used for building the images and running the containers, as explained above.
-
-<!-- 
-Perhaps just compress these two sets of three similar commands into just two commands and say that you swapped out the numbers?
- -->
+These are the commands we did to install docker, and in the block beneath we display our docker compose file  `configs/docker-compose.yml`, which was run with the `docker-compose up` command on VM1, in the same directory as this file
 
 ```bash
-# building the image for VM1 from Dockerfile
-sudo docker build -t vm-image1 -f data2410-portfolio2/configs/vm1-dockerfile .
-
-# building the image for VM2 from Dockerfile
-sudo docker build -t vm-image2 -f data2410-portfolio2/configs/vm2-dockerfile .
-
-# building the image for VM3 from Dockerfile
-sudo docker build -t vm-image3 -f data2410-portfolio2/configs/vm3-dockerfile .
+sudo apt-get install -y docker-compose
 ```
 
-```bash
-# Running the VM1 container
-sudo docker container run --privileged -v /var/run/docker.sock:/var/run/docker.sock -d vm_image
-# Running the VM2 container
 
-sudo docker container run --name vm2 -p 8080:8080 -d -t vm-image2
-# Running the VM3 container
-# Coming soon
-```
-
-The image, `vm_image`, was made from this Dockerfile:
-
-<!--
-TODO
-- [ ] update this dockerfile to match not having apache
--->
-
-
-## Quad Container Setup on intel1 / VM1
+## 2.1. Quad Container Setup on intel1 / VM1
 
 After setting up the three VMs, we used the file `docker-compose.yml`, to set up the four containers with the required config instructions for the assignment within VM1. This file can be found in the configs folder. 
 
@@ -115,6 +84,9 @@ services:
     networks:
       zabbix-net:
         ipv4_address: 172.200.1.1
+        # not really supposed to have two commands put putting it on one line broke things and this seems to work
+        # tried this, but it did not work:
+        # command: bash -c "--default-authentication-plugin=mysql_native_password && --datadir=/var/lib/mysql/data"
     command: --default-authentication-plugin=mysql_native_password
     command: --datadir=/var/lib/mysql/data
 
@@ -200,7 +172,7 @@ volumes:
     external: true
 ```
 
-When setting up the docker containers, we mostly used the auto generated docker files, but we made some minor adjustments by setting the environment variables for these files before they were generated. The environment variables were created outside the ``docker-compose.yml`` file, and later referenced in the ``docker-compose.yml`` file. We created volume links as external volumes, to make it possible to edit the files outside the docker containers via the docker volume functionality, since these volume files are synchronized with the volume files we mapped them to. The ``docs`` volume was used to get the .sql file to create the server. Setting up volumes for outside access made debugging easier while working on the project. For example we utilized this setup to look at the `zabbix_server.conf` config file to see if the environment variables in the ``docker-compose.yml`` file was correctly written in the config file. 
+When setting up the docker containers, we mostly used the auto generated docker files, but we made some minor adjustments by setting the environment variables for these files before they were generated. The environment variables were created outside the ``docker-compose.yml`` file, and later referenced in the ``docker-compose.yml`` file. We created volume links as external volumes, to make it possible to edit the files outside the docker containers via the docker volume functionality, since these volume files are synchronized with the volume files we mapped them to. The ``docs`` volume was used to get the .sql file to create the server. Setting up volumes for outside access made debugging easier while working on the project. For example we utilized this setup to look at the `zabbix_server.conf` config file to see if the environment variables in the ``docker-compose.yml`` file was correctly written in the config file.
 
 The following block of code describes how we set up the volumes according to the description above. 
 
@@ -212,57 +184,56 @@ sudo docker volume create zabbix-agent-config
 sudo docker volume create docs
 ```
 
+After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack. This was to ensure that everything connected properly. The web frontend is hosted on VM1 port 80 as per the assignment description, so to reach it, we simply typed the address in a web browser. In later steps of the assignment, we set up an nginx proxy that allowed us to reach the frontend trough the localhost-address.
 
-
-<!--
+<!-- 
 TODO
-DELETE
-- [ ] This is reedundant, delete all this
-- [ ] Specify the four files and directory in the following explanation.
-- [ ] prune comments from the files to make them wayyyyy shorter
-- [ ] Insert he final four files (or the changes, based on what we decide to include) RE: The final files we used can be found below (alt. The changes we made to the files can be found below)
-### mysql
+- [ ] Consider also having config images
+ -->
 
-### zabbix-server
+![Active and Passive checks on the ](assets%5Call-green-vm1.png)
 
-### zabbix-web
+Here is a screen of our docker compose log, showing that all the checks except for one is working between the agent and server. Our thougts was that this one check from the template probably wasn't suited for being run in a docker enviroment as some things can be different there.04_all
 
-### zabbix-agent
+![Logs from docker compose after setting up hosts on frontend](assets%5Cfixed-active-checks-cropped.png)
+
+So this should fully explain how we did the first part of this assignment, how we installed docker and how we configured our docker-compose stack, and made our docker bridge network inside of VM1, whilst also going a little further with using the frontend with setting up the hosts there.
+
+<!-- 
+TODO 
+- [ ] detail docker install
+- [ ] consider more images of frontend? tho probably not
 -->
-
-
-<!--
-TODO
-- [x] få containere til å snakke sammen?
-- [ ] Finialize this "chapter"
--->
-
 
 
 \newpage
 
-# 2. VM2 and VM3: Install zabbix-agent and zabbix-proxy 10%
+# 3. VM2 and VM3: Install zabbix-agent and zabbix-proxy
 
-From here on out, everything was performed on VMs using VirtualBox. 
+## 3.1. VM2
 
-## VM2
+<!-- TODO real apa7 sourcing on this source -->
 
 We followed this guide to complete task 1 in part III of the assignment description: https://bestmonitoringtools.com/install-zabbix-proxy-on-ubuntu/
 There were a few things we did differently from the guide. These will be described below. 
 
-### Innstalling Zabbix Proxy
+### 3.1.1. Innstalling Zabbix Proxy
 
-We started by installing `Zabbix Proxy` on VM2 with the following commands: 
+We started by installing `Zabbix Proxy` on VM2 with the following commands:
+
+NB: These links are not the same given in the tasks as using the release packages gave a lot of problems with wrong versions, sometimes we would get verison 4 or 5, and sometimes a 6.2 beta version, whilst all we needed was the 6.0.x versions as these were the ones that the docker compose stack recieved. We got our downloads from this zabbix repo: <!-- TODO insert link as apa7 -->
 
 ```bash
 apt-get install wget
 
 wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-1%2Bubuntu20.04_all.deb
 
-#needed this as well as the proxy was the wrong version
+dpkg -i zabbix-release_6.0-1+ubuntu20.04_all.deb
+
+# needed this as well since we got the wrong version of the proxy by just having the release package
 wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/zabbix-proxy-mysql_6.0.1-1%2Bubuntu20.04_amd64.deb
 
-dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
+dpkg -i zabbix-proxy-mysql_6.0.1-1+ubuntu20.04_amd64.deb
 
 apt-get install -f
 
@@ -271,9 +242,9 @@ apt-get install zabbix-proxy-mysql
 apt-get install zabbix-sql-scripts
 ```
 
-The only notable difference between the guide and what we did in this part of the task, is that we used Zabbix-proxy version 6.1 instead of Zabbix-proxy version 6.0, because the assignment descriptions asks us to use version 6.1.  
+The only notable difference between the guide and what we did in this part of the task, is that we used Zabbix-proxy version 6.0.1 instead of Zabbix-proxy version 6.0, because the assignment descriptions asks us to use version 6.1.1  
 
-### Configuring database
+### 3.1.2. Configuring MariaDB database for the proxy to use
 
 After we finished installing `Zabbix Proxy`, we installed and configured the database, using `MariaDB`, according to both the guide mentioned above, and the assignment description. 
 
@@ -291,7 +262,7 @@ sudo apt update
 sudo apt -y install mariadb-common mariadb-server-10.6 mariadb-client-10.6
 ```
 
-After installing `MariaDB` we began the configuration of the database by running the following commands to start and enable MariaDB, and configure it to start on boot: 
+After installing `MariaDB` we began configuring the database by running the following commands to start and enable MariaDB, and configure it to start on boot: 
 
 ```bash
 sudo systemctl start mariadb
@@ -328,7 +299,8 @@ The only notable difference between the guide and what we did was that we set th
 After we set the root password, it was time to create the database by running the commands in the following block of code: 
 
 ```bash
-sudo  mysql -uroot -p'123' -e "create database zabbix_proxy character set utf8mb4 collate utf8mb4_bin;"
+sudo mysql -uroot -p'123' -e "create database zabbix_proxy character set utf8mb4 collate utf8mb4_bin;"
+
 sudo mysql -uroot -p'123' -e "grant all privileges on *.* to zabbix@localhost identified by 'zabbixDBpass';"
 ```
 
@@ -340,7 +312,7 @@ sudo cat /usr/share/doc/zabbix-sql-scripts/mysql/proxy.sql | mysql -uzabbix -p'z
 In the installation and configuration of the database, we followed the guide quite exactly. Therefore, there are very few differences between what we did to install and configure the database, and what is stated in the installation guide. 
 
 
-### Configurating Zabbix Proxy
+### 3.1.3. Configurating Zabbix Proxy
 
 Once the installation and configuration of the database was complete, it was time to configure the `Zabbix Proxy`. The first step when configuring the `Zabbix Proxy` was to open the config file with the following command: 
 
@@ -361,68 +333,30 @@ DBUser=zabbix
 
 After editing the necessary values, we saved and exited the file. We configured the ConfigFrequency to be 100 seconds. This parameter determines how often the proxy retrieves data from the configuration file, and is useful to cut down on the waiting time between updates on the status of the `Zabbix Proxy`. The notable differences between our config file, and the config file in the guide is that we have a different IP address for the server, and a different hostname for the proxy itself. 
 
+![](assets/zabbix-proxy-post-100s.png)
 
-### Starting and enabling Zabbix Proxy
+![](assets/all-green-vm1.png)
+
+### 3.1.4. Starting and enabling the Zabbix Proxy
 
 Next, we started and enabled the `Zabbix Proxy` to boot on startup with the following commands: 
 
 ```bash
-sudo systemctl restart zabbix-proxy
-
+#makes the proxy start by default
 sudo systemctl enable zabbix-proxy
+
+# not really needed but i like to do this just in case
+sudo systemctl start zabbix-proxy
 ```
 
-Find Hostname in the zabbix-proxy config file and note. This is important in order to connect the proxy to the server in the web frontend. 
-In the zabbix-proxy config find DBPassword, and make sure it is set to the correct password.  
+It is important to take note of the Hostname in the zabbix-proxy config file. We need it in order to connect the proxy to the server in the web frontend. 
+While in the zabbix-proxy config file, it is also important to make sure that the DBPassword is set to the correct value.  
 
 
-### Registering Zabbix Proxy in the Zabbix frontend
+### 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
 
+![](assets/proxy-frontend-setup.png)
 
-### Accessing zabbix web with lynx
-
-<!--
-TODO
-- [ ] Replace with ssh-tunneling
- -->
-
-The following code block describes how to access the `Zabbix-web`.
-
-```bash
-# This gives you a cli web browser
-g13@net513:~$ lynx localhost
-```
-
-
-
-<!--
-
-### Accessing zabbix web with lynx
-
-The following code block describes how to access the `Zabbix-web`.
-
-```bash
-# This gives you a cli web browser
-g13@net513:~$ lynx localhost
-```
-
--->
-
-### Acessing zabbix web with ssh tunneling, setting up the new host
-
-We needed to set up a new host on the frontend to make the active checks work, used a ssh tunnel to let us open the intel1 localhost:80 in our own browsers
-
-<!-- 
-Change to listen to 8080 to make it use the nginx proxy and make it look a bit better
- -->
-
-```bash
-ssh -L 8080:localhost:80 -p 513 g13@intel1.vlab.cs.hioa.no
-```
-
-then we could use the localhost:8080 in our browser to login with `user: Admin password: admin`
-
-![](assets/ssh-tunnel-sucess.png)
 
 Then we set up a new host to make the active changes work, configured like this:
 
@@ -432,12 +366,7 @@ Proof that it is working:
 
 ![](assets/zabbix_agent-on-frontend-config-working.png)
 
-<!-- 
-- [ ] Need to test that the active checks are actually working now
-- [ ] 
- -->
-
-## VM 3
+## 3.2. VM 3
 
 The following code block must be run as root on VM3 to install the `Zabbix-agent`.
 
@@ -447,24 +376,24 @@ TODO
  -->
 
 ```bash
-# TODO delete these, they have been put into vm3 dockerfile
- wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
+wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
 
- #woops had to use this one for right version
- wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/zabbix-agent_6.0.1-1%2Bubuntu20.04_amd64.deb
+#had to use this one for right version
+wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/zabbix-agent_6.0.1-1%2Bubuntu20.04_amd64.deb
 
- dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
+sudo dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
 
- apt-get install -f
+sudo apt-get install -f
 
- apt-get install zabbix-agent
+sudo apt-get install zabbix-agent
 ```
 
 The following code block creates the psk encryption key.
 
 ```
-ubuntu1@ubuntu1-VirtualBox:~$ openssl rand -hex 32 > zabbix_agent.psk
-ubuntu1@ubuntu1-VirtualBox:~$ cat zabbix_agent.psk 
+openssl rand -hex 32 > zabbix_agent.psk
+
+cat zabbix_agent.psk 
 e8126679667a8594bc8d3d76121b6ba2a5fb4b6d41bea2cd62190c163fbc6c6b
 ```
 
@@ -472,18 +401,19 @@ The following code block moves the psk encryption key to /opt/zabbix folder.
 
 ```bash
 sudo mkdir /opt/zabbix
+
 sudo chmod 777 /opt/zabbix
+
 sudo mv zabbix_agent.psk /opt/zabbix/
 ```
 
 used these commands to edit the `zabbix-agent.conf` file
 
 ```bash
-ubuntu1@ubuntu1-VirtualBox:~$ sudo su
-root@ubuntu1-VirtualBox:/home/ubuntu1# vim /etc/zabbix/zabbix_agentd.conf 
+sudo vim /etc/zabbix/zabbix_agentd.conf 
 ```
 
-The following code block contains the lines we changed in the `zabbix-agent.conf` file.
+The following code block contains the lines we changed in the `zabbix-agent.conf` file; to enable psk encryption.
 
 ```bash
 TLSConnect=psk
@@ -497,19 +427,19 @@ Server=192.168.50.247
 Since we are running this in a docker container and not on an actual VM, we don´t have systemd available. Therefore, we cannot _enable_ the service, only start it, and have it as a run command in a dockerfile. This means we need to make sure that the service is started every time we run the container the dockerfile is made for.
 \newpage
 
-# 3. VM2: Nginx proxy 10%
+# 4. VM2: Nginx proxy
 
-We start by creating the configuration file for the nginx-proxy. This file makes sure that the nginx-proxy listens on port 8080, and redirects all incoming traffic from that port to the `Zabbix-server` using `proxy_pass`followed by the Zabbix-server's IP address and port number.
+We start by creating the configuration file for the nginx-proxy. This file makes sure that the nginx-proxy listens on port 8080, and redirects all incoming traffic from that port to the `Zabbix-server` using `proxy_pass` followed by the Zabbix-server's IP address and port number.
 
 ```bash
-# To be moved to /etc/nginx/sites-enabled/zabbix.conf on VM2
+# file: /etc/nginx/sites-enabled/zabbix.conf
 
 server {
     listen  8080;
     server_name localhost;
 
     location / {
-        proxy_pass http://172.24.0.1:8080;
+        proxy_pass http://192.168.50.95:8080;
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -521,39 +451,37 @@ server {
 After setting up the configuration file for the `Nginx-proxy`, we start up a terminal on VM2 and install nginx with the following commands.
 
 ```bash
-sudo docker exec -it vm2 /bin/bash
-root@47b33e945b34:/# apt-get update
-root@47b33e945b34:/# apt-get install nginx
+sudo apt-get update
+
+sudo apt-get install nginx
 ```
 
 Once nginx has been installed, we disable the default virtual host by unlinking it with the following command.
 
 ```bash
-root@47b33e945b34:/# unlink /etc/nginx/sites-enabled/default
+sudo unlink /etc/nginx/sites-enabled/default
 ```
 
 Then we add `reverse-proxy.conf` to the directory `/etc/nginx/sites-available/` with the following commands.
 
 ```bash
-root@47b33e945b34:/# cd /etc/nginx/sites-available/
-root@47b33e945b34:/# cd nano reverse-proxy.conf
+sudo nano /etc/nginx/sites-available/reverse-proxy.conf
 ```
 
 To complete the proxy, we activate the directives by linking to `/sites-enabled/` using the following command.
 
 ```bash
-root@47b33e945b34:/etc/nginx/sites-available# ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enabled/reverse-proxy.conf
+sudo ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enabled/reverse-proxy.conf
 ```
 
 Lastly, to see if it works, we run an nginx configuration test and restart the service.
 
 ```bash
-root@47b33e945b34:/etc/nginx/sites-available# cd
-root@47b33e945b34:~# service nginx configtest
+sudo service nginx configtest
  * Testing nginx configuration                                               [ OK ]
-root@47b33e945b34:~# service nginx restart
+
+sudo service nginx restart
  * Restarting nginx nginx                                                    [ OK ]
-root@47b33e945b34:~#
 ```
 
 This verifies that nginx works as intended.
@@ -566,30 +494,26 @@ You can check the tests manually after entering the dockerfile
 To reach other docker containers, we have to use the IP address of the host machine (intel1 in this case) 172.19.0.1
 
 ```bash
-root@0501deebfda5:/# curl 172.19.0.1
+curl 172.19.0.1
 <!DOCTYPE html>
 <html>
 --------------------------------- # commented put contents of the zabbix page
-root@0501deebfda5:/#
 ```
 \newpage
 
-## Testing zabbix-web and nginx-proxy
-
-Here we test if we can connect to the zabbix front end by using the IP of VM1 and with the IP of VM via the nginx-proxy.
-
-![](assets/double-vm-bridged-network-unique-mac-proxy-works.png)
-
-# 4. VM1: Zabbix frontend
+# 5. VM1: Zabbix frontend
 
 To access the Zabbix frontend we connect to the nginx-proxy on VM2 via it's local IP and and port 8080 as specified. This redirected us to the VM1 zabbix-web docker container. Here we added the host according to the descriptions, and then made the items as per point a) and b), and the triggers as per point c) and d)
 
+![](assets/all-green-yeet.png)
+
+![](assets/double-vm-bridged-network-unique-mac-proxy-works.png)
 
 We created a new template zabbix-monitoring in the host group zabbix-monitoring with the following items and triggers:
 
 ![](assets/making-template-for-monitoring-group.png)
 
-## Items
+## 5.1. Items
 
 We created the item for total disk space usage in the directory ``/var`` with interval of 1 hour:
 
@@ -601,7 +525,7 @@ We created an that will monitor the docker process usage with interval of 1 minu
 
 ![](assets/items-created.png)
 
-## Triggers
+## 5.2. Triggers
 
 We created a trigger that triggers when uptime is longer than 240 days:
 
@@ -620,3 +544,7 @@ After making those triggers we made sure that the triggers where correctly creat
 ![](assets/trigger-uptime240.png)
 
 ![](assets/trigger-disk-io-smol.png)
+
+# 6. References
+
+TODO: actually add references

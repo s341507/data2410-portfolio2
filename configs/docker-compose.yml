@@ -20,6 +20,9 @@ services:
     networks:
       zabbix-net:
         ipv4_address: 172.200.1.1
+        # not really supposed to have two commands put putting it on one line broke things and this seems to work
+        # tried this, but it did not work:
+        # command: bash -c "--default-authentication-plugin=mysql_native_password && --datadir=/var/lib/mysql/data"
     command: --default-authentication-plugin=mysql_native_password
     command: --datadir=/var/lib/mysql/data
 

@@ -47,7 +47,7 @@
 - [x] Assign a hostname and visible name
 - [x] Add a template named Linux by zabbix agent
 - [x] Enable encryption with PSK and configure it
-- [ ] Create a new template named zabbix-monitoring and add the following items and triggers (Spesifikasjoner i oppgavetekster)
+- [x] Create a new template named zabbix-monitoring and add the following items and triggers (Spesifikasjoner i oppgavetekster)
   - [x] **Check Discord pinned for this, in network channel**
   - [x] **Check Thea's presentation in our private discord for this setup thingyyyyyyyyy ~~we out here~~**
   - [x] Create an item in the template that will monitor the total used disk space on the directory /var, interval 1h
@@ -67,3 +67,63 @@
 - [ ] Maile Hårek om docker i docker
 - [x] Maile Hårek om hosting av nginx proxy
 - [ ] Maile Hårek ssh tunneling for å debugge i browser
+
+# Oppvasken
+- [ ] 1. Introduction
+  - [ ] 1.1. Virtual Machines with VirtualBox 
+    - [ ] First draft 
+    - [ ] Edited
+    - [ ] Done 
+- [ ] 2. VM1: Docker containers setup
+  - [ ] 2.1. Quad Container Setup on intel1 / VM1
+    - [ ] First draft 
+    - [ ] Edited
+    - [ ] Done 
+- [ ] 3. VM2 and VM3: Install zabbix-agent and zabbix-proxy
+  - [ ] 3.1. VM2
+     - [ ] 3.1.1. Innstalling Zabbix Proxy
+       - [ ] First draft 
+       - [ ] Edited
+       - [ ] Done 
+     - [ ] 3.1.2. Configuring MariaDB database for the proxy to use
+       - [ ] First draft 
+       - [ ] Edited
+       - [ ] Done 
+     - [ ] 3.1.3. Configurating Zabbix Proxy
+       - [ ] First draft 
+       - [ ] Edited
+       - [ ] Done 
+     - [ ] 3.1.4. Starting and enabling the Zabbix Proxy
+       - [ ] First draft 
+       - [ ] Edited
+       - [ ] Done 
+     - [ ] 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
+       - [ ] First draft 
+       - [ ] Edited
+       - [ ] Done 
+  - [ ] 3.2. VM 3
+    - [ ] First draft 
+    - [ ] Edited
+    - [ ] Done 
+- [ ] 4. VM2: Nginx proxy
+  - [ ] First draft 
+  - [ ] Edited
+  - [ ] Done 
+- [ ] 5. VM1: Zabbix frontend
+  - [ ] 5.1. Items
+    - [ ] First draft 
+    - [ ] Edited
+    - [ ] Done 
+  - [ ] 5.2. Triggers
+    - [ ] First draft 
+    - [ ] Edited
+    - [ ] Done 
+- [ ] 6. APA7 References?
+  - [ ] First draft 
+  - [ ] Edited
+  - [ ] Done 
+- [ ] Other
+  - [ ] Change "Introduction" to "Introduction: VM setup" and remove subheading 1.1
+  - [ ] Final read through and edit
+  - [ ] Convert to pdf
+  - [ ] Deliver the report
