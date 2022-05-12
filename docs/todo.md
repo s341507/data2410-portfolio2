@@ -11,7 +11,7 @@
 - [x] Finn ut av volumes for 4 containers  (kan hende vi trenger mer configs)
 - [x] Finn ut av å lage et container network
   - [x] Få agent og server til å sende active logs
-- [ ] Fix server not sending active checks and agent not getting active checks
+- [x] Fix server not sending active checks and agent not getting active checks
 
 
 # III. VM2 and VM3: Install zabbix-agent and zabbix-proxy 
@@ -57,50 +57,53 @@
 
 
 # General
-- [ ] Rapportere det vi har gjort så langt
-- [ ] Guide for hvordan man kjører
+- [x] Rapportere det vi har gjort så langt
+- [x] Guide for hvordan man kjører
+- [x] APA kildehenvisning i proxy configuration i VM2.
 - [ ] Ta oppvasken
-- [ ] APA kildehenvisning i proxy configuration i VM2.
 
 
 # Redundant
-- [ ] Maile Hårek om docker i docker
+- [x] Maile Hårek om docker i docker
 - [x] Maile Hårek om hosting av nginx proxy
-- [ ] Maile Hårek ssh tunneling for å debugge i browser
+- [x] Maile Hårek ssh tunneling for å debugge i browser
 
 # Oppvasken
 - [ ] 1. Introduction
   - [ ] 1.1. Our project directory
+    - [x] First draft 
+    - [x] Edited
+    - [ ] Done 
   - [ ] 1.2. Virtual Machines with VirtualBox 
     - [x] First draft 
-    - [ ] Edited
+    - [x] Edited
     - [ ] Done 
 - [ ] 2. VM1: Docker containers setup
   - [ ] 2.1. Quad Container Setup on intel1 / VM1
-    - [ ] First draft 
+    - [x] First draft 
     - [ ] Edited
     - [ ] Done 
 - [ ] 3. VM2 and VM3: Install zabbix-agent and zabbix-proxy
   - [ ] Ha systemctl kommandoer for VM2 og VM3
   - [ ] 3.1. VM2
      - [ ] 3.1.1. Innstalling Zabbix Proxy
-       - [ ] First draft 
+       - [x] First draft 
        - [ ] Edited
        - [ ] Done 
      - [ ] 3.1.2. Configuring MariaDB database for the proxy to use
-       - [ ] First draft 
+       - [x] First draft 
        - [ ] Edited
        - [ ] Done 
      - [ ] 3.1.3. Configurating Zabbix Proxy
-       - [ ] First draft 
+       - [x] First draft 
        - [ ] Edited
        - [ ] Done 
      - [ ] 3.1.4. Starting and enabling the Zabbix Proxy
-       - [ ] First draft 
+       - [x] First draft 
        - [ ] Edited
        - [ ] Done 
      - [ ] 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
-       - [ ] First draft 
+       - [x] First draft 
        - [ ] Edited
        - [ ] Done 
   - [ ] 3.2. VM 3
