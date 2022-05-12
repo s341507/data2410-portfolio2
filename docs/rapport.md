@@ -259,7 +259,8 @@ wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/
 
 dpkg -i zabbix-release_6.0-1+ubuntu20.04_all.deb
 
-# needed this as well since we got the wrong version (6.2 beta) of the proxy by just having the release package
+# needed this as well since we got the wrong version (6.2 beta) of the proxy by just having 
+# the release package
 wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/
   zabbix-proxy-mysql_6.0.1-1%2Bubuntu20.04_amd64.deb
 
@@ -543,8 +544,8 @@ Regarding point 4.3 in the assignment text, we have already configured the port 
 
 Inside the zabbix-web container we have the following nginx configuration:
 
-<!-- figure 9 -->
-![](assets/zabbix-web-nginx-correct-port.png) 
+<!-- figure 10 -->
+![TODO](assets/zabbix-web-nginx-correct-port.png) 
 
 \newpage
 
@@ -635,6 +636,8 @@ Canonical. (n.d.). *Ubuntu 20.04.4 LTS (Focal Fossa)*. Ubuntu 20.04.4 lts (focal
 
 Lontons	A. (2021, December 9). *Handy Tips #15: Deploying zabbix passive and active agents*. Zabbix Blog. Retrieved May 12, 2022, from <https://blog.zabbix.com/handy-tips-15-deploying-zabbix-passive-and-active-agents/17696/> 
 
+
+TODO: nginx reverse proxy | https://www.hostinger.com/tutorials/how-to-set-up-nginx-reverse-proxy/
 
 *Zabbix proxy: Install on ubuntu 20.04 in 10 minutes!*. Best Monitoring Tools. (n.d.). Retrieved May 12, 2022, from <https://bestmonitoringtools.com/install-zabbix-proxy-on-ubuntu/> 
 

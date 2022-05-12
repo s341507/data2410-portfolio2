@@ -117,7 +117,7 @@
   - [ ] Done 
 - [ ] 5. VM1: Zabbix frontend
   - [ ] 5.1. Items
-    - [x] First draft 
+    - [ ] First draft 
     - [x] Edited
     - [ ] Done 
   - [ ] 5.2. Triggers
