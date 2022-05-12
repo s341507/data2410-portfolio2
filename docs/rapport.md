@@ -28,17 +28,21 @@ docker exec -it <container-id> bash
 
 ## 1.1. Our project directory
 
-For ease of use, all project-files are separated into the following sub-folders based on their functionality.
+At the beginning of the project we set up a group project directory called `portfolio2`. In this directory we decided to sort our files into different sub-folders for structure, backup and easy access purposes. The files were sorted based on their functionality and contents. Below is a list of the different sub-folders that were of significance to our project. Many of these sub-folders will be referenced in the report. 
+
 docker: files pertaining to docker functionality
+
 docs: files pertaining to documentation and explanation of our project
-configs: files that aren't used
+
+configs: files that aren't in use, but are kept as backup
+- configs/intel1: redundant docker files for VMs on intel1
+- configs/mysql: old mysql configuration files
+- configs/nginx: old nginx configuration files
+- configs/zabbix: old Zabbix configuration files
+
+
 
 ## 1.2. Virtual Machines with VirtualBox
-
-<!-- 
-TODO
-- [ ] Describe setup of VMs on virtual box (see introduction paragraph of report for specifics). 
--->
 
 Originally, we attempted to use docker containers on the intel1-server to implement our solution. However, the server ran out of storage space, so we created virtual machines through VirtualBox as a substitute. 
 
@@ -58,9 +62,9 @@ The architecture diagram in the assignment description can be interpreted to mea
 
 \newpage
 
-# 2. VM1: Docker containers setup - Quad Container Setup
+# 2. VM1: Docker containers setup - Docker Compose Setup
 
-After setting up the three VMs, we used the file `docker-compose.yml`, to set up the four docker containers with the required config instructions for the assignment within VM1. This file can be found in the docker folder in our project directory. The first step in setting up the docker containers was to install docker on VM1. 
+After setting up the three VMs, we used the file `docker-compose.yml`, from the docker folder in our project directory, to set up the four docker containers with the required config instructions for the assignment within VM1. This file can be found in the docker folder in our project directory. The first step in setting up the docker containers was to install docker on VM1. 
 
 We used the following command to install docker.
 
@@ -68,7 +72,7 @@ We used the following command to install docker.
 sudo apt-get install -y docker-compose
 ```
 
-We used the auto generated docker files to set up the docker containers, but we made some minor adjustments by setting the environment variables for these files before they were generated. The environment variables were created outside the ``docker-compose.yml`` file, and later referenced in the ``docker-compose.yml`` file. We created volume links as external volumes to make it possible to edit the files outside the docker containers via the docker volume functionality. This was possible because the volume files are synchronized with the volume files we mapped them to. The ``docs`` volume was used to get the .sql file to create the server. Setting up volumes for outside access made debugging easier while working on the project. For example we utilized this setup to look at the `zabbix_server.conf` config file to see if the environment variables in the ``docker-compose.yml`` file was correctly written in the config file.
+We used the auto generated docker files to set up the docker containers, but we made some minor adjustments by setting the environment variables for these files before they were generated. The environment variables were created outside the `docker-compose.yml` file, but later references in the file. We created volume links as external volumes to make it possible to edit the internal volume files outside the docker containers via the docker volume functionality. This was possible because the volume files outside the docker containers are synchronized with the volume files we mapped them to inside the docker containers. The `docs` volume was used to get the .sql file to create the server. Setting up volumes for outside access made debugging easier while working on the project. For example we utilized this setup to verify if the environment variables in the `docker-compose.yml` file was correctly written in the `zabbix_server.conf` config file, while remaining outside the docker container containing the Zabbix Server. 
 
 The following block of code describes how we set up the volumes according to the description above. 
 
@@ -80,8 +84,7 @@ sudo docker volume create zabbix-agent-config
 sudo docker volume create docs
 ```
 
-In the block below, we display our docker compose file  `portfolio2/docker/docker-compose.yml` from the docker folder in our project directory. This file was run with the `docker-compose up` command on VM1 to start the docker containers. 
-
+In the block below, we display our docker compose file  `docker-compose.yml` from the docker folder in our project directory. 
 
 ```yml
 # Docker Container setup for VM 1
@@ -194,37 +197,34 @@ volumes:
     external: true
 ```
 
+We used the following command on VM1 to start the docker containers with the `docker-compose.yml`. 
+
+```bash
+sudo docker-compose up
+```
+
 After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack. This was to ensure that everything connected properly. The web frontend is hosted on VM1 port 80 as per the assignment description, so to reach it, we simply typed the address in a web browser. In later steps of the assignment, we set up an nginx proxy that allowed us to reach the frontend trough the localhost-address.
 
 <!-- 
 TODO
-- [ ] Consider also having config images
+- [ ] Consider also having config images front frontend
  -->
 
 ![.](assets/all-green-vm1-splitt1.png) \
 
 ![Image showing that the zabbix-agent and zabbix-server is working](assets/all-green-vm1-splitt2.png)
 
-Here is a screengrab of our docker compose log, showing that all the checks except for one is working between the agent and server. Our thoughts was that this one check from the template probably wasn't suited for being run in a docker environment as some things can be different there.
+Here is a screenshot of our docker compose log, showing that all the checks except for one is working between the agent and server. Our thoughts was that this one check from the template probably wasn't suited for being run in a docker environment as some things can be different there. We decided to cut this image in two and put them ih two rows to make it easier to read in a standing page .pdf format
 
 ![Logs from docker compose after setting up hosts on frontend](assets/host-error-sorted-tho-sorted-itself.png)
 
-So this should fully explain how we did the first part of this assignment, how we installed docker, how we configured our docker-compose stack and made our docker bridge network inside of VM1, while also going a little further by using the frontend to set up the hosts there.
-
-<!-- 
-TODO 
-- [ ] detail docker install
-- [ ] consider more images of frontend? tho probably not
--->
-
+So this should fully explain how we did the first part of this assignment, how we installed docker, how we configured our docker-compose stack and made our docker bridge network inside of VM1, while also going a little further by using the frontend to set up the hosts there.'
 
 \newpage
 
 # 3. VM2 and VM3: Install zabbix-agent and zabbix-proxy
 
 ## 3.1. VM2
-
-<!-- TODO real apa7 sourcing on this source -->
 
 We followed this guide to complete task 1 in part III of the assignment description: <https://bestmonitoringtools.com/install-zabbix-proxy-on-ubuntu/>
 There were a few things we did differently from the guide. These will be described below. 
@@ -233,17 +233,19 @@ There were a few things we did differently from the guide. These will be describ
 
 We started by installing `Zabbix Proxy` on VM2 with the following commands:
 
-NB: These links are not the same given in the tasks as using the release packages gave a lot of problems with wrong versions, sometimes we would get version 4 or 5, and sometimes a 6.2 beta version, whilst all we needed was the 6.0.x versions as these were the ones that the docker compose stack received. We got our downloads from this zabbix repo: <!-- TODO insert link as apa7 -->
+NB: These links are not the same given in the tasks as using the release packages gave a lot of problems with wrong versions, sometimes we would get version 4 or 5, and sometimes a 6.2 beta version, whilst all we needed was the 6.0.x versions as these were the ones that the docker compose stack received. We got our downloads from the zabbix repo listed in our references
 
 ```bash
 apt-get install wget
 
-wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-1%2Bubuntu20.04_all.deb
+wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/
+  zabbix-release_6.0-1%2Bubuntu20.04_all.deb
 
 dpkg -i zabbix-release_6.0-1+ubuntu20.04_all.deb
 
-# needed this as well since we got the wrong version of the proxy by just having the release package
-wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/zabbix-proxy-mysql_6.0.1-1%2Bubuntu20.04_amd64.deb
+# needed this as well since we got the wrong version (6.2 beta) of the proxy by just having the release package
+wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/
+  zabbix-proxy-mysql_6.0.1-1%2Bubuntu20.04_amd64.deb
 
 dpkg -i zabbix-proxy-mysql_6.0.1-1+ubuntu20.04_amd64.deb
 
@@ -369,8 +371,6 @@ Quickly documenting how we did the frontend setup of the proxy after, doing the 
 
 ![Image showing that the zabbix-proxy is connected](assets/zabbix-proxy-post-100s.png)
 
-
-
 ## 3.2. VM 3. Zabbix Agent installation and setup 
 
 The following code block must be run as root on VM3 to install the `Zabbix-agent`.
@@ -428,6 +428,12 @@ TLSPSKFile=/opt/zabbix_agent.psk
 Server=192.168.50.247
 ```
 
+Lastly we start the agent with the following command:
+
+```bash
+sudo systemctl restart zabbix-agent
+```
+
 See point/heading 5 to see how we configured this in the front end.
 
 \newpage
@@ -481,16 +487,16 @@ sudo ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enable
 Lastly, to see if it worked, we ran an nginx configuration test and restarted the service.
 
 ```bash
-sudo service nginx configtest
+sudo systemctl configtest nginx
  * Testing nginx configuration                                               [ OK ]
 
-sudo service nginx restart
+sudo systemctl restart nginx
  * Restarting nginx nginx                                                    [ OK ]
 ```
 
 This verifies that nginx works as intended.
 
-Image of nginx-proxy being accessed from host machine via VM2 local IP in bridged network on port 8080.
+Image of nginx-proxy being accessed from host machine via VM2 local IP in bridged network on port 8080. This isn't strictly localhost:8080 based on the diagram.
 
 ![Image showing zabbix frontend from nginx proxy](assets/nginx-frontend-working-red-highlight.png)
 
@@ -503,8 +509,6 @@ Hostnames on all VMs where `ubuntu1` because vm2 and vm3 where created by clonin
 # 5. VM1: Zabbix frontend
 
 To access the Zabbix frontend, we connected to the nginx-proxy on VM2 via its local IP and port 8080 as specified. This redirected us to the VM1 zabbix-web docker container. Once logged in to the Zabbix frontend, we added the host according to the descriptions, made the items as per point a) and b) and lastly the triggers as per point c) and d)
-
-<!-- ![](assets/all-green-yeet.png) -->
 
 ![.](assets/all-green-split1.png) \
 
@@ -566,10 +570,7 @@ Canonical. (n.d.). *Ubuntu 20.04.4 LTS (Focal Fossa)*. Ubuntu 20.04.4 lts (focal
 *Downloads.mariadb.com*. downloads.mariadb.com. (n.d.). Retrieved May 12, 2022, from <https://downloads.mariadb.com/MariaDB/mariadb_repo_setup> 
 
 
-*Index of /zabbix/6.0/debian/pool/main/z/zabbix-release/*. Zabbix Official Repository. (n.d.). Retrieved May 12, 2022, from <https://repo.zabbix.com/zabbix/6.0/debian/pool/main/z/zabbix-release/> 
-
-
-*Index of /zabbix/6.0/ubuntu/pool/main/z/zabbix/*. Zabbix Official Repository. (n.d.). Retrieved May 12, 2022, from <https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/> 
+*Index of /zabbix/6.0/ubuntu/pool/main/z/zabbix/*. Zabbix Official Repository. (n.d.). Retrieved May 12, 2022, from <https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/> 
 
 
 Lontons	A. (2021, December 9). *Handy Tips #15: Deploying zabbix passive and active agents*. Zabbix Blog. Retrieved May 12, 2022, from <https://blog.zabbix.com/handy-tips-15-deploying-zabbix-passive-and-active-agents/17696/> 
@@ -577,3 +578,7 @@ Lontons	A. (2021, December 9). *Handy Tips #15: Deploying zabbix passive and act
 
 *Zabbix proxy: Install on ubuntu 20.04 in 10 minutes!* Best Monitoring Tools. (n.d.). Retrieved May 12, 2022, from <https://bestmonitoringtools.com/install-zabbix-proxy-on-ubuntu/> 
 
+
+<!-- 
+*Index of /zabbix/6.0/ubuntu/pool/main/z/zabbix-release/*. Zabbix Official Repository. (n.d.). Retrieved May 12, 2022, from <https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/>  
+-->
