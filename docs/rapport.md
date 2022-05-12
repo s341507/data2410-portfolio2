@@ -334,15 +334,9 @@ DBName=zabbix_proxy
 DBUser=zabbix
 ```
 
-After editing the necessary values, we saved and exited the file. We configured the ConfigFrequency to be 100 seconds. This parameter determines how often the proxy retrieves data from the configuration file, and is useful to cut down on the waiting time between updates on the status of the `Zabbix Proxy`. The notable differences between our config file, and the config file in the guide is that we have a different IP address for the server, and a different hostname for the proxy itself. 
+After editing the necessary values, we saved and exited the file. We set the ConfigFrequency to be 100 seconds. This parameter determines how often the proxy retrieves data from the configuration file, and is useful to cut down on the waiting time between updates on the status of the `Zabbix Proxy`. The notable differences between our config file, and the config file in the guide is that we have a different IP address for the server, and a different hostname for the proxy itself. 
 
 ![](assets/zabbix-proxy-post-100s.png)
-
-<!-- ![](assets/all-green-vm1.png) -->
-
-![](assets/all-green-vm1-splitt1.png)
-
-![](assets/all-green-vm1-splitt2.png)
 
 ### 3.1.4. Starting and enabling the Zabbix Proxy
 
@@ -514,7 +508,7 @@ To access the Zabbix frontend we connect to the nginx-proxy on VM2 via it's loca
 
 ![](assets/all-green-split1.png)
 
-![](assets/all-green-split2.png)
+![Image of our host setup with VM3 agent, split in two for easier viewing on paper](assets/all-green-split2.png)
 
 <!-- ![](assets/double-vm-bridged-network-unique-mac-proxy-works.png)-->
 
@@ -556,4 +550,4 @@ After making those triggers we made sure that the triggers where correctly creat
 
 # 6. References
 
-TODO: actually add references
+Arturs Lontons. (2021, December 9). *Deploying zabbix passive and active agents.* Zabbix Blog. Retrieved May 12, 2022, from https://blog.zabbix.com/handy-tips-15-deploying-zabbix-passive-and-active-agents/17696/ 
