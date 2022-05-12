@@ -71,7 +71,7 @@
 # Oppvasken
 - [ ] 1. Introduction
   - [ ] 1.1. Virtual Machines with VirtualBox 
-    - [ ] First draft 
+    - [x] First draft 
     - [ ] Edited
     - [ ] Done 
 - [ ] 2. VM1: Docker containers setup
@@ -125,5 +125,6 @@
 - [ ] Other
   - [ ] Change "Introduction" to "Introduction: VM setup" and remove subheading 1.1
   - [ ] Final read through and edit
+  - [ ] Clean up unnecessary comments
   - [ ] Convert to pdf
   - [ ] Deliver the report

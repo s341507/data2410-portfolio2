@@ -56,7 +56,6 @@ These are the commands we did to install docker, and in the block beneath we dis
 sudo apt-get install -y docker-compose
 ```
 
-
 ## 2.1. Quad Container Setup on intel1 / VM1
 
 After setting up the three VMs, we used the file `docker-compose.yml`, to set up the four containers with the required config instructions for the assignment within VM1. This file can be found in the configs folder. 
@@ -242,7 +241,7 @@ apt-get install zabbix-proxy-mysql
 apt-get install zabbix-sql-scripts
 ```
 
-The only notable difference between the guide and what we did in this part of the task, is that we used Zabbix-proxy version 6.0.1 instead of Zabbix-proxy version 6.0, because the assignment descriptions asks us to use version 6.1.1  
+The only notable difference between the guide and what we did in this part of the task, is that we used Zabbix-proxy version 6.0.1 instead of Zabbix-proxy version 6.1, because the assignment descriptions asks us to use version 6.1.1  
 
 ### 3.1.2. Configuring MariaDB database for the proxy to use
 
@@ -439,7 +438,7 @@ server {
     server_name localhost;
 
     location / {
-        proxy_pass http://192.168.50.95:8080;
+        proxy_pass http://192.168.50.95:80;
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -491,10 +490,10 @@ You can check the tests manually after entering the dockerfile
  -->
 
  
-To reach other docker containers, we have to use the IP address of the host machine (intel1 in this case) 172.19.0.1
+To reach other docker containers, we have to use the IP address of the host machine (intel1 in this case) 192.168.50.95
 
 ```bash
-curl 172.19.0.1
+curl 192.168.50.95
 <!DOCTYPE html>
 <html>
 --------------------------------- # commented put contents of the zabbix page
