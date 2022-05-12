@@ -40,8 +40,6 @@ configs: files that aren't in use, but are kept as backup
 - configs/nginx: old nginx configuration files
 - configs/zabbix: old Zabbix configuration files
 
-
-
 ## 1.2. Virtual Machines with VirtualBox
 
 Originally, we attempted to use docker containers on the intel1-server to implement our solution. However, the server ran out of storage space, so we created virtual machines through VirtualBox as a substitute. 
@@ -49,11 +47,10 @@ Originally, we attempted to use docker containers on the intel1-server to implem
 The first thing we needed was a VM running Ubuntu Focal Fossa. We needed the VM to have 4GB of RAM and 10GB of disk space. As shown in Figure 1, we downloaded the image for Ubuntu Focal Fossa (20.04) from: 
   <https://releases.ubuntu.com/20.04/ubuntu-20.04.4-desktop-amd64.iso> and created VM1 from this image.
 
-![Ubuntu installation screen](./assets/ubuntu%20install.png)  
 <!-- figure 1 -->
+![Ubuntu installation screen](./assets/ubuntu%20install.png)  
 
-The next ste was to configure VM1. We started by setting up VM1 on a bridged network. The reason we started with VM1 was to make sure that it was working. We created VM2 by cloning VM1 and changing the mac address. By cloning VM1 one more time, we created VM3. By changing the mac addresses we ensured that each VM had their own local IP on the bridged network. By doing it this way, we made sure that all three VMs could communicate with each other, whilst also being able to communicate with the host machine.
-
+The next step was to configure VM1. We started by setting up VM1 on a bridged network. The reason we started with VM1 was to make sure that it was working. We created VM2 by cloning VM1 and changing the mac address. By cloning VM1 one more time, we created VM3. By changing the mac addresses we ensured that each VM had their own local IP on the bridged network. By doing it this way, we made sure that all three VMs could communicate with each other, whilst also being able to communicate with the host machine.
 
 The architecture diagram in the assignment description can be interpreted to mean that we should use an internal network for all of the VMs whilst giving VM2 a second bridged network adapter. This would ensure that only the nginx proxy could reach the outside of the internal VM network. Since the assignment didn't specify what network method to use for th VMs, we decided against this, because this would make our assignment more complicated than necessary.
 
@@ -209,13 +206,13 @@ TODO
 
 ![.](assets/all-green-vm1-splitt1.png) \
 
-![Image showing that the zabbix-agent and zabbix-server is working](assets/all-green-vm1-splitt2.png)
 <!-- figure 2 -->
+![Image showing that the zabbix-agent and zabbix-server is working](assets/all-green-vm1-splitt2.png)
 
 Figure 2 shows a screenshot of the docker compose log. It shows that all the checks except one is working between the agent and server. We assumed that this one check from the template probably wasn't suited for being run in a docker environment, because some things can be different in a docker environment. We decided to cut this image into two parts to improve the readability.
 
-![Logs from docker compose after setting up hosts on frontend](assets/host-error-sorted-tho-sorted-itself.png)
 <!-- figure 3 -->
+![Logs from docker compose after setting up hosts on frontend](assets/host-error-sorted-tho-sorted-itself.png)
 
 This section should now fully explain how we did the first part of this assignment, how we installed docker, how we configured our docker-compose stack and made our docker bridge network inside of VM1, while also going a little further by using the frontend to set up the hosts there.' 
 
@@ -366,11 +363,11 @@ While in the zabbix-proxy config file, it is also important to make sure that th
 
 Quickly documenting how we did the frontend setup of the proxy after, doing the config on VM2, and also an image verifying that it was connected
 
-![Image showing proxy creation dialog window](assets/proxy-frontend-setup.png) 
 <!--figure 4 this can be removed if we don't have enough space-->
+![Image showing proxy creation dialog window](assets/proxy-frontend-setup.png) 
 
-![Image showing that the zabbix-proxy is connected](assets/zabbix-proxy-post-100s.png) 
 <!-- figure 5 -->
+![Image showing that the zabbix-proxy is connected](assets/zabbix-proxy-post-100s.png) 
 
 ## 3.2. VM 3. Zabbix Agent installation and setup 
 
@@ -503,13 +500,13 @@ sudo systemctl restart nginx
 
 This verifies that nginx works as intended.
 
-The following is an image of the zbbix  being accessed from host machine via VM2 local IP in bridged network on port 8080. This isn't strictly localhost:8080 based on the diagram.
+The following is an image of the zabbix frontend being accessed from the host machine through the nginx proxy on VM2. The URL to reach the zabbix frontend isn't localhost:8080, as the architecture diagram suggested, but rather the IP address of VM2.
 
-![Image showing zabbix frontend from nginx proxy](assets/nginx-frontend-working-red-highlight.png) 
 <!-- figure 6 -->
+![Image showing zabbix frontend from nginx proxy](assets/nginx-frontend-working-red-highlight.png) 
 
-![Image showing local ip of vm2](assets/vm2-local-ip.png) 
 <!-- figure 7 -->
+![Image showing local ip of vm2](assets/vm2-local-ip.png) 
 
 Hostnames on all VMs where `ubuntu1` because vm2 and vm3 where created by cloning vm1.
 
@@ -525,15 +522,15 @@ To access the Zabbix frontend, we connected to the nginx-proxy on VM2 via its lo
 
 ![.](assets/all-green-split1.png) \
 
-![Image of our host setup with VM3 agent, split in two for easier viewing on paper](assets/all-green-split2.png) 
 <!-- figure 8 -->
+![Image of our host setup with VM3 agent, split in two for easier viewing on paper](assets/all-green-split2.png)
 
 <!-- ![](assets/double-vm-bridged-network-unique-mac-proxy-works.png)-->
 
 We created a new template named zabbix-monitoring in the zabbix-monitoring host group:
 
-![Image showing template creation dialog](assets/making-template-for-monitoring-group.png) 
 <!-- figure 9, this can be removed if we don't have enough space-->
+![Image showing template creation dialog](assets/making-template-for-monitoring-group.png) 
 
 ## 5.1. Items
 
@@ -549,8 +546,9 @@ We created an that will monitor the docker process usage with interval of 1 minu
 proc.cpu.util[dockerd]
 ```
 
-![Image showing that the items are created](assets/items-created.png)
 <!-- figure 10 -->
+![Image showing that the items are created](assets/items-created.png)
+
 
 ## 5.2. Triggers
 
@@ -560,8 +558,8 @@ We created a trigger that triggers when uptime is longer than 240 days:
 last(/zabbix_server_agent_vm3/system.uptime)>240d
 ```
 
-![Image showing trigger uptime creation dialog](assets/making-trigger-uptime240.png)
 <!-- figure 11 -->
+![Image showing trigger uptime creation dialog](assets/making-trigger-uptime240.png)
 
 We created a trigger that triggers when disk I/O is higher than 20% average for 5 minutes:
 
@@ -569,16 +567,16 @@ We created a trigger that triggers when disk I/O is higher than 20% average for 
 avg(/zabbix_server_agent_vm3/system.cpu.util[,iowait],5m)>20
 ```
 
-![Image showing trigger disk io creation dialog](assets/making-trigger-disk-io.png)
 <!-- figure 12 -->
+![Image showing trigger disk io creation dialog](assets/making-trigger-disk-io.png)
 
 After making those triggers we made sure that the triggers where correctly created:
 
-![Image showing the uptime trigger is created](assets/trigger-uptime240.png)
 <!-- figure 13 -->
+![Image showing the uptime trigger is created](assets/trigger-uptime240.png)
 
-![Image showing the disk io trigger is created](assets/trigger-disk-io-smol.png)
 <!-- figure 14 -->
+![Image showing the disk io trigger is created](assets/trigger-disk-io-smol.png)
 
 \newpage
 
