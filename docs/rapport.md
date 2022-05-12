@@ -22,6 +22,8 @@ to run a docker container
 docker exec -it <container-id> bash
  -->
 
+\newpage
+
 # 1. Introduction
 
 ## 1.1. Virtual Machines with VirtualBox
@@ -192,11 +194,11 @@ TODO
 
 ![Active and Passive checks on the ](assets/all-green-vm1.png)
 
-Here is a screen of our docker compose log, showing that all the checks except for one is working between the agent and server. Our thougts was that this one check from the template probably wasn't suited for being run in a docker enviroment as some things can be different there.04_all
+Here is a screengrab of our docker compose log, showing that all the checks except for one is working between the agent and server. Our thougts was that this one check from the template probably wasn't suited for being run in a docker enviroment as some things can be different there.04_all
 
-![Logs from docker compose after setting up hosts on frontend](assets/fixed-active-checks-cropped.png)
+![Logs from docker compose after setting up hosts on frontend](assets/host-error-sorted-tho-sorted-itself.png)
 
-So this should fully explain how we did the first part of this assignment, how we installed docker and how we configured our docker-compose stack, and made our docker bridge network inside of VM1, whilst also going a little further with using the frontend with setting up the hosts there.
+So this should fully explain how we did the first part of this assignment, how we installed docker, how we configured our docker-compose stack and made our docker bridge network inside of VM1, while also going a little further by using the frontend to set up the hosts there.
 
 <!-- 
 TODO 
@@ -354,7 +356,7 @@ While in the zabbix-proxy config file, it is also important to make sure that th
 
 ### 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
 
-![](assets/proxy-frontend-setup.png)
+![](assets/proxy-frontend-setup.png) <!--this can be removed if we don't have enough space-->
 
 
 Then we set up a new host to make the active changes work, configured like this:
@@ -375,10 +377,12 @@ TODO
  -->
 
 ```bash
-wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.1-1%2Bubuntu20.04_all.deb
+wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/
+  zabbix-release_6.1-1%2Bubuntu20.04_all.deb
 
 #had to use this one for right version
-wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/zabbix-agent_6.0.1-1%2Bubuntu20.04_amd64.deb
+wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/
+  zabbix-agent_6.0.1-1%2Bubuntu20.04_amd64.deb
 
 sudo dpkg -i zabbix-release_6.1-1+ubuntu20.04_all.deb
 
@@ -496,7 +500,7 @@ To reach other docker containers, we have to use the IP address of the host mach
 curl 192.168.50.95
 <!DOCTYPE html>
 <html>
---------------------------------- # commented put contents of the zabbix page
+... # commented put contents of the zabbix page
 ```
 \newpage
 
@@ -506,11 +510,11 @@ To access the Zabbix frontend we connect to the nginx-proxy on VM2 via it's loca
 
 ![](assets/all-green-yeet.png)
 
-![](assets/double-vm-bridged-network-unique-mac-proxy-works.png)
+<!-- ![](assets/double-vm-bridged-network-unique-mac-proxy-works.png)-->
 
 We created a new template zabbix-monitoring in the host group zabbix-monitoring with the following items and triggers:
 
-![](assets/making-template-for-monitoring-group.png)
+![](assets/making-template-for-monitoring-group.png) <!--this can be removed if we don't have enough space-->
 
 ## 5.1. Items
 

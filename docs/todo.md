@@ -128,3 +128,8 @@
   - [ ] Clean up unnecessary comments
   - [ ] Convert to pdf
   - [ ] Deliver the report
+
+  # Report structure
+  - [ ] Ikke ha tekst på samme side som innholdsfortegnelsen
+  - [ ] Linjeavastand 1,5 i hele dokumentet
+  - [ ] Mer whitespace mellom tekst og bilder/kode
