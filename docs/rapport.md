@@ -22,6 +22,8 @@ to run a docker container
 docker exec -it <container-id> bash
  -->
 
+\newpage
+
 # 1. VM1: Docker containers setup 10%
 
 Originally, we attempted to use Docker containers on the intel1-server to implement our solution. However, the server ran out of storage, so created virtual machines through VirtualBox as a substitute. 
@@ -122,6 +124,7 @@ TODO
 TODO
 - [ ] Descirbe setup of VMs on virtual box (see introduction paragraph of report for specifics). 
 -->
+\newpage
 
 # 2. VM2 and VM3: Install zabbix-agent and zabbix-proxy 10%
 
@@ -380,6 +383,7 @@ Server=192.168.50.247
 ```
 
 Since we are running this in a docker container and not on an actual VM, we don´t have systemd available. Therefore, we cannot _enable_ the service, only start it, and have it as a run command in a dockerfile. This means we need to make sure that the service is started every time we run the container the dockerfile is made for.
+\newpage
 
 # 3. VM2: Nginx proxy 10%
 
@@ -456,4 +460,6 @@ root@0501deebfda5:/# curl 172.19.0.1
 --------------------------------- # commented put contents of the zabbix page
 root@0501deebfda5:/#
 ```
+\newpage
+
 # 4. VM1: Zabbix frontend
