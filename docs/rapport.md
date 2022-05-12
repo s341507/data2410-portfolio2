@@ -191,11 +191,11 @@ TODO
 - [ ] Consider also having config images
  -->
 
-![Active and Passive checks on the ](assets%5Call-green-vm1.png)
+![Active and Passive checks on the ](assets/all-green-vm1.png)
 
 Here is a screen of our docker compose log, showing that all the checks except for one is working between the agent and server. Our thougts was that this one check from the template probably wasn't suited for being run in a docker enviroment as some things can be different there.04_all
 
-![Logs from docker compose after setting up hosts on frontend](assets%5Cfixed-active-checks-cropped.png)
+![Logs from docker compose after setting up hosts on frontend](assets/fixed-active-checks-cropped.png)
 
 So this should fully explain how we did the first part of this assignment, how we installed docker and how we configured our docker-compose stack, and made our docker bridge network inside of VM1, whilst also going a little further with using the frontend with setting up the hosts there.
 
