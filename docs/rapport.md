@@ -192,7 +192,9 @@ TODO
 - [ ] Consider also having config images
  -->
 
-![Active and Passive checks on the ](assets/all-green-vm1.png)
+![](assets/all-green-vm1-splitt1.png)
+
+![](assets/all-green-vm1-splitt2.png)
 
 Here is a screengrab of our docker compose log, showing that all the checks except for one is working between the agent and server. Our thougts was that this one check from the template probably wasn't suited for being run in a docker enviroment as some things can be different there.04_all
 
@@ -336,7 +338,11 @@ After editing the necessary values, we saved and exited the file. We configured 
 
 ![](assets/zabbix-proxy-post-100s.png)
 
-![](assets/all-green-vm1.png)
+<!-- ![](assets/all-green-vm1.png) -->
+
+![](assets/all-green-vm1-splitt1.png)
+
+![](assets/all-green-vm1-splitt2.png)
 
 ### 3.1.4. Starting and enabling the Zabbix Proxy
 
@@ -370,11 +376,6 @@ Proof that it is working:
 ## 3.2. VM 3
 
 The following code block must be run as root on VM3 to install the `Zabbix-agent`.
-
-<!--
-TODO
-- [ ] get these commands into a dockerfile
- -->
 
 ```bash
 wget https://repo.zabbix.com/zabbix/6.1/ubuntu/pool/main/z/zabbix-release/
@@ -508,7 +509,11 @@ curl 192.168.50.95
 
 To access the Zabbix frontend we connect to the nginx-proxy on VM2 via it's local IP and and port 8080 as specified. This redirected us to the VM1 zabbix-web docker container. Here we added the host according to the descriptions, and then made the items as per point a) and b), and the triggers as per point c) and d)
 
-![](assets/all-green-yeet.png)
+<!-- ![](assets/all-green-yeet.png) -->
+
+![](assets/all-green-split1.png)
+
+![](assets/all-green-split2.png)
 
 <!-- ![](assets/double-vm-bridged-network-unique-mac-proxy-works.png)-->
 
