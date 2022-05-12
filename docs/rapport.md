@@ -31,7 +31,7 @@ docker exec -it <container-id> bash
 For ease of use, all project-files are separated into the following sub-folders based on their functionality.
 docker: files pertaining to docker functionality
 docs: files pertaining to documentation and explanation of our project
-vm_data
+configs: files that aren't used
 
 ## 1.2. Virtual Machines with VirtualBox
 
