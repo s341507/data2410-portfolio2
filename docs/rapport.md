@@ -196,7 +196,7 @@ TODO
 
 ![](assets/all-green-vm1-splitt2.png)
 
-Here is a screengrab of our docker compose log, showing that all the checks except for one is working between the agent and server. Our thougts was that this one check from the template probably wasn't suited for being run in a docker enviroment as some things can be different there.04_all
+Here is a screengrab of our docker compose log, showing that all the checks except for one is working between the agent and server. Our thoughts was that this one check from the template probably wasn't suited for being run in a docker environment as some things can be different there.
 
 ![Logs from docker compose after setting up hosts on frontend](assets/host-error-sorted-tho-sorted-itself.png)
 
@@ -224,7 +224,7 @@ There were a few things we did differently from the guide. These will be describ
 
 We started by installing `Zabbix Proxy` on VM2 with the following commands:
 
-NB: These links are not the same given in the tasks as using the release packages gave a lot of problems with wrong versions, sometimes we would get verison 4 or 5, and sometimes a 6.2 beta version, whilst all we needed was the 6.0.x versions as these were the ones that the docker compose stack recieved. We got our downloads from this zabbix repo: <!-- TODO insert link as apa7 -->
+NB: These links are not the same given in the tasks as using the release packages gave a lot of problems with wrong versions, sometimes we would get version 4 or 5, and sometimes a 6.2 beta version, whilst all we needed was the 6.0.x versions as these were the ones that the docker compose stack received. We got our downloads from this zabbix repo: <!-- TODO insert link as apa7 -->
 
 ```bash
 apt-get install wget
@@ -429,6 +429,7 @@ Server=192.168.50.247
 ```
 
 Since we are running this in a docker container and not on an actual VM, we don´t have systemd available. Therefore, we cannot _enable_ the service, only start it, and have it as a run command in a dockerfile. This means we need to make sure that the service is started every time we run the container the dockerfile is made for.
+
 \newpage
 
 # 4. VM2: Nginx proxy
