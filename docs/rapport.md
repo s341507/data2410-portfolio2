@@ -26,12 +26,19 @@ docker exec -it <container-id> bash
 
 # 1. Introduction
 
-## 1.1. Virtual Machines with VirtualBox
+## 1.1. Our project directory
+
+Our project-files are separated into sub-folders based on their functionality.
+
+## 1.2. Virtual Machines with VirtualBox
 
 <!-- 
 TODO
 - [ ] Describe setup of VMs on virtual box (see introduction paragraph of report for specifics). 
 -->
+
+Originally, we attempted to use docker containers on the intel1-server to implement our solution. However, the server ran out of storage space, so we created virtual machines through VirtualBox as a substitute. 
+
 The first thing we needed was a VM running Ubuntu Focal Fossa.
 Cloning this VM would let us create the 3 virtual machines needed for the assignment, each with 4GB of RAM and 10GB of disk space. 
 We started by downloading the image for Ubuntu Focal Fossa (20.04) from: 
@@ -44,23 +51,22 @@ We started by downloading the image for Ubuntu Focal Fossa (20.04) from:
 We started by setting up VM1 on a bridged network. The reason we started with VM1 was to make sure that it was working. We created VM2 by cloning VM1 and changing the mac address. We cloned VM1 one more time to create VM3. By changing the mac addresses we ensured that each VM had their own local IP on the bridged network. By doing it this way, we made sure that all three VMs could communicate with each other, whilst also being able to communicate with the host machine.
 
 
-The architecture diagram in the assignment description can be interpreted to mean that we should use an internal network for all of the VMs whilst giving VM2 a second bridged network adapter. This would ensure that only the nginx proxy could reach the outside of the internal VM network. However, this would make our assignment more complicated than necessary, because the assignment didn't specify what network method to use for the VMs.
+The architecture diagram in the assignment description can be interpreted to mean that we should use an internal network for all of the VMs whilst giving VM2 a second bridged network adapter. This would ensure that only the nginx proxy could reach the outside of the internal VM network. Since the assignment didn't specify what network method to use for th VMs, we decided against this, because this would make our assignment more complicated than necessary.
 
 \newpage
 
-# 2. VM1: Docker containers setup
+# 2. VM1: Docker containers setup - Quad Container Setup
 
-Originally, we attempted to use docker containers on the intel1-server to implement our solution. However, the server ran out of storage space, so we created virtual machines through VirtualBox as a substitute. 
+After setting up the three VMs, we used the file `docker-compose.yml`, to set up the four docker containers with the required config instructions for the assignment within VM1. This file can be found in the configs folder in our project directory. The first step in setting up the docker containers was to install docker on VM1. 
 
-These are the commands we did to install docker, and in the block beneath we display our docker compose file  `configs/docker-compose.yml`, which was run with the `docker-compose up` command on VM1, in the same directory as this file
+We used the following command to install docker.
 
 ```bash
 sudo apt-get install -y docker-compose
 ```
 
-## 2.1. Quad Container Setup on intel1 / VM1
+In the block below, we display our docker compose file  `configs/docker-compose.yml`, which was run with the `docker-compose up` command on VM1, in the configs folder in our project directory. 
 
-After setting up the three VMs, we used the file `docker-compose.yml`, to set up the four containers with the required config instructions for the assignment within VM1. This file can be found in the configs folder. 
 
 ```yml
 # Docker Container setup for VM 1
@@ -192,7 +198,7 @@ TODO
 - [ ] Consider also having config images
  -->
 
-![.](assets/all-green-vm1-splitt1.png)
+![.](assets/all-green-vm1-splitt1.png) \
 
 ![Image showing that the zabbix-agent and zabbix-server is working](assets/all-green-vm1-splitt2.png)
 
@@ -315,7 +321,7 @@ sudo cat /usr/share/doc/zabbix-sql-scripts/mysql/proxy.sql | mysql -uzabbix -p'z
 In the installation and configuration of the database, we followed the guide quite exactly. Therefore, there are very few differences between what we did to install and configure the database, and what is stated in the installation guide. 
 
 
-### 3.1.3. Configurating Zabbix Proxy
+### 3.1.3. Configuring Zabbix Proxy
 
 Once the installation and configuration of the database was complete, it was time to configure the `Zabbix Proxy`. The first step when configuring the `Zabbix Proxy` was to open the config file with the following command: 
 
@@ -325,7 +331,7 @@ sudo gedit /etc/zabbix/zabbix_proxy.conf
 
 In the file we changed the following values: 
 
-```
+```bash
 DBPassword=zabbixDBpass
 ConfigFrequency=100
 Server=192.168.50.95
@@ -335,8 +341,6 @@ DBUser=zabbix
 ```
 
 After editing the necessary values, we saved and exited the file. We set the `ConfigFrequency` to be 100 seconds. This parameter determines how often the proxy retrieves data from the configuration file, and is useful to cut down on the waiting time between updates on the status of the `Zabbix Proxy`. The notable differences between our config file, and the config file in the guide is that we have a different IP address for the server, and a different hostname for the proxy itself. 
-
-![Image showing that the zabbix-proxy is connected](assets/zabbix-proxy-post-100s.png)
 
 ### 3.1.4. Starting and enabling the Zabbix Proxy
 
@@ -356,10 +360,15 @@ While in the zabbix-proxy config file, it is also important to make sure that th
 
 ### 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
 
+Quickly documenting how we did the frontend setup of the proxy after, doing the config on VM2, and also an image verifying that it was connected
+
 ![Image showing proxy creation dialog window](assets/proxy-frontend-setup.png) <!--this can be removed if we don't have enough space-->
 
+![Image showing that the zabbix-proxy is connected](assets/zabbix-proxy-post-100s.png)
 
-## 3.2. VM 3
+
+
+## 3.2. VM 3. Zabbix Agent installation and setup 
 
 The following code block must be run as root on VM3 to install the `Zabbix-agent`.
 
@@ -382,7 +391,7 @@ sudo apt-get install zabbix-agent
 
 The following code block creates the psk encryption key.
 
-```
+```bash
 openssl rand -hex 32 > zabbix_agent.psk
 
 cat zabbix_agent.psk 
@@ -399,7 +408,7 @@ sudo chmod 777 /opt/zabbix
 sudo mv zabbix_agent.psk /opt/zabbix/
 ```
 
-used these commands to edit the `zabbix-agent.conf` file
+Used these commands to edit the `zabbix-agent.conf` file
 
 ```bash
 sudo vim /etc/zabbix/zabbix_agentd.conf 
@@ -415,6 +424,8 @@ TLSPSKFile=/opt/zabbix_agent.psk
 # the local ip of our bridged networked VM2
 Server=192.168.50.247
 ```
+
+See point/heading 5 to see how we configured this in the front end.
 
 \newpage
 
@@ -488,17 +499,17 @@ Hostnames on all VMs where `ubuntu1` because vm2 and vm3 where created by clonin
 
 # 5. VM1: Zabbix frontend
 
-To access the Zabbix frontend we connected to the nginx-proxy on VM2 via it's local IP and and port 8080 as specified. This redirected us to the VM1 zabbix-web docker container. Here we added the host according to the descriptions, and then made the items as per point a) and b), and the triggers as per point c) and d)
+To access the Zabbix frontend, we connected to the nginx-proxy on VM2 via its local IP and port 8080 as specified. This redirected us to the VM1 zabbix-web docker container. Once logged in to the Zabbix frontend, we added the host according to the descriptions, made the items as per point a) and b) and lastly the triggers as per point c) and d)
 
 <!-- ![](assets/all-green-yeet.png) -->
 
-![.](assets/all-green-split1.png)
+![.](assets/all-green-split1.png) \
 
 ![Image of our host setup with VM3 agent, split in two for easier viewing on paper](assets/all-green-split2.png)
 
 <!-- ![](assets/double-vm-bridged-network-unique-mac-proxy-works.png)-->
 
-We created a new template zabbix-monitoring in the host group zabbix-monitoring with the following items and triggers:
+We created a new template named zabbix-monitoring in the zabbix-monitoring host group:
 
 ![Image showing template creation dialog](assets/making-template-for-monitoring-group.png) <!--this can be removed if we don't have enough space-->
 
@@ -506,11 +517,15 @@ We created a new template zabbix-monitoring in the host group zabbix-monitoring 
 
 We created the item for total disk space usage in the directory ``/var`` with interval of 1 hour:
 
-```fsv.fs[/var,used]```
+```bash
+fsv.fs.size[/var,used]
+```
 
 We created an that will monitor the docker process usage with interval of 1 minute:
 
-```proc.cpu.util[dockerd]```
+```bash
+proc.cpu.util[dockerd]
+```
 
 ![Image showing that the items are created](assets/items-created.png)
 
@@ -518,13 +533,17 @@ We created an that will monitor the docker process usage with interval of 1 minu
 
 We created a trigger that triggers when uptime is longer than 240 days:
 
-```last(/zabbix_server_agent_vm3/system.uptime)>240d```
+```bash
+last(/zabbix_server_agent_vm3/system.uptime)>240d
+```
 
 ![Image showing trigger uptime creation dialog](assets/making-trigger-uptime240.png)
 
 We created a trigger that triggers when disk I/O is higher than 20% average for 5 minutes:
 
-```avg(/zabbix_server_agent_vm3/system.cpu.util[,iowait],5m)>20```
+```bash
+avg(/zabbix_server_agent_vm3/system.cpu.util[,iowait],5m)>20
+```
 
 ![Image showing trigger disk io creation dialog](assets/making-trigger-disk-io.png)
 

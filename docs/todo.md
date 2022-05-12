@@ -70,7 +70,8 @@
 
 # Oppvasken
 - [ ] 1. Introduction
-  - [ ] 1.1. Virtual Machines with VirtualBox 
+  - [ ] 1.1. Our project directory
+  - [ ] 1.2. Virtual Machines with VirtualBox 
     - [x] First draft 
     - [ ] Edited
     - [ ] Done 
@@ -127,6 +128,7 @@
   - [ ] Change "Introduction" to "Introduction: VM setup" and remove subheading 1.1
   - [ ] Final read through and edit
   - [ ] Clean up unnecessary comments
+  - [ ] Remove all references to our project directory and folders if we're not delivering the .zip file of our working directory. 
   - [ ] Convert to pdf
   - [ ] Deliver the report
 
