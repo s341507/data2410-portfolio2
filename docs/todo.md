@@ -80,6 +80,7 @@
     - [ ] Edited
     - [ ] Done 
 - [ ] 3. VM2 and VM3: Install zabbix-agent and zabbix-proxy
+  - [ ] Ha systemctl kommandoer for VM2 og VM3
   - [ ] 3.1. VM2
      - [ ] 3.1.1. Innstalling Zabbix Proxy
        - [ ] First draft 

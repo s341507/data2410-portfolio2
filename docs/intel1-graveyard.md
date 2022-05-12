@@ -98,3 +98,11 @@ root@47b33e945b34:~# service nginx restart
  * Restarting nginx nginx                                                    [ OK ]
 root@47b33e945b34:~#
 ```-->
+
+<!-- Then we set up a new host to make the active changes work, configured like this:
+
+![](assets/zabbix_agent-on-frontend-config.png)
+
+Proof that it is working:
+
+![](assets/zabbix_agent-on-frontend-config-working.png) -->
