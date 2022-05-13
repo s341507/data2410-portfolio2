@@ -150,7 +150,7 @@
   - [x] First draft 
   - [ ] Edited
   - [ ] Done 
-  
+
 - [ ] Other
   - [x] Change "Introduction" to "Introduction: VM setup" and remove subheading 1.1
   - [ ] Final read through and edit
