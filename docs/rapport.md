@@ -30,23 +30,23 @@ docker exec -it <container-id> bash
 
 # 1. Introduction
 
-This report will cover our solution to the Group Portfolio 2 Assignment, given to us in the subject DATA2410. The report is divided into six separate chapters. The first chapter is an introduction to our project. It gives a short description of our project structure, to improve the readability of this report. It also goes into detail about how we set up the VMs we used to implement our solution. The main part of this report consists of the four chapters following immediately after the introduction, and will cover the steps we took to implement the different requirements in the assignment description. These requirements are mainly linked to understanding docker containers, Zabbix monitoring tools, network communication, installation and configuration of a web server. Lastly, the sixth and final chapter of the report will be a brief summary and conclusion of our work. 
+This report will cover our solution to the Group Portfolio 2 Assignment, given to us in the subject DATA2410. The report is divided into six separate chapters. The first chapter is an introduction to our project. It gives a short description of our project structure, to improve the readability of this report. It also goes into detail about how we set up the VMs we used to implement our solution. The main part of this report consists of the four chapters following immediately after the introduction, and will cover the steps we took to implement the different requirements in the assignment description. These requirements are mainly linked to understanding Docker containers, Zabbix monitoring tools, network communication, installation and configuration of a web server. Lastly, the sixth and final chapter of the report will be a brief summary and conclusion of our work. 
 
 ## 1.1. Our project directory
 
 At the beginning of the project we set up a group project directory called `portfolio2`. In this directory we decided to sort our files into different sub-folders for structure, backup and easy access purposes. The files were sorted based on their functionality and contents. Below is a list of the different sub-folders that were of significance to our project. Many of these sub-folders will be referenced in the report. 
 
-- ``docker``: files pertaining to docker functionality  
+- ``docker``: files pertaining to Docker functionality  
 - ``docs``: files pertaining to documentation and explanation of our project  
 - ``configs``: files that aren't in use, but are kept as backup  
-  - ``configs/intel1``: redundant docker files for VMs on intel1  
+  - ``configs/intel1``: redundant Docker files for VMs on intel1  
   - ``configs/mysql``: old mysql configuration files  
   - ``configs/nginx``: old nginx configuration files  
   - ``configs/zabbix``: old Zabbix configuration files  
 
 ## 1.2. Virtual Machines with VirtualBox 
 
-Originally, we attempted to use docker containers on the intel1-server to implement our solution. However, the server ran out of storage space, so we created virtual machines through VirtualBox as a substitute. 
+Originally, we attempted to use Docker containers on the intel1-server to implement our solution. However, the server ran out of storage space, so we created virtual machines through VirtualBox as a substitute. 
 
 The first thing we needed was a VM running Ubuntu Focal Fossa. We needed the VM to have 4GB of RAM and 10GB of disk space. As shown in Figure 1, we downloaded the image for Ubuntu Focal Fossa (20.04) from: 
   <https://releases.ubuntu.com/20.04/ubuntu-20.04.4-desktop-amd64.iso> and created VM1 from this image.
@@ -65,22 +65,22 @@ The architecture diagram in the assignment description can be interpreted to mea
 
 # 2. VM1: Docker containers setup
 
-This chapter of the report explains how we completed section II of the assignment. It includes the installation and setup of docker containers, how we configured our docker-compose stack and made the docker bridge network inside of VM1. It also covers how we used the frontend to set up the host profiles. It displays our understanding of both conventional VMs and using the docker software. 
+This chapter of the report explains how we completed section II of the assignment. It includes the installation and setup of Docker containers, how we configured our docker-compose stack and made the Docker bridge network inside of VM1. It also covers how we used the frontend to set up the host profiles. It displays our understanding of both conventional VMs and using the Docker software. 
 
 ## 2.1. Docker Compose Setup 
 
-After setting up the three VMs, we used the file `docker-compose.yml`, from the docker folder in our project directory, to set up the four docker containers with the required config instructions for the assignment within VM1. The first step in setting up the docker containers was to install docker on VM1. 
+After setting up the three VMs, we used the file `docker-compose.yml`, from the ``docker`` folder in our project directory, to set up the four docker containers with the required config instructions for the assignment within VM1. The first step in setting up the Docker containers was to install Docker on VM1. 
 
-We used the following command to install docker.
+We used the following command to install docker and docker-compose.
 
 ```bash
 sudo apt-get install -y docker-compose
 ```
 
-We used the docker images specified in the assignment description to serve as a base for the docker containers in the docker compose stack. By setting the environment variables in the compose file, we affected the generation of the respective config files for each container. 
-We created created and linked up volumes to these generated files to make it possible to edit the internal volume files from outside the docker containers via the docker volume functionality. 
-This was possible because the volume files outside the docker containers are linked with the config files we mapped them to inside each of the docker containers.
-Setting up volumes for outside access made debugging easier while working on the project. E.g. we utilized this setup to verify if the environment variables in the `docker-compose.yml` file were correctly written to config files like `zabbix_server.conf` inside the server container, while remaining outside the docker container and checking directly from the host machine. 
+We used the Docker images specified in the assignment description to serve as a base for the Docker containers in the Docker compose stack. By setting the environment variables in the compose file, we affected the generation of the respective config files for each container. 
+We created created and linked up volumes to these generated files to make it possible to edit the internal volume files from outside the Docker containers via the Docker volume functionality. 
+This was possible because the volume files outside the Docker containers are linked with the config files we mapped them to inside each of the Docker containers.
+Setting up volumes for outside access made debugging easier while working on the project. E.g. we utilized this setup to verify if the environment variables in the `docker-compose.yml` file were correctly written to config files like `zabbix_server.conf` inside the server container, while remaining outside the Docker container and checking directly from the host machine. 
 
 The following block of code describes how we set up the volumes according to the description above. 
 
@@ -105,7 +105,7 @@ sudo docker volume inspect zabbix-server-config
 sudo vim /var/lib/docker/volumes/zabbix-server-config/_data/zabbix_server.conf 
 ```
 
-In the block below, we display our docker compose file  `docker-compose.yml` from the docker folder in our project directory. The comments in the file provide details about the functionality of the different sections of the file that are important for the implementation of the solution. 
+In the block below, we display our docker compose file  `docker-compose.yml` from the ``docker`` folder in our project directory. The comments in the file provide details about the functionality of the different sections of the file that are important for the implementation of the solution. 
 
 ```yml
 # Docker Container setup for VM1
@@ -234,7 +234,7 @@ We used the following command on VM1 to start the docker containers with the `do
 sudo docker-compose up
 ```
 
-After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack, as shown in Figure 3. This was to ensure that everything was connected properly. The Zabbix frontend is hosted on VM1 port 80 as per the assignment description. At this point in the assignment we typed the address of VM1 without supplying port as it was mapped to port 80 into a web browser to access the web frontend.
+After the Docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack, as shown in Figure 3. This was to ensure that everything was connected properly. The Zabbix frontend is hosted on VM1 port 80 as per the assignment description. At this point in the assignment we typed the address of VM1 without supplying port as it was mapped to port 80 into a web browser to access the web frontend.
 
 
 ![.](assets/all-green-vm1-splitt1.png) \
@@ -242,9 +242,9 @@ After the docker containers were up and running, we decided to set up host profi
 <!-- figure 3 -->
 ![Showing that the zabbix-agent and zabbix-server is working](assets/all-green-vm1-splitt2.png)
 
-We decided to split the Figure 3 image into two parts to improve the readability. The figure shows that our docker stack is functioning correctly with fully set up hosts for both active and passive checks
+We decided to split the Figure 3 image into two parts to improve the readability. The figure shows that our Docker stack is functioning correctly with fully set up hosts for both active and passive checks
 
-Figure 4 shows a screenshot of the docker compose log. It shows that all the checks are working between the agent and server, except one. We assumed that this one check from the template probably wasn't suited for being run in a docker environment, because some things can be different in a docker environment. The error, however, did not reoccur so we attributed it to a minor fault in the startup process.
+Figure 4 shows a screenshot of the Docker compose log. It shows that all the checks are working between the agent and server, except one. We assumed that this one check from the template probably wasn't suited for being run in a Docker environment, because some things can be different in a Docker environment. The error, however, did not reoccur so we attributed it to a minor fault in the startup process.
 
 <!-- figure 4 -->
 ![Logs from docker compose after setting up hosts on frontend](assets/host-error-sorted-tho-sorted-itself.png)
@@ -253,7 +253,7 @@ Figure 4 shows a screenshot of the docker compose log. It shows that all the che
 
 # 3. VM2 and VM3: Install Zabbix agent and Zabbix proxy
 
-This chapter explains how we completed section III of the assignment. That includes how we installed, configured and started a Zabbix proxy, connected to both MariaDB and our Zabbix server. It also includes how we installed and configured a Zabbix agent on VM3, and got it to communicate with the Zabbix server through the Zabbix proxy.
+This chapter explains how we completed section III of the assignment. That includes how we installed, configured and started a Zabbix proxy, connected to both MariaDB and our Zabbix server. It also covers how we installed and configured a Zabbix agent on VM3, and got it to communicate with the Zabbix server through the Zabbix proxy.
 
 ## 3.1. VM2: Zabbix proxy and MariaDB
 
@@ -579,26 +579,22 @@ Regarding task 3 section IV in the assignment, we have already configured the po
 
 This chapter explains how completed section V of the assignment by using the Zabbix frontend to create a host group, a host and a template complete with items and triggers for the Zabbix agent running on VM3.
 
-To access the Zabbix frontend, we connected to the nginx-proxy on VM2 via its local IP and port 8080 as specified. This redirected us to the VM1 zabbix-web docker container and allowed us to interact with the server through this web interface. Once we had logged in to the Zabbix frontend, we added a host according to the assignment description, and made the items, as per task 2 a) and b) in section IV of the assignment description. Then we created a template, named ``zabbic-monitoring``in the zabbix-monitoring hst group, as shown in Figure 12. Lastly, we added the triggers as per task 2 c) and d) in section IV of the assignment description. 
+To access the Zabbix frontend, we connected to the nginx-proxy on VM2 via its local IP and port 8080 as specified. This redirected us to the VM1 zabbix-web Docker container and allowed us to interact with the server through this web interface. Once we had logged in to the Zabbix frontend, we added a host according to the assignment description, and made the items, as per task 2 a) and b) in section IV of the assignment description. Then we created a template, named ``zabbic-monitoring``in the zabbix-monitoring hst group, as shown in Figure 12. Lastly, we added the triggers as per task 2 c) and d) in section IV of the assignment description. 
 
 <!-- figure 12, this can be removed if we don't have enough space-->
 ![Showing template creation dialog](assets/making-template-for-monitoring-group2.png) 
 
 ## 5.1. Items
 
-We created the item for total disk space usage in the directory ``/var`` with an interval of one hour, and  as shown in Figure 13:
+We created the item for total disk space usage in the directory ``/var`` with an interval of one hour, and an item that moitors the Docker process usage with an interval of one minute,  as shown in Figure 13:
 
 ```bash
+#Total disk space usage in directory
 fsv.fs.size[/var,used]
-```
 
-We created an item that monitors the docker process usage with an interval of one minute:
-
-```bash
+#Docker process usage
 proc.cpu.util[dockerd]
 ```
-
-Figure 13 shows that both items are created.
 
 <!-- figure 13 -->
 ![Showing that the items are created](assets/items-created.png)
@@ -638,13 +634,9 @@ After having done these steps, we and anyone using this as a guide should be abl
 
 # 6. Conclusion and summary
 
-<!-- In the previous chapters, you have seen how we have answered the different sections of the assignment description. We believe that we have successfully set up a network of 3 VMs communicating with each other through the use of various zabbix components to emulate a real word scenario where a client could want their network to be monitored, and have had the need of various custom checks  -->
+In chapters two, three, four and five, we have detailed how we implemented the four main points of this assignment. Our main takeaways from this assignment has been working with traditional VMs networked together in a bridged network on the host machine as well as setting up a Zabbix monitoring environment on these machines. We have gained experience working with bridged Docker networking, Docker volume functionality and the setting of environment variables to help with the generation of config files, in addition to general configuration of a Docker compose stack through a `.yml` Docker compose file.
 
-In chapters two, three, four and five, we have detailed how we implemented the four main points of this assignment. Our main takeaways from this assignment has been working with traditional VMs networked together in a bridged network on the host machine as well as setting up a Zabbix monitoring environment on these machines. We have gained experience working with bridged docker networking, docker volume functionality and the setting of environment variables to help with the generation of config files, in addition to general configuration of a docker compose stack through a `.yml` docker compose file.
-
-We have also displayed how we worked with the zabbix environment and its services such as the server, the databases it depends on and its agents and proxies, as well as setting up the frontend and further using it to configure a custom setup similar to something a real industry client could want. We have installed this in two ways, both manually and using docker-compose stack. We have gone through the unique ways to configure this for each approach, whilst also connecting the two approaches and making them communicate with each other through various checks.
-
-<!-- sections: Docker-compose, zabbix-proxy, nginx-proxy, zabbix-agent with psk -->
+We have also displayed how we worked with the zabbix environment and its services such as the server, the databases it depends on and its agents and proxies, as well as setting up the frontend and further using it to configure a custom setup similar to something a real industry client could want. We have installed this in two ways, both manually and using Docker compose stack. We have gone through the unique ways to configure this for each approach, whilst also connecting the two approaches and making them communicate with each other through various checks.
 
 \newpage
 

@@ -129,22 +129,22 @@
   - [x] Done 
   - [x] All Figures checked
   
-- [ ] 5. VM1: Zabbix frontend
-  - [ ] 5.1. Items
+- [x] 5. VM1: Zabbix frontend
+  - [x] 5.1. Items
     - [x] First draft 
     - [x] Edited
-    - [ ] Done 
+    - [x] Done 
     - [x] All Figures checked
-  - [ ] 5.2. Triggers
+  - [x] 5.2. Triggers
     - [x] First draft 
     - [x] Edited
-    - [ ] Done 
+    - [x] Done 
     - [x] All Figures checked
 
-- [ ] Conclusion and summary
+- [x] Conclusion and summary
   - [x] First draft
-  - [ ] Edited 
-  - [ ] Done
+  - [x] Edited 
+  - [x] Done
 
 - [ ] 7. APA7 References?
   - [x] First draft 
@@ -155,7 +155,7 @@
   - [x] Change "Introduction" to "Introduction: VM setup" and remove subheading 1.1
   - [ ] Final read through and edit
   - [x] Clean up unnecessary comments 
-  - [ ] Check all figure references, and that all figures are references at least once. 
+  - [x] Check all figure references, and that all figures are references at least once. 
   - [ ] Convert to pdf
   - [ ] Deliver the report
 
