@@ -87,7 +87,7 @@
     - [x] First draft 
     - [x] Edited
     - [ ] Done 
-    - [ ] All Figures checked
+    - [x] All Figures checked
 
 - [ ] 3. VM2 and VM3: Install zabbix-agent and zabbix-proxy
   - [x] Ha systemctl kommandoer for VM2 og VM3
@@ -96,32 +96,32 @@
        - [x] First draft 
        - [x] Edited
        - [ ] Done 
-       - [ ] All Figures checked
+       - [x] All Figures checked
      - [ ] 3.1.2. Configuring MariaDB database for the proxy to use
        - [x] First draft 
        - [x] Edited
        - [ ] Done 
-       - [ ] All Figures checked
+       - [x] All Figures checked
      - [ ] 3.1.3. Configurating Zabbix Proxy
        - [x] First draft 
        - [x] Edited
        - [ ] Done 
-       - [ ] All Figures checked
+       - [x] All Figures checked
      - [ ] 3.1.4. Starting and enabling the Zabbix Proxy
        - [x] First draft 
        - [x] Edited
        - [ ] Done 
-       - [ ] All Figures checked
+       - [x] All Figures checked
      - [ ] 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
        - [x] First draft 
        - [x] Edited
        - [ ] Done 
-       - [ ] All Figures checked
+       - [x] All Figures checked
   - [ ] 3.2. VM 3
     - [x] First draft 
     - [x] Edited
     - [ ] Done 
-    - [ ] All Figures checked
+    - [x] All Figures checked
 
 - [ ] 4. VM2: Nginx proxy
   - [x] First draft 
