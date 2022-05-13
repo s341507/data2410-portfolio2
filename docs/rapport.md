@@ -9,10 +9,17 @@ author: |
   Thea Emilie Haugen | s351879 \
   Andrea Bjørge | s344175
 date: April 25, 2022
-geometry: margin=2cm
+#geometry: margin=2cm
+geometry: "left=2cm,right=2cm,top=1cm,bottom=1.5cm"
 output: pdf_document
+# pdf-engine: xelatex
+# toc: true
+# standalone: true
+# highlight-style: tango
+# monofont: SFMono Nerd Font Mono
 include-before:
   - '`\newpage{}`{=latex}'
+  # - '\pagenumbering{gobble}'
 ---
 
 <!--  command to run:
