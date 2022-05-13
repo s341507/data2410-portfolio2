@@ -4,10 +4,12 @@ title: |
 
   GROUP Portfolio Assignment 2 - Docker and Zabbix Real Use-Case
 author: |
-  Ulrik Bakken Singsaas | s351917 \
-  Adrian Bakstad | s341507 \
-  Thea Emilie Haugen | s351879 \
-  Andrea Bjørge | s344175
+ '\begin{aligned}
+  \text{Ulrik Bakken Singsaas } &| \text{ s351917} \\
+  \text{Adrian Bakstad } &| \text{ s341507} \\
+  \text{Thea Emilie Haugen } &| \text{ s351879} \\
+  \text{Andrea Bjørge } &| \text{ s344175}
+ \end{aligned}'
 date: April 25, 2022
 #geometry: margin=2cm
 geometry: "left=2cm,right=2cm,top=1cm,bottom=1.5cm"
@@ -68,7 +70,7 @@ The architecture diagram in the assignment description can be interpreted to mea
 
 # 2. VM1: Docker containers setup
 
-This section explains how we completed section II of this assignment. It includes the installation and setup of docker containers, how we configured our docker-compose stack and made the docker bridge network inside of VM1. It also covers how we used the frontend to set up the host profiles. 
+This section of the report explains how we completed section II of this assignment. It includes the installation and setup of docker containers, how we configured our docker-compose stack and made the docker bridge network inside of VM1. It also covers how we used the frontend to set up the host profiles. 
 
 ## 2.1. Docker Compose Setup 
 
@@ -80,7 +82,7 @@ We used the following command to install docker.
 sudo apt-get install -y docker-compose
 ```
 
-We used the auto generated docker files to set up the docker containers, but we made some minor adjustments by setting the environment variables for these files before they were generated. The environment variables were created outside the `docker-compose.yml` file, but later references in the file. We created external volumes to make it possible to edit the internal volume files from outside the docker containers via the docker volume functionality. This was possible because the volume files outside the docker containers are synchronized with the volume files we mapped them to inside the docker containers. The `docs` volume was used to get the .sql file to create the server. Setting up volumes for outside access made debugging easier while working on the project. For example we utilized this setup to verify if the environment variables in the `docker-compose.yml` file were correctly written in the `zabbix_server.conf` config file, while remaining outside the docker container containing the Zabbix Server. 
+We used the auto generated docker files to set up the docker containers, but we made some minor adjustments by setting the environment variables for these files before they were generated. The environment variables were created outside the `docker-compose.yml` file, but later references in the file. We created external volumes to make it possible to edit the internal volume files from outside the docker containers via the docker volume functionality. This was possible because the volume files outside the docker containers are synchronized with the volume files we mapped them to inside the docker containers. The `docs` volume was used to get the .sql file to create the server. Setting up volumes for outside access made debugging easier while working on the project. E.g. we utilized this setup to verify if the environment variables in the `docker-compose.yml` file were correctly written in the `zabbix_server.conf` config file, while remaining outside the docker container containing the Zabbix Server. 
 
 The following block of code describes how we set up the volumes according to the description above. 
 
@@ -223,10 +225,6 @@ sudo docker-compose up
 
 After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack, as shown in Figure 3. This was to ensure that everything was connected properly. The Zabbix frontend is hosted on VM1 port 80 as per the assignment description. At this point in the assignment we typed the address of VM1 without supplying port as it was mapped to port 80 into a web browser to access the web frontend.
 
-<!-- 
-TODO
-- [ ] Consider having images of how we configured it in the front frontend along with the results already shown
- -->
 
 We decided to split the Figure 3 image into two parts to improve the readability, same with Figure 11. These two figures displays that our docker stack is functioning correctly with fully set up hosts for both active and passive checks
 
@@ -474,7 +472,7 @@ We believe we have now displayed in a reproducible way, how to set up the zabbix
 
 # 4. VM2: Nginx Proxy
 
-This section explains how we installed, configured and started an nginx reverse proxy that listens on localhost, redirecting its traffic to the Zabbix-server frontend.
+This section explains how we installed, configured and started an nginx reverse proxy that listens on localhost, redirecting its traffic to the Zabbix server frontend.
 
 
 ## 4.1. Installing Nginx Proxy and preparing configuration files
@@ -509,7 +507,7 @@ server {
     server_name localhost;
 
     location / {
-        proxy_pass http://192.168.50.95:80; # Zabbix server IP
+        proxy_pass http://192.168.50.95:80; # Zabbix server IP address
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -520,7 +518,7 @@ server {
 
 These configurations ensures that the nginx-proxy listens on port 8080 of VM2, and redirects all incoming traffic from that port to the `Zabbix-server` using `proxy_pass`.
 
-To clarify, VM1's local IP in the VirtualBox bridged network is `192.168.50.95` and the docker container holding the web frontend is mapped to this ip on port 80
+To clarify, VM1's local IP in the VirtualBox bridged network is `192.168.50.95` and the docker container holding the Z frontend is mapped to this ip on port 80
 
 To complete the proxy, we activated the directives by linking to `/sites-enabled/` using the following command.
 
@@ -531,7 +529,7 @@ sudo ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enable
 Lastly, to see if it worked, we ran an nginx configuration test and restarted the service.
 
 ```bash
-# making it run on boot to make setup permanent
+# Making it run on boot to make setup permanent
 sudo systemctl enable nginx
 
 sudo systemctl start nginx
@@ -564,7 +562,7 @@ Figure 10 shows the nginx configuration for the zabbix-web container.
 <!-- figure 10 -->
 ![Showing zabbix-web nginx config file](assets/zabbix-web-nginx-correct-port.png) 
 
-We have now set up the Nginx Proxy to relay the Zabbix frontend, which could be a good way to control outside access to only this site and not the rest of the network, should we for instance do port forwarding on the VM2s local IP to make it accessible to the outside.
+We have now set up the Nginx Proxy to relay the Zabbix frontend, which could be a good way to control outside access to only this site and not the rest of the network, should we for instance do port forwarding on VM2's local IP to make it accessible to the outside.
 
 \newpage
 
