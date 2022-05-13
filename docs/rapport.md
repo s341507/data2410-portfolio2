@@ -70,7 +70,7 @@ The architecture diagram in the assignment description can be interpreted to mea
 
 # 2. VM1: Docker containers setup
 
-This section of the report explains how we completed section II of this assignment. It includes the installation and setup of docker containers, how we configured our docker-compose stack and made the docker bridge network inside of VM1. It also covers how we used the frontend to set up the host profiles. 
+This section of the report explains how we completed section II of this assignment. It includes the installation and setup of docker containers, how we configured our docker-compose stack and made the docker bridge network inside of VM1. It also covers how we used the frontend to set up the host profiles. It displays our understanding of both conventional VMs and using the docker software. 
 
 ## 2.1. Docker Compose Setup 
 
@@ -226,19 +226,17 @@ sudo docker-compose up
 After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack, as shown in Figure 3. This was to ensure that everything was connected properly. The Zabbix frontend is hosted on VM1 port 80 as per the assignment description. At this point in the assignment we typed the address of VM1 without supplying port as it was mapped to port 80 into a web browser to access the web frontend.
 
 
-We decided to split the Figure 3 image into two parts to improve the readability, same with Figure 11. These two figures displays that our docker stack is functioning correctly with fully set up hosts for both active and passive checks
-
 ![.](assets/all-green-vm1-splitt1.png) \
 
 <!-- figure 3 -->
 ![Showing that the zabbix-agent and zabbix-server is working](assets/all-green-vm1-splitt2.png)
 
-Figure 4 shows a screenshot of the docker compose log. It shows that all the checks except one is working between the agent and server. We assumed that this one check from the template probably wasn't suited for being run in a docker environment, because some things can be different in a docker environment. The error, however, did not reoccur so we attributed it to a minor fault in the startup process.
+We decided to split the Figure 3 image into two parts to improve the readability. The figure shows that our docker stack is functioning correctly with fully set up hosts for both active and passive checks
+
+Figure 4 shows a screenshot of the docker compose log. It shows that all the checks are working between the agent and server, except one. We assumed that this one check from the template probably wasn't suited for being run in a docker environment, because some things can be different in a docker environment. The error, however, did not reoccur so we attributed it to a minor fault in the startup process.
 
 <!-- figure 4 -->
 ![Logs from docker compose after setting up hosts on frontend](assets/host-error-sorted-tho-sorted-itself.png)
-
-We believe that this section now fully explains how we installed docker and set up the four containers in a networked manner via our docker compose file, and displays competency with both conventional VMs and using the docker software.
 
 \newpage
 
@@ -598,13 +596,15 @@ We created an item that monitors the docker process usage with an interval of on
 proc.cpu.util[dockerd]
 ```
 
+Figure 13 shows that both items are created.
+
 <!-- figure 13 -->
 ![Showing that the items are created](assets/items-created.png)
 
 
 ## 5.2. Triggers
 
-We created a trigger that triggers when the uptime is longer than 240 days:
+We created a trigger that triggers when the uptime is longer than 240 days, as shown in Figure 14:
 
 ```bash
 last(/zabbix_server_agent_vm3/system.uptime)>240d
@@ -613,7 +613,7 @@ last(/zabbix_server_agent_vm3/system.uptime)>240d
 <!-- figure 14 -->
 ![Showing trigger uptime creation dialog](assets/making-trigger-uptime240.png)
 
-We created a trigger that triggers when disk I/O is higher than 20% average for five minutes:
+We created a trigger that triggers when disk I/O is higher than 20% average for five minutes, as shown in Figure 15:
 
 ```bash
 avg(/zabbix_server_agent_vm3/system.cpu.util[,iowait],5m)>20
@@ -638,10 +638,9 @@ After having done these steps, we and anyone using this as a guide should be abl
 
 <!-- In the previous sections, you have seen how we have answered the different sections of the assignment description. We believe that we have successfully set up a network of 3 VMs communicating with each other through the use of various zabbix components to emulate a real word scenario where a client could want their network to be monitored, and have had the need of various custom checks  -->
 
-In sections two, three, four and five, we have detailed how we reached the four main points of this assignment. Our main takeaways from this assignment has been working with traditional VMs networked together in a bridged network on the host machine. 
-Docker, complete with bridged docker networking, along with use of docker's volume functionality and the setting of environment variables to help with the generation of config files, in addition to general configuration of a docker compose stack through a `.yml` compose file.
+In sections two, three, four and five, we have detailed how we implemented the four main points of this assignment. Our main takeaways from this assignment has been working with traditional VMs networked together in a bridged network on the host machine as well as setting up a Zabbix monitoring environment on these machines. We have gained experience working with bridged docker networking, docker volume functionality and the setting of environment variables to help with the generation of config files, in addition to general configuration of a docker compose stack through a `.yml` docker compose file.
 
-We have also displayed how we worked with the zabbix environment and it's services like the server, the databases it depends on and it's agents and proxies as well as setting up the frontend and further using it to configure a custom setup similar to something a real industry client could want. We have installed this in two ways, both manually and using docker-compose stack. We have gone through the unique ways to configure this for each approach, whilst also connecting the two approaches and making them communicate with each other through various checks.
+We have also displayed how we worked with the zabbix environment and its services such as the server, the databases it depends on and its agents and proxies, as well as setting up the frontend and further using it to configure a custom setup similar to something a real industry client could want. We have installed this in two ways, both manually and using docker-compose stack. We have gone through the unique ways to configure this for each approach, whilst also connecting the two approaches and making them communicate with each other through various checks.
 
 <!-- sections: Docker-compose, zabbix-proxy, nginx-proxy, zabbix-agent with psk -->
 

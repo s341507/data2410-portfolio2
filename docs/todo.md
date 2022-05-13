@@ -81,12 +81,12 @@
     - [x] Done 
     - [x] All Figures checked
 
-- [ ] 2. VM1: Docker containers setup
-  - [ ] 2.1. Quad Container Setup on intel1 / VM1
+- [x] 2. VM1: Docker containers setup
+  - [x] 2.1. Quad Container Setup on intel1 / VM1
     - [x] **More detailed description of the docker-compose.yml file (What is mentioned as important in the assignmnet description)**
     - [x] First draft 
     - [x] Edited
-    - [ ] Done 
+    - [x] Done 
     - [x] All Figures checked
 
 - [ ] 3. VM2 and VM3: Install zabbix-agent and zabbix-proxy
