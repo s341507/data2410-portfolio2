@@ -389,7 +389,7 @@ sudo systemctl start zabbix-proxy
 Figure 5 shows how we set up the proxy in the Zabbix frontend after finishing the configuration on VM2. Figure 6 verifies that the proxy is properly connected to the server. 
 
 <!--figure 5 this can be removed if we don't have enough space-->
-![Showing proxy creation dialog window](assets/proxy-frontend-setup.png) 
+![Showing proxy creation dialog window](assets/proxy-frontend-setup2.png) 
 
 Notable in Figure 6 is that the `last seen (age)` is less than 6s. Now we know that the proxy is connected to the server.
 
@@ -407,7 +407,7 @@ wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/
 
 sudo dpkg -i zabbix-release_6.0-1+ubuntu20.04_all.deb
 
-#had to use this one for right version
+# We had to use this one to get the right version
 wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix/
   zabbix-agent_6.0.1-1%2Bubuntu20.04_amd64.deb
 
@@ -455,7 +455,7 @@ TLSPSKFile=/opt/zabbix_agent.psk
 Server=192.168.50.247
 ```
 
-Lastly we start the agent and enable the agent to start on boot with the following commands:
+Lastly we started and enabled the agent to start on boot with the following commands:
 
 ```bash
 sudo systemctl enable zabbix-agent
@@ -548,7 +548,7 @@ This verifies that nginx works as intended.
 Figure 8 shows the zabbix frontend being accessed from the host machine through the nginx proxy on VM2. The URL to reach the zabbix frontend isn't localhost:8080, as the architecture diagram suggested, but rather the IP address of VM2 which Figure 9 shows.
 
 <!-- figure 8 -->
-![Showing zabbix frontend from nginx proxy](assets/nginx-frontend-working-red-highlight.png) 
+![Showing zabbix frontend from nginx proxy](assets/nginx-frontend-working-red-highlight2.png) 
 
 <!-- figure 9 -->
 ![Showing local ip of VM2](assets/vm2-local-ip.png) 
@@ -584,7 +584,7 @@ Figure 11 shows that the zabbix agent on VM3 is working and using psk encryption
 Figure 12 shows that we created a new template named ``zabbix-monitoring`` in the zabbix-monitoring host group:
 
 <!-- figure 12, this can be removed if we don't have enough space-->
-![Showing template creation dialog](assets/making-template-for-monitoring-group.png) 
+![Showing template creation dialog](assets/making-template-for-monitoring-group2.png) 
 
 ## 5.1. Items
 
