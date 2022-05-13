@@ -236,6 +236,7 @@ sudo docker-compose up
 
 After the Docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack, as shown in Figure 3. This was to ensure that everything was connected properly. The Zabbix frontend is hosted on VM1 port 80 as per the assignment description. At this point in the assignment we typed the address of VM1 without supplying port as it was mapped to port 80 into a web browser to access the web frontend.
 
+\newpage
 
 ![.](assets/all-green-vm1-splitt1.png) \
 
