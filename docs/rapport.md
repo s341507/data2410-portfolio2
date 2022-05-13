@@ -238,12 +238,12 @@ After the Docker containers were up and running, we decided to set up host profi
 
 \newpage
 
+We decided to split the Figure 3 image into two parts to improve the readability. The figure shows that our Docker stack is functioning correctly with fully set up hosts for both active and passive checks
+
 ![.](assets/all-green-vm1-splitt1.png) \
 
 <!-- figure 3 -->
 ![Showing that the zabbix-agent and zabbix-server is working](assets/all-green-vm1-splitt2.png)
-
-We decided to split the Figure 3 image into two parts to improve the readability. The figure shows that our Docker stack is functioning correctly with fully set up hosts for both active and passive checks
 
 Figure 4 shows a screenshot of the Docker compose log. It shows that all the checks are working between the agent and server, except one. We assumed that this one check from the template probably wasn't suited for being run in a Docker environment, because some things can be different in a Docker environment. The error, however, did not reoccur so we attributed it to a minor fault in the startup process.
 
