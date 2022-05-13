@@ -3,19 +3,14 @@ title: |
   DATA2410-1 22V Datanettverk og Skytjenester
 
   GROUP Portfolio Assignment 2 - Docker and Zabbix Real Use-Case
-author: |
- '\begin{aligned}
-  \text{Ulrik Bakken Singsaas } &| \text{ s351917} \\
-  \text{Adrian Bakstad } &| \text{ s341507} \\
-  \text{Thea Emilie Haugen } &| \text{ s351879} \\
-  \text{Andrea Bjørge } &| \text{ s344175}
- \end{aligned}'
-date: April 25, 2022
+author: 
+  - '$\begin{aligned} \text{Ulrik Bakken Singsaas } &| \text{ s351917} \\ \text{Adrian Bakstad } &| \text{ s341507} \\ \text{Thea Emilie Haugen } &| \text{ s351879} \\ \text{Andrea Bjørge } &| \text{ s344175} \\ \\ \text{May 13, 2022 } & \end{aligned}$'
+# date: April 25, 2022
 #geometry: margin=2cm
 geometry: "left=2cm,right=2cm,top=1cm,bottom=1.5cm"
+toc: true
 output: pdf_document
 # pdf-engine: xelatex
-# toc: true
 # standalone: true
 # highlight-style: tango
 # monofont: SFMono Nerd Font Mono
@@ -25,7 +20,7 @@ include-before:
 ---
 
 <!--  command to run:
-pandoc rapport.md -s -o rapport.pdf --pdf-engine=xelatex --variable monofont="SFMono Nerd Font Mono" --toc --highlight-style=tango
+pandoc rapport.md -s -o rapport.pdf --pdf-engine=xelatex --variable monofont="SFMono Nerd Font Mono" --highlight-style=tango
 
 to run a docker container
 docker exec -it <container-id> bash
