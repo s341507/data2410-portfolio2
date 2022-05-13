@@ -33,7 +33,7 @@ docker exec -it <container-id> bash
 
 # 1. Introduction
 
-This report will cover our solution to the Group Portfolio 2 Assignment, given to us in the subject DATA2410. The report is divided into six separate sections. The first section is an introduction to our project. It gives a short description of our project structure, to enhance the readability of this report. It also goes into detail about how we set up the VMs we used to create the solution. The four section following immediately after the introduction will be the main part, and will cover the steps we took to implement the different requirements stated in the assignment description. These requirements cover understanding Docker containers Lastly, the final and sixth section of the report will be a brief summary and conclusion of our work. 
+This report will cover our solution to the Group Portfolio 2 Assignment, given to us in the subject DATA2410. The report is divided into six separate sections. The first section is an introduction to our project. It gives a short description of our project structure, to improve the readability of this report. It also goes into detail about how we set up the VMs we used to implement our solution. The main part of this report consists of the four sections following immediately after the introduction, and will cover the steps we took to implement the different requirements in the assignment description. These requirements are mainly linked to understanding docker containers, Zabbix monitoring tools, network communication, installation and configuration of a web server. Lastly, the final and sixth section of the report will be a brief summary and conclusion of our work. 
 
 ## 1.1. Our project directory
 
@@ -68,7 +68,7 @@ The architecture diagram in the assignment description can be interpreted to mea
 
 # 2. VM1: Docker containers setup
 
-This section explains how we did the first part of this assignment. It includes the installation and setup of docker containers, how we configured our docker-compose stack and made the docker bridge network inside of VM1. It also covers how we used the frontend to set up the host profiles. 
+This section explains how we completed section II of this assignment. It includes the installation and setup of docker containers, how we configured our docker-compose stack and made the docker bridge network inside of VM1. It also covers how we used the frontend to set up the host profiles. 
 
 ## 2.1. Docker Compose Setup 
 
@@ -92,7 +92,7 @@ sudo docker volume create zabbix-agent-config
 sudo docker volume create docs
 ```
 
-In the block below, we display our docker compose file  `docker-compose.yml` from the docker folder in our project directory. 
+In the block below, we display our docker compose file  `docker-compose.yml` from the docker folder in our project directory. The comments in the file provide details about the functionality of the different sections of the file that are important for the implementation of the solution. 
 
 ```yml
 # Docker Container setup for VM1
@@ -118,7 +118,7 @@ services:
     networks:
       zabbix-net:
         ipv4_address: 172.200.1.1
-        # not really supposed to have two commands put putting it on one line broke things and 
+        # not supposed to have two commands put putting it on one line broke things and 
         # this seems to work
         # tried this, but it did not work:
         # command: bash -c "--default-authentication-plugin=mysql_native_password \
@@ -135,7 +135,7 @@ services:
     restart: unless-stopped
     volumes:
       - zabbix-server-config:/etc/zabbix
-      - docs:/usr/share/doc/ # not in the assignment description but it allowed us to get the sql file
+      - docs:/usr/share/doc/
     environment:
       - DB_SERVER_HOST=mysql-server
       - MYSQL_DATABASE=zabbix
@@ -200,8 +200,8 @@ networks:
 
 # volumes for the containers
 # This is how we link the generated config files to the host machine for easy 
-# debug, Not much real use though as they are regenerated on every run and must
-# be pre set with environment variables, as we are doing
+# debug, not required as the configs are regenerated on every run and must
+# be set with environment variables, as shown above
 volumes:
   mysql-server-data:
     external: true
@@ -221,14 +221,14 @@ We used the following command on VM1 to start the docker containers with the `do
 sudo docker-compose up
 ```
 
-After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack, as shown in Figure 3. This was to ensure that everything was connected properly. The Zabbix web frontend is hosted on VM1 port 80 as per the assignment description. At this point in the assignment we typed the address of VM1 without supplying port as it was mapped to port 80 into a web browser to access the web frontend.
+After the docker containers were up and running, we decided to set up host profiles for active and passive checks between the zabbix agent and server in the docker stack, as shown in Figure 3. This was to ensure that everything was connected properly. The Zabbix frontend is hosted on VM1 port 80 as per the assignment description. At this point in the assignment we typed the address of VM1 without supplying port as it was mapped to port 80 into a web browser to access the web frontend.
 
 <!-- 
 TODO
 - [ ] Consider having images of how we configured it in the front frontend along with the results already shown
  -->
 
- We decided to split the Figure 3 image into two parts to improve the readability, same with Figure 11. These two figures displays that our docker stack is functioning correctly with fully set up hosts for both active and passive checks
+We decided to split the Figure 3 image into two parts to improve the readability, same with Figure 11. These two figures displays that our docker stack is functioning correctly with fully set up hosts for both active and passive checks
 
 ![.](assets/all-green-vm1-splitt1.png) \
 
@@ -248,13 +248,13 @@ We believe that this section now fully explains how we installed docker and set 
 
 This section explains how we installed, configured and started a Zabbix proxy, connected to both MariaDB and our Zabbix server. It also explains how we installed and configured a Zabbix agent on VM3, and got it to communicate with the Zabbix server through the Zabbix proxy.
 
-## 3.1. VM2: Zabbix Proxy and MariaDB
+## 3.1. VM2: Zabbix proxy and MariaDB
 
-We followed a guide called "Zabbix proxy: Install on ubuntu 20.04 in 10 minutes!", hereby referred to as "the guide", to complete task 1 in part III of the assignment description. There were a few differences between what we did and what the guide did while setting up Zabbix Proxy. These differences will be described below.
+We followed a guide called "Zabbix proxy: Install on ubuntu 20.04 in 10 minutes!", hereby referred to as "the guide", to complete task 1 in section III of the assignment description. There were a few differences between what we did and what the guide did while setting up Zabbix proxy. These differences will be described below.
 
-### 3.1.1. Installing Zabbix Proxy
+### 3.1.1. Installing Zabbix proxy
 
-We started by installing Zabbix Proxy on VM2 with the following commands:
+We started by installing Zabbix proxy on VM2 with the following commands:
 
 ```bash
 apt-get install wget
@@ -278,12 +278,12 @@ apt-get install zabbix-proxy-mysql
 apt-get install zabbix-sql-scripts
 ``` 
 
-NB: The download links we used are not the ones that were given in the assignment description. We decided against using those, because we ran into issues with the zabbix-release packages giving us the wrong version on Zabbix Proxy. E.g we would end up with version 4, 5, or 6.2 beta. None of those versions were compatible with our server, which ran on version 6.0. We needed the Zabbix Proxy version 6.0.x, because the major release version has to be same on both server and proxy to establish a connection (Zabbix, 2019). We got our downloads from the official Zabbix repo listed in our references. 
+NB: The download links we used are not the ones that were given in the assignment description. We decided against using those, because we ran into issues with the ``zabbix-release`` packages giving us the wrong version on Zabbix proxy. E.g we would end up with version 4, 5, or 6.2 beta. None of those versions were compatible with our server, which ran version 6.0. We needed the Zabbix proxy version 6.0.x, because the major release version has to be same on both server and proxy to establish a connection (Zabbix, 2019). We got our downloads from the official Zabbix repo listed in our references. 
 
 
 ### 3.1.2. Configuring MariaDB database for the proxy to use
 
-After we finished installing the Zabbix Proxy, we installed and configured the MariaDB database, in accordance with both the guide, and the assignment description. 
+After we finished installing the Zabbix proxy, we installed and configured the MariaDB database, in accordance with both the guide, and the assignment description. 
 
 The following block of code describes the installation of MariaDB on VM2:
 
@@ -349,9 +349,9 @@ sudo cat /usr/share/doc/zabbix-sql-scripts/mysql/proxy.sql | mysql -uzabbix -p'z
 In the installation and configuration of the database, we followed the guide quite exactly. Therefore, there are very few differences between what we did to install and configure the database, and what is suggested in the guide. The only notable difference between the guide and what we did was that we set the root password to **'123'**, instead of **'rootDBpass'**. 
 
 
-### 3.1.3. Configuring Zabbix Proxy
+### 3.1.3. Configuring Zabbix proxy
 
-Once the installation and configuration of the database was complete, it was time to configure the Zabbix Proxy. The first step when configuring the Zabbix Proxy was to open the config file with the following command: 
+Once the installation and configuration of the database was complete, it was time to configure the Zabbix proxy. The first step when configuring the Zabbix proxy was to open the config file with the following command: 
 
 ```bash 
 sudo gedit /etc/zabbix/zabbix_proxy.conf
@@ -372,7 +372,7 @@ DBUser=zabbix
 
 After editing the necessary values, we saved and exited the file. We set the ``ConfigFrequency`` to be 100 seconds. This parameter determines how often the proxy retrieves data from the configuration file, and is useful to cut down on the waiting time between status updates from the Zabbix proxy. We also noted the ``Hostname``, because this was needed to connect the proxy to the server in the web frontend. We also ensured the the ``DBPassword`` was set to the correct value. 
 
-The notable differences between our config file, and the config file in the guide is that we have a different IP address for the zabbix server, and a different hostname for the proxy itself. The difference in IP address is to connect the Zabbix Proxy to the right server.  
+The notable differences between our config file, and the config file in the guide is that we have a different IP address for the zabbix server, and a different hostname for the proxy itself. The difference in IP address is to connect the Zabbix proxy to the right server.  
 
 ### 3.1.4. Starting and enabling the Zabbix proxy
 
@@ -384,9 +384,9 @@ sudo systemctl enable zabbix-proxy
 sudo systemctl start zabbix-proxy
 ``` 
 
-### 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
+### 3.1.5. Registering Zabbix proxy in the Zabbix frontend
 
-Figures 5 6 documents how we set up the proxy in the zabbix web frontend after finishing the configuration on VM2. The Figures also verifies that the proxy is correctly connected to the server. 
+Figure 5 shows how we set up the proxy in the Zabbix frontend after finishing the configuration on VM2. Figure 6 verifies that the proxy is properly connected to the server. 
 
 <!--figure 5 this can be removed if we don't have enough space-->
 ![Showing proxy creation dialog window](assets/proxy-frontend-setup.png) 
@@ -394,12 +394,12 @@ Figures 5 6 documents how we set up the proxy in the zabbix web frontend after f
 Notable in Figure 6 is that the `last seen (age)` is less than 6s. Now we know that the proxy is connected to the server.
 
 <!-- figure 6 -->
-![Showing that the zabbix-proxy is connected](assets/zabbix-proxy-post-100s.png) 
+![Showing that the Zabbix proxy is connected](assets/zabbix-proxy-post-100s.png) 
 
 
 ## 3.2. VM3: Zabbix Agent installation and setup 
 
-The following code block must be run as root on VM3 to install the Zabbix-agent.
+The following code block must be run on VM3 to install the Zabbix-agent.
 
 ```bash
 wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/
@@ -466,7 +466,7 @@ sudo systemctl start zabbix-agent
 In the Zabbix frontend we added psk encryption to the ``zabbix_server_vm3_agent`` host as shown in Figure 7.
 
 <!-- figure 7 -->
-![VM3 abbix Agent encryption settings](assets/agent-3-config-encryption-page.png)
+![VM3 Zabbix Agent encryption settings](assets/agent-3-config-encryption-page.png)
 
 We believe we have now displayed in a reproducible way, how to set up the zabbix proxy and how to make an agent work through it.
 
@@ -557,22 +557,22 @@ The hostname on all VMs is `ubuntu1` as a result of VM2 and VM3 being clones of 
 
 ## 4.3. Comment on Zabbix Server Web Frontend Nginx configuration
 
-Regarding point 4.3 in the assignment text, we have already configured the port forwarding of the zabbix-web via the ``docker-compose.yml`` file; From 80 to 8080.
+Regarding task 3 section IV in the assignment, we have already configured the port forwarding of the zabbix-web via the ``docker-compose.yml`` file; From 80 to 8080.
 
 Figure 10 shows the nginx configuration for the zabbix-web container.
 
 <!-- figure 10 -->
 ![Showing zabbix-web nginx config file](assets/zabbix-web-nginx-correct-port.png) 
 
-We have now set up the Nginx Proxy to relay the zabbix frontend, which could be a good way to control outside access to only this site and not the rest of the network, should we for instance do port forwarding on the VM2s local IP to make it accessible to the outside.
+We have now set up the Nginx Proxy to relay the Zabbix frontend, which could be a good way to control outside access to only this site and not the rest of the network, should we for instance do port forwarding on the VM2s local IP to make it accessible to the outside.
 
 \newpage
 
 # 5. VM1: Zabbix Frontend
 
-This section explains how we used the Zabbix frontend to create a host group, a host and a template complete with items and triggers for the agent running on VM3. It also explains how we enabled PSK-encryption for this zabbix-agent.
+This section explains how we used the Zabbix frontend to create a host group, a host and a template complete with items and triggers for the Zabbix agent running on VM3. It also explains how we enabled PSK-encryption for this zabbix-agent.
 
-To access the Zabbix web frontend, we connected to the nginx-proxy on VM2 via its local IP and port 8080 as specified. This redirected us to the VM1 zabbix-web docker container and would allow us to interact with the server through this web interface. Once logged in to the Zabbix frontend, we added a host according to the assignment description, made the items as per point a) and b) and lastly the triggers as per point c) and d) in the assignment description.
+To access the Zabbix frontend, we connected to the nginx-proxy on VM2 via its local IP and port 8080 as specified. This redirected us to the VM1 zabbix-web docker container and would allow us to interact with the server through this web interface. Once logged in to the Zabbix frontend, we added a host according to the assignment description, made the items as per point a) and b) and lastly the triggers as per point c) and d) in the assignment description.
 
 Figure 11 shows that the zabbix agent on VM3 is working and using psk encryption.
 
