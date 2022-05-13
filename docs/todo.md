@@ -89,57 +89,57 @@
     - [x] Done 
     - [x] All Figures checked
 
-- [ ] 3. VM2 and VM3: Install zabbix-agent and zabbix-proxy
+- [x] 3. VM2 and VM3: Install zabbix-agent and zabbix-proxy
   - [x] Ha systemctl kommandoer for VM2 og VM3
-  - [ ] 3.1. VM2
-     - [ ] 3.1.1. Innstalling Zabbix Proxy
+  - [x] 3.1. VM2
+     - [x] 3.1.1. Innstalling Zabbix Proxy
        - [x] First draft 
        - [x] Edited
-       - [ ] Done 
+       - [x] Done 
        - [x] All Figures checked
-     - [ ] 3.1.2. Configuring MariaDB database for the proxy to use
+     - [x] 3.1.2. Configuring MariaDB database for the proxy to use
        - [x] First draft 
        - [x] Edited
-       - [ ] Done 
+       - [x] Done 
        - [x] All Figures checked
-     - [ ] 3.1.3. Configurating Zabbix Proxy
+     - [x] 3.1.3. Configurating Zabbix Proxy
        - [x] First draft 
        - [x] Edited
-       - [ ] Done 
+       - [x] Done 
        - [x] All Figures checked
-     - [ ] 3.1.4. Starting and enabling the Zabbix Proxy
+     - [x] 3.1.4. Starting and enabling the Zabbix Proxy
        - [x] First draft 
        - [x] Edited
-       - [ ] Done 
+       - [x] Done 
        - [x] All Figures checked
-     - [ ] 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
+     - [x] 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
        - [x] First draft 
        - [x] Edited
-       - [ ] Done 
+       - [x] Done 
        - [x] All Figures checked
-  - [ ] 3.2. VM 3
+  - [x] 3.2. VM 3
     - [x] First draft 
     - [x] Edited
-    - [ ] Done 
+    - [x] Done 
     - [x] All Figures checked
 
-- [ ] 4. VM2: Nginx proxy
+- [x] 4. VM2: Nginx proxy
   - [x] First draft 
   - [x] Edited
-  - [ ] Done 
-  - [ ] All Figures checked
+  - [x] Done 
+  - [x] All Figures checked
   
 - [ ] 5. VM1: Zabbix frontend
   - [ ] 5.1. Items
     - [x] First draft 
     - [x] Edited
     - [ ] Done 
-    - [ ] All Figures checked
+    - [x] All Figures checked
   - [ ] 5.2. Triggers
     - [x] First draft 
     - [x] Edited
     - [ ] Done 
-    - [ ] All Figures checked
+    - [x] All Figures checked
 
 - [ ] Conclusion and summary
   - [x] First draft
@@ -161,5 +161,5 @@
 
   # Report structure
   - [x] Ikke ha tekst på samme side som innholdsfortegnelsen
-  - [ ] Linjeavastand 1,5 i hele dokumentet
-  - [ ] Mer whitespace mellom tekst og bilder/kode
+  <!-- - [ ] Linjeavastand 1,5 i hele dokumentet -->
+  <!-- - [ ] Mer whitespace mellom tekst og bilder/kode -->
