@@ -69,74 +69,92 @@
 - [x] Maile Hårek ssh tunneling for å debugge i browser
 
 # Oppvasken
-- [ ] 1. Introduction
-  - [ ] 1.1. Our project directory
+- [x] 1. Introduction
+  - [x] 1.1. Our project directory
     - [x] First draft 
     - [x] Edited
-    - [ ] Done 
-  - [ ] 1.2. Virtual Machines with VirtualBox 
+    - [x] Done 
+    - [x] All Figures checked
+  - [x] 1.2. Virtual Machines with VirtualBox 
     - [x] First draft 
     - [x] Edited
-    - [ ] Done 
+    - [x] Done 
+    - [x] All Figures checked
+
 - [ ] 2. VM1: Docker containers setup
   - [ ] 2.1. Quad Container Setup on intel1 / VM1
-    - [ ] More detailed description of the docker-compose.yml file (What is mentioned as important in the assignmnet description)
+    - [x] **More detailed description of the docker-compose.yml file (What is mentioned as important in the assignmnet description)**
     - [x] First draft 
     - [x] Edited
     - [ ] Done 
+    - [ ] All Figures checked
+
 - [ ] 3. VM2 and VM3: Install zabbix-agent and zabbix-proxy
-  - [ ] Ha systemctl kommandoer for VM2 og VM3
+  - [x] Ha systemctl kommandoer for VM2 og VM3
   - [ ] 3.1. VM2
      - [ ] 3.1.1. Innstalling Zabbix Proxy
        - [x] First draft 
        - [x] Edited
        - [ ] Done 
+       - [ ] All Figures checked
      - [ ] 3.1.2. Configuring MariaDB database for the proxy to use
        - [x] First draft 
        - [x] Edited
        - [ ] Done 
+       - [ ] All Figures checked
      - [ ] 3.1.3. Configurating Zabbix Proxy
        - [x] First draft 
        - [x] Edited
        - [ ] Done 
+       - [ ] All Figures checked
      - [ ] 3.1.4. Starting and enabling the Zabbix Proxy
        - [x] First draft 
        - [x] Edited
        - [ ] Done 
+       - [ ] All Figures checked
      - [ ] 3.1.5. Registering Zabbix Proxy in the Zabbix frontend
        - [x] First draft 
        - [x] Edited
        - [ ] Done 
+       - [ ] All Figures checked
   - [ ] 3.2. VM 3
     - [x] First draft 
     - [x] Edited
     - [ ] Done 
+    - [ ] All Figures checked
+
 - [ ] 4. VM2: Nginx proxy
   - [x] First draft 
   - [x] Edited
   - [ ] Done 
+  - [ ] All Figures checked
+  
 - [ ] 5. VM1: Zabbix frontend
   - [ ] 5.1. Items
-    - [ ] First draft 
+    - [x] First draft 
     - [x] Edited
     - [ ] Done 
+    - [ ] All Figures checked
   - [ ] 5.2. Triggers
     - [x] First draft 
     - [x] Edited
     - [ ] Done 
+    - [ ] All Figures checked
+
 - [ ] Conclusion and summary
-  - [ ] First draft
+  - [x] First draft
   - [ ] Edited 
   - [ ] Done
+
 - [ ] 7. APA7 References?
-  - [ ] First draft 
+  - [x] First draft 
   - [ ] Edited
   - [ ] Done 
+  
 - [ ] Other
-  - [ ] Change "Introduction" to "Introduction: VM setup" and remove subheading 1.1
+  - [x] Change "Introduction" to "Introduction: VM setup" and remove subheading 1.1
   - [ ] Final read through and edit
-  - [ ] Clean up unnecessary comments
-  - [ ] Remove all references to our project directory and folders if we're not delivering the .zip file of our working directory. 
+  - [x] Clean up unnecessary comments 
   - [ ] Check all figure references, and that all figures are references at least once. 
   - [ ] Convert to pdf
   - [ ] Deliver the report
